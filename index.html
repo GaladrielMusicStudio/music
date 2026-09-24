@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galadriel Music Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0d0b10;
+    --ink-2:#17131d;
+    --gold:#c9a24a;
+    --gold-soft:#e6cd8f;
+    --paper:#efe9df;
+    --muted:#9a9199;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:
+      radial-gradient(120% 70% at 50% -10%, #241c2e 0%, var(--ink) 60%),
+      var(--ink);
+    color:var(--paper);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding:56px 20px 72px;
+  }
+  .wrap{max-width:520px;margin:0 auto}
+
+  header{text-align:center;margin-bottom:44px}
+  .crest{
+    width:104px;height:104px;margin:0 auto 22px;
+    border-radius:50%;
+    border:1px solid rgba(201,162,74,.45);
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Cormorant Garamond",serif;
+    font-size:44px;color:var(--gold-soft);letter-spacing:.04em;
+    background:linear-gradient(160deg,#20192a,#0f0c14);
+  }
+  h1{
+    font-family:"Cormorant Garamond",serif;
+    font-weight:500;font-size:34px;line-height:1.15;margin:0 0 12px;
+    letter-spacing:.01em;
+  }
+  .tagline{margin:0;color:var(--muted);font-size:15px;line-height:1.6}
+
+  .rule{
+    display:block;width:64px;height:1px;margin:34px auto 30px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    border:0;
+  }
+
+  .channel{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:16px 18px;margin-bottom:12px;
+    background:var(--ink-2);
+    border:1px solid rgba(255,255,255,.06);
+    border-left:2px solid var(--gold);
+    color:var(--paper);text-decoration:none;
+    transition:background .18s ease, border-color .18s ease;
+  }
+  .channel:hover,.channel:focus-visible{
+    background:#1f1a27;
+    border-left-color:var(--gold-soft);
+  }
+  .channel:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+  .mark{font-size:19px;line-height:1.35}
+  .name{font-family:"Cormorant Garamond",serif;font-size:21px;font-weight:600;line-height:1.25}
+  .what{display:block;margin-top:3px;color:var(--muted);font-size:13.5px;line-height:1.5}
+
+  h2{
+    font-family:"Cormorant Garamond",serif;
+    font-weight:500;font-size:22px;margin:38px 0 14px;text-align:center;
+    color:var(--gold-soft);
+  }
+  .row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .pill{
+    padding:9px 16px;font-size:14px;text-decoration:none;
+    color:var(--paper);border:1px solid rgba(201,162,74,.35);border-radius:999px;
+    transition:background .18s ease;
+  }
+  .pill:hover,.pill:focus-visible{background:rgba(201,162,74,.14)}
+  .pill:focus-visible{outline:2px solid var(--gold-soft);outline-offset:3px}
+
+  footer{margin-top:46px;text-align:center;color:var(--muted);font-size:12.5px}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="crest">GS</div>
+    <h1>Galadriel Music Studio</h1>
+    <p class="tagline">Original music and orchestral reimaginings.<br>New releases every week.</p>
+  </header>
+
+  <hr class="rule">
+
+  <a class="channel" href="https://www.youtube.com/@Galadriel_Symphony">
+    <span class="mark">🎻</span>
+    <span>
+      <span class="name">Galadriel Symphony</span>
+      <span class="what">Rock and metal classics as full symphonic orchestra</span>
+    </span>
+  </a>
+
+  <a class="channel" href="https://www.youtube.com/@Heavenly_Echoes_Sounds">
+    <span class="mark">🕊️</span>
+    <span>
+      <span class="name">Heavenly Echoes Sounds</span>
+      <span class="what">Sacred choirs, Psalms and celestial music</span>
+    </span>
+  </a>
+
+  <a class="channel" href="https://www.youtube.com/@TheVelvetAtlasMusic">
+    <span class="mark">🌍</span>
+    <span>
+      <span class="name">The Velvet Atlas</span>
+      <span class="what">Romance songs from around the world</span>
+    </span>
+  </a>
+
+  <a class="channel" href="https://www.youtube.com/@ForgedInSilenceMusic">
+    <span class="mark">⚔️</span>
+    <span>
+      <span class="name">Forged in Silence</span>
+      <span class="what">Gym and workout music for heavy training</span>
+    </span>
+  </a>
+
+  <a class="channel" href="https://www.youtube.com/@REEMPLAZA_HANDLE_ECHOES_OF_ANIME">
+    <span class="mark">🎌</span>
+    <span>
+      <span class="name">Echoes of Anime</span>
+      <span class="what">Original anime songs and cinematic music</span>
+    </span>
+  </a>
+
+  <a class="channel" href="https://www.youtube.com/@ReelEmpiresMusic">
+    <span class="mark">🏛️</span>
+    <span>
+      <span class="name">Reel Empires Music</span>
+      <span class="what">Epic music for legendary movie scenes</span>
+    </span>
+  </a>
+
+  <h2>Listen anywhere</h2>
+  <div class="row">
+    <a class="pill" href="https://open.spotify.com/intl-es/artist/4nYRh691c9rFwYWgybuZY1">Spotify</a>
+    <a class="pill" href="https://music.apple.com/us/album/symphonic-reimaginings-orchestral-collection-orchestral/6774085456">Apple Music</a>
+    <a class="pill" href="https://tidal.com/artist/80259415">Tidal</a>
+  </div>
+
+  <footer>© 2026 Galadriel Music Studio</footer>
+
+</div>
+</body>
+</html>
