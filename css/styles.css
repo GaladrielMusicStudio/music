@@ -423,3 +423,197 @@ h1{margin:0;display:grid;gap:.1rem;justify-items:center;font-family:"Marcellus",
   .record-zone .home-audio .player-btn{width:39px!important;height:39px!important}
   .record-zone .touch{bottom:0!important;min-width:48%!important;min-height:38px!important;font-size:.5rem!important;letter-spacing:.18em!important}
 }
+
+/* Correccion: usar tocadisco premium como base visual y mantener controles funcionales encima */
+.record-zone{
+  width:min(1040px,72vw)!important;
+  aspect-ratio:1456/1024!important;
+  margin-top:-1.2rem!important;
+  padding:0!important;
+  display:block!important;
+  position:relative!important;
+  overflow:visible!important;
+  background:transparent!important;
+}
+.turntable-photo{
+  display:block!important;
+  position:absolute;
+  z-index:1;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  pointer-events:none;
+  filter:drop-shadow(0 30px 48px rgba(58,41,18,.18));
+  -webkit-mask-image:radial-gradient(ellipse at 50% 58%,#000 0 65%,rgba(0,0,0,.96) 72%,transparent 92%);
+  mask-image:radial-gradient(ellipse at 50% 58%,#000 0 65%,rgba(0,0,0,.96) 72%,transparent 92%);
+}
+.record-zone::before,
+.record-zone::after{display:none!important}
+.record-zone .orbit{
+  display:none!important;
+}
+.record-zone .orbit.two{
+  display:block!important;
+  z-index:8!important;
+  left:42.5%!important;
+  top:78.7%!important;
+  width:31%!important;
+  height:2px!important;
+  aspect-ratio:auto!important;
+  transform:none!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:rgba(255,230,180,.2)!important;
+  box-shadow:0 0 9px rgba(255,222,158,.28)!important;
+  opacity:1!important;
+}
+.record-zone .orbit.two::before{display:none!important}
+.record-zone .orbit.two::after{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  width:var(--disc-progress,0%);
+  max-width:100%;
+  height:2px;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#fff2c9,#c89b4e);
+  box-shadow:0 0 12px rgba(255,222,158,.5);
+}
+.record-zone .vinyl-button{
+  z-index:5!important;
+  left:41.5%!important;
+  top:41.5%!important;
+  width:42.5%!important;
+  aspect-ratio:1!important;
+  transform:translate(-50%,-50%) scaleY(.78) rotate(-1deg)!important;
+  opacity:.96!important;
+  mix-blend-mode:multiply!important;
+  filter:drop-shadow(0 14px 22px rgba(0,0,0,.18))!important;
+}
+.record-zone .vinyl-button:hover{transform:translate(-50%,-51%) scaleY(.78) rotate(-1deg)!important}
+.record-zone .vinyl-button::before,
+.record-zone .vinyl-button::after{display:none!important}
+.record-zone .vinyl{
+  background:radial-gradient(circle at 50% 50%,transparent 0 10%,rgba(0,0,0,.74) 10.5% 13%,transparent 13.5%),radial-gradient(circle at 49% 48%,rgba(30,29,25,.94) 0 25%,rgba(8,8,7,.96) 55%,rgba(2,2,2,.96) 100%)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 0 0 0 8px rgba(0,0,0,.14),inset 0 0 68px rgba(255,255,255,.08)!important;
+}
+.record-zone .vinyl::before{
+  animation:none!important;
+  opacity:.82!important;
+}
+.record-zone.is-audio-playing .vinyl::before{animation:spin 4.8s linear infinite!important}
+.record-zone .vinyl::after{opacity:.45!important}
+.record-zone .label-disc{
+  inset:34%!important;
+  background:radial-gradient(circle at 50% 46%,rgba(255,249,232,.94),rgba(230,203,159,.76) 58%,rgba(185,145,70,.24))!important;
+}
+.record-zone .progress-ring{
+  z-index:6!important;
+  left:41.5%!important;
+  top:41.5%!important;
+  width:48%!important;
+  transform:translate(-50%,-50%) rotate(-90deg) scaleY(.78)!important;
+}
+.record-zone .progress-ring circle{
+  stroke-width:.75!important;
+  stroke:rgba(255,223,163,.9)!important;
+}
+.record-zone .home-audio{
+  z-index:12!important;
+  left:20.8%!important;
+  top:79.2%!important;
+  width:64px!important;
+  transform:translate(-50%,-50%)!important;
+}
+.record-zone .home-audio .audio-orb{width:64px!important;height:64px!important}
+.record-zone .home-audio .player-btn{width:50px!important;height:50px!important}
+.record-zone .touch{
+  z-index:12!important;
+  left:50%!important;
+  bottom:6.2%!important;
+  min-width:260px!important;
+  min-height:48px!important;
+  transform:translateX(-50%)!important;
+}
+@media(min-width:821px){
+  .stage{grid-template-columns:1fr!important}
+  .channel-rail{position:absolute!important;left:0!important;top:52%!important;z-index:12!important}
+}
+@media(max-height:950px) and (min-width:821px){
+  .record-zone{width:min(910px,68vw)!important;margin-top:-1.35rem!important}
+}
+@media(max-width:820px){
+  .record-zone{
+    width:min(100%,560px)!important;
+    aspect-ratio:1456/1024!important;
+    margin-top:.35rem!important;
+  }
+  .turntable-photo{
+    filter:drop-shadow(0 18px 30px rgba(58,41,18,.14));
+    -webkit-mask-image:linear-gradient(#000 0 88%,transparent 100%);
+    mask-image:linear-gradient(#000 0 88%,transparent 100%);
+  }
+  .record-zone .vinyl-button{left:41.5%!important;top:41.5%!important;width:42.5%!important}
+  .record-zone .progress-ring{left:41.5%!important;top:41.5%!important;width:48%!important}
+  .record-zone .home-audio{left:20.7%!important;top:79.2%!important;width:48px!important}
+  .record-zone .home-audio .audio-orb{width:48px!important;height:48px!important}
+  .record-zone .home-audio .player-btn{width:39px!important;height:39px!important}
+  .record-zone .orbit.two{left:42.5%!important;top:78.7%!important;width:31%!important}
+  .record-zone .touch{
+    bottom:5.4%!important;
+    min-width:42%!important;
+    min-height:36px!important;
+    padding:0 .35rem 0 .85rem!important;
+    font-size:.48rem!important;
+    letter-spacing:.16em!important;
+  }
+  .record-zone .touch .arrow{width:28px!important;height:28px!important}
+}
+
+/* Encuadre corregido del tocadisco: no invade el titulo */
+.hero-copy{position:relative;z-index:18}
+.record-zone{
+  width:min(820px,58vw)!important;
+  margin-top:.9rem!important;
+  z-index:3!important;
+}
+.turntable-photo{
+  opacity:.94!important;
+  mix-blend-mode:multiply;
+  filter:drop-shadow(0 26px 42px rgba(58,41,18,.16)) saturate(1.04)!important;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 58%,#000 0 54%,rgba(0,0,0,.82) 66%,transparent 86%),linear-gradient(to bottom,transparent 0,#000 15%,#000 86%,transparent 100%)!important;
+  mask-image:radial-gradient(ellipse at 50% 58%,#000 0 54%,rgba(0,0,0,.82) 66%,transparent 86%),linear-gradient(to bottom,transparent 0,#000 15%,#000 86%,transparent 100%)!important;
+  -webkit-mask-composite:source-in;
+  mask-composite:intersect;
+}
+.record-zone .vinyl-button{left:41.6%!important;top:41.2%!important;width:42%!important}
+.record-zone .progress-ring{left:41.6%!important;top:41.2%!important;width:47.5%!important}
+.record-zone .home-audio{left:20.7%!important;top:79%!important}
+.record-zone .orbit.two{left:42.5%!important;top:78.5%!important}
+.record-zone .touch{bottom:6%!important}
+@media(max-height:820px) and (min-width:821px){
+  h1 span{font-size:clamp(4rem,6.6vw,6.4rem)!important}
+  h1 small{font-size:clamp(.72rem,1vw,1rem)!important}
+  .count-label{margin-top:.55rem!important}
+  .hero-statement{margin-top:.55rem!important}
+  .current-meta{margin-top:.45rem!important;position:relative;z-index:22}
+  .current-meta::before{height:18px!important}
+  .current-meta .name{font-size:clamp(1.65rem,2.6vw,2.35rem)!important;background:linear-gradient(90deg,transparent,rgba(251,248,240,.72) 18% 82%,transparent);padding:0 .6rem}
+  .stage{margin-top:.9rem!important}
+  .record-zone{width:min(560px,47vw)!important;margin-top:0!important}
+  .channel-rail{top:57%!important}
+}
+@media(max-width:820px){
+  .record-zone{
+    width:min(100%,420px)!important;
+    margin-top:.65rem!important;
+  }
+  .turntable-photo{
+    opacity:.95!important;
+    mix-blend-mode:multiply;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 89%,transparent 100%)!important;
+    mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 89%,transparent 100%)!important;
+  }
+}
