@@ -5,6 +5,8 @@ const SHOW_AUDIO=true;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const enc=s=>new URLSearchParams({q:String(s)}).toString().slice(2);
+const qs=obj=>new URLSearchParams(obj).toString();
+const cleanRemoteUrl=url=>String(url||"").replace(/\\u0026/g,"&").replace(/\\u003d/g,"=").replace(/\\\//g,"/").replace(/&amp;/g,"&");
 const pad=n=>String(n+1).padStart(2,"0");
 const fmt=n=>{n=+n||0;if(n>=1e6)return(n/1e6).toFixed(1).replace(".",",")+" M";if(n>=1e3)return Math.round(n/1e3)+" K";return String(n)};
 const fecha=iso=>{if(!iso)return"";const d=(Date.now()-new Date(iso))/864e5;if(d<1)return"Hoy";if(d<2)return"Ayer";if(d<7)return`Hace ${Math.floor(d)} dias`;if(d<35)return`Hace ${Math.floor(d/7)} semanas`;return new Date(iso).toLocaleDateString("es-PE",{day:"numeric",month:"long"})};
@@ -20,7 +22,7 @@ let active=1,view="canales",panelOpen=false;
 function buildChannels(){
   CH=APP.canales.map(c=>{
     const f=FALLBACK[c.handle]||{};
-    return {...c,avatar:"",videos:[...(f.videos||[])],subs:f.subs||0,nVideos:f.nVideos||0,accent:f.accent||"#b89146",loaded:false};
+    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.avatar||c.avatar||"",videos:[...(f.videos||[])],subs:f.subs||0,nVideos:f.nVideos||0,accent:f.accent||"#b89146",loaded:false};
   });
 }
 
@@ -93,7 +95,7 @@ function renderHero(){
   $("#homeAudio").innerHTML=audioBlock("Cancion del canal",c.audio,c);
   const label=$(".label-disc");
   label.classList.toggle("has-img",!!c.avatar);
-  label.innerHTML=c.avatar?`<img src="${esc(c.avatar)}" alt="">`:seal(c);
+  label.innerHTML=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
   const stats=[c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · ");
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
@@ -113,7 +115,7 @@ function renderListen(){
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=c.videos.slice(0,4);
     const community=c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Comunidad en crecimiento":"Cargando comunidad");
-    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
+    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   initPlayers($("#listenList"));
 }
@@ -146,34 +148,66 @@ function togglePanel(force){
 }
 async function fetchViaApi(c){
   const k=APP.apiKey;
-  const cj=await getJson(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${enc(c.handle)}&key=${k}`);
-  if(cj.error||!cj.items?.[0])throw new Error(cj.error?.message||"channel");
+  if(!k)throw new Error("api key");
+  const handle=String(c.handle||"").trim();
+  const cleanHandle=handle.replace(/^@/,"");
+  const requests=[
+    c.channelId?{part:"snippet,statistics,contentDetails",id:c.channelId,key:k}:null,
+    handle?{part:"snippet,statistics,contentDetails",forHandle:handle,key:k}:null,
+    cleanHandle&&cleanHandle!==handle?{part:"snippet,statistics,contentDetails",forHandle:cleanHandle,key:k}:null
+  ].filter(Boolean);
+  let cj,lastError;
+  for(const params of requests){
+    try{
+      const data=await getJson(`https://www.googleapis.com/youtube/v3/channels?${qs(params)}`);
+      if(data.error)throw new Error(data.error.message||"youtube api");
+      if(data.items?.[0]){cj=data;break}
+    }catch(error){lastError=error}
+  }
+  if(!cj?.items?.[0])throw lastError||new Error("channel");
   const it=cj.items[0];
-  const pl=await getJson(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${it.contentDetails.relatedPlaylists.uploads}&key=${k}`);
+  const uploads=it.contentDetails?.relatedPlaylists?.uploads;
+  const pl=uploads?await getJson(`https://www.googleapis.com/youtube/v3/playlistItems?${qs({part:"snippet",maxResults:"50",playlistId:uploads,key:k})}`):{items:[]};
   const ids=(pl.items||[]).map(x=>x.snippet.resourceId.videoId).filter(Boolean);
   const det={};
   if(ids.length){
-    const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids.slice(0,50).join(",")}&key=${k}`);
+    const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?${qs({part:"contentDetails,statistics",id:ids.slice(0,50).join(","),key:k})}`);
     (vd.items||[]).forEach(v=>det[v.id]={dur:dur(v.contentDetails.duration),vistas:+v.statistics.viewCount||0});
   }
-  const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).sort((a,b)=>b.vistas-a.vistas);
-  return{nombre:it.snippet.title||c.nombre,avatar:it.snippet.thumbnails?.high?.url||it.snippet.thumbnails?.default?.url||"",subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos};
+  const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id).sort((a,b)=>b.vistas-a.vistas);
+  const thumbs=it.snippet?.thumbnails||{};
+  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos};
 }
 async function fetchFallback(c){
   const html=await getText(APP.proxy+enc(`https://www.youtube.com/${c.handle}`));
-  const id=(html.match(/"externalId":"(UC[\w-]{22})"/)||html.match(/"channelId":"(UC[\w-]{22})"/)||[])[1];
-  const avatar=(html.match(/"avatar":\{"thumbnails":\[\{"url":"([^"]+)"/)||[])[1]?.replace(/\\u0026/g,"&").replace(/\\\//g,"/")||"";
+  const id=c.channelId||(html.match(/"externalId":"(UC[\w-]{22})"/)||html.match(/"channelId":"(UC[\w-]{22})"/)||html.match(/\/channel\/(UC[\w-]{22})/)||[])[1];
+  const avatar=cleanRemoteUrl(
+    (html.match(/"avatar":\{"thumbnails":\[\{"url":"([^"]+)"/)||
+    html.match(/"avatarViewModel":\{"image":\{"sources":\[\{"url":"([^"]+)"/)||
+    html.match(/"(https:\/\/yt3\.googleusercontent\.com\/[^"\\]+)"/)||[])[1]||""
+  );
   let videos=[];
   if(id){
     const xml=await getText(APP.proxy+enc(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`));
     const doc=new DOMParser().parseFromString(xml,"text/xml");
     videos=[...doc.querySelectorAll("entry")].slice(0,8).map(n=>({id:n.querySelector("videoId")?.textContent||n.querySelector("yt\\:videoId")?.textContent,title:n.querySelector("title")?.textContent||"Video",date:n.querySelector("published")?.textContent||"",vistas:0,dur:""})).filter(v=>v.id);
   }
-  return{avatar,videos};
+  return{channelId:id||c.channelId||"",avatar,videos};
 }
 async function loadChannel(c){
-  try{Object.assign(c,await fetchViaApi(c),{loaded:true})}
-  catch(_){try{Object.assign(c,await fetchFallback(c),{loaded:true})}catch(__){c.loaded=true}}
+  try{
+    const api=await fetchViaApi(c);
+    Object.assign(c,api,{avatar:api.avatar||c.avatar,videos:api.videos?.length?api.videos:c.videos,loaded:true});
+  }catch(error){
+    console.warn("No se pudo cargar YouTube API para",c.handle,error);
+    try{
+      const fallback=await fetchFallback(c);
+      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:fallback.videos?.length?fallback.videos:c.videos,loaded:true});
+    }catch(fallbackError){
+      console.warn("No se pudo cargar fallback de YouTube para",c.handle,fallbackError);
+      c.loaded=true;
+    }
+  }
   renderHero();renderListen();
 }
 document.addEventListener("click",ev=>{
@@ -183,10 +217,18 @@ document.addEventListener("click",ev=>{
   if(ev.target.closest("#closePanel"))togglePanel(false);
 });
 document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(ev.key==="ArrowLeft")setActive(active-1);if(ev.key==="ArrowRight")setActive(active+1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
-const mail=$("#mail");mail.href=`mailto:${APP.correo}?subject=Contacto%20Galadriel%20Music%20Studio`;mail.textContent=APP.correo;
-const studioMail=$("#studioMail");if(studioMail)studioMail.href=`mailto:${APP.correo}?subject=Conocer%20Galadriel%20Music%20Studio`;
-const studioLower=document.querySelector(".studio-lower");
-if(studioLower){studioLower.insertAdjacentHTML("beforeend",`<div class="contact-card studio-card studio-audio-card"><h3>Audio del estudio</h3>${audioBlock("Audio del estudio",APP.studioAudio,{nombre:"Galadriel Music Studio"})}</div>`);initPlayers(studioLower)}
+function initStaticBindings(){
+  const mail=$("#mail");
+  if(mail){mail.href=`mailto:${APP.correo}?subject=Contacto%20Galadriel%20Music%20Studio`;mail.textContent=APP.correo}
+  const studioMail=$("#studioMail");
+  if(studioMail)studioMail.href=`mailto:${APP.correo}?subject=Conocer%20Galadriel%20Music%20Studio`;
+  const studioLower=document.querySelector(".studio-lower");
+  if(studioLower&&!studioLower.dataset.audioReady){
+    studioLower.dataset.audioReady="1";
+    studioLower.insertAdjacentHTML("beforeend",`<div class="contact-card studio-card studio-audio-card"><h3>Audio del estudio</h3>${audioBlock("Audio del estudio",APP.studioAudio,{nombre:"Galadriel Music Studio"})}</div>`);
+    initPlayers(studioLower);
+  }
+}
 const notifyForm=$("#lista-correo"),notifyMsg=$("#susc-msg");
 if(notifyForm){
   notifyForm.addEventListener("submit",ev=>{
@@ -237,7 +279,7 @@ async function boot(){
   try{
     await loadSiteData();
     buildChannels();
-    renderShop();renderHero();renderListen();setView("canales");CH.forEach(loadChannel);
+    initStaticBindings();renderShop();renderHero();renderListen();setView("canales");CH.forEach(loadChannel);
     setTimeout(()=>{CH.forEach(c=>{if(!c.loaded)c.loaded=true});renderListen();renderHero()},6200);
   }catch(error){
     document.body.insertAdjacentHTML("beforeend",'<p style="position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:99999;padding:1rem;background:#0b0a08;color:#fff;border-radius:8px">No se pudo cargar la data del sitio. Sube tambien la carpeta data.</p>');
