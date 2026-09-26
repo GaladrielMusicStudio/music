@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://dairfernandezc-maker.github.io/music/sitemap.xml
+Sitemap: https://galadrielmusicstudio.github.io/music/sitemap.xml
