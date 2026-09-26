@@ -1,1 +1,247 @@
-Add site JavaScript
+let APP={canales:[],packs:[]};
+let FALLBACK={};
+
+const SHOW_AUDIO=true;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const enc=s=>new URLSearchParams({q:String(s)}).toString().slice(2);
+const pad=n=>String(n+1).padStart(2,"0");
+const fmt=n=>{n=+n||0;if(n>=1e6)return(n/1e6).toFixed(1).replace(".",",")+" M";if(n>=1e3)return Math.round(n/1e3)+" K";return String(n)};
+const fecha=iso=>{if(!iso)return"";const d=(Date.now()-new Date(iso))/864e5;if(d<1)return"Hoy";if(d<2)return"Ayer";if(d<7)return`Hace ${Math.floor(d)} dias`;if(d<35)return`Hace ${Math.floor(d/7)} semanas`;return new Date(iso).toLocaleDateString("es-PE",{day:"numeric",month:"long"})};
+const dur=iso=>{const m=/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso||"");if(!m)return"";const h=+m[1]||0,mi=+m[2]||0,sg=+m[3]||0;return h?`${h}:${String(mi).padStart(2,"0")}:${String(sg).padStart(2,"0")}`:`${mi}:${String(sg).padStart(2,"0")}`};
+function getText(url){
+  if(typeof fetch==="function") return fetch(url).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.text()});
+  if(typeof XMLHttpRequest==="function") return new Promise((resolve,reject)=>{const x=new XMLHttpRequest();x.open("GET",url,true);x.onload=()=>x.status>=200&&x.status<300?resolve(x.responseText):reject(new Error("HTTP "+x.status));x.onerror=()=>reject(new Error("Network error"));x.send()});
+  return Promise.reject(new Error("No network API available"));
+}
+const getJson=url=>getText(url).then(JSON.parse);
+let CH=[];
+let active=1,view="canales",panelOpen=false;
+function buildChannels(){
+  CH=APP.canales.map(c=>{
+    const f=FALLBACK[c.handle]||{};
+    return {...c,avatar:"",videos:[...(f.videos||[])],subs:f.subs||0,nVideos:f.nVideos||0,accent:f.accent||"#b89146",loaded:false};
+  });
+}
+
+function iconPlay(){return `<svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>`}
+function audioWave(){return `<span class="audio-wave" aria-hidden="true">${Array.from({length:18},()=>"<i></i>").join("")}</span>`}
+function audioBlock(label,src,c={}){
+  if(!SHOW_AUDIO||!src) return "";
+  return `<div class="audio-card audio-orb" data-audio-player><audio preload="none" controlslist="nodownload noplaybackrate" src="${esc(src)}"></audio><button class="player-btn" type="button" data-audio-play aria-label="Reproducir ${esc(c.nombre||label)}">${iconPlay()}</button></div>`;
+}
+function timeAudio(s){s=Number.isFinite(s)?Math.max(0,s):0;return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`}
+function paintRange(input,val,max=100){const pct=max?Math.min(100,Math.max(0,val/max*100)):0;input.style.setProperty("--fill",pct+"%")}
+function syncDiscProgress(card,pct,playing=false){
+  const target=card.closest("#homeAudio")?document.querySelector(".record-zone"):card.closest(".listen-disc");
+  if(!target)return;
+  target.style.setProperty("--disc-progress",pct+"%");
+  const ring=target.querySelector?.(".progress-ring circle");
+  if(ring)ring.style.strokeDashoffset=String(100-pct);
+  target.classList.toggle("is-audio-playing",playing);
+}
+function initPlayers(root=document){
+  root.querySelectorAll("[data-audio-player]").forEach(card=>{
+    if(card.dataset.ready)return;
+    card.dataset.ready="1";
+    const audio=card.querySelector("audio"),play=card.querySelector("[data-audio-play]"),seek=card.querySelector("[data-audio-seek]"),vol=card.querySelector("[data-audio-volume]"),now=card.querySelector("[data-audio-current]"),end=card.querySelector("[data-audio-duration]");
+    audio.volume=vol?+vol.value:.9;
+    if(seek)paintRange(seek,0); if(vol)paintRange(vol,+vol.value,1);
+    const update=()=>{const d=audio.duration||0,pct=d?Math.min(100,Math.max(0,audio.currentTime/d*100)):0;card.style.setProperty("--audio-progress",pct+"%");syncDiscProgress(card,pct,!audio.paused&&!audio.ended);if(seek){seek.max=d||100;seek.value=audio.currentTime||0;paintRange(seek,+seek.value,+seek.max)}if(now)now.textContent=timeAudio(audio.currentTime);if(end)end.textContent=d?timeAudio(d):"0:00"};
+    play.addEventListener("click",()=>{
+      if(audio.paused){
+        document.querySelectorAll("audio").forEach(a=>{if(a!==audio)a.pause()});
+        document.querySelectorAll("[data-audio-player]").forEach(p=>{if(p!==card)p.classList.remove("is-open","is-playing")});
+        card.classList.add("is-open","is-loading");
+        audio.play().catch(()=>{card.classList.remove("is-loading");card.classList.add("is-error")});
+      }else{audio.pause();card.classList.remove("is-open")}
+    });
+    seek?.addEventListener("input",()=>{audio.currentTime=+seek.value||0;update()});
+    vol?.addEventListener("input",()=>{audio.volume=+vol.value;paintRange(vol,+vol.value,1)});
+    audio.addEventListener("loadedmetadata",update);
+    audio.addEventListener("timeupdate",update);
+    audio.addEventListener("waiting",()=>card.classList.add("is-loading"));
+    audio.addEventListener("canplay",()=>card.classList.remove("is-loading"));
+    audio.addEventListener("play",()=>{card.classList.remove("is-loading");card.classList.add("is-playing");update()});
+    audio.addEventListener("pause",()=>{card.classList.remove("is-playing");update()});
+    audio.addEventListener("ended",()=>{card.classList.remove("is-playing","is-open");card.style.setProperty("--audio-progress","100%");syncDiscProgress(card,100,false)});
+    audio.addEventListener("error",()=>{card.classList.remove("is-loading");card.classList.add("is-error")});
+  });
+}
+function links(c){
+  const entries=Object.entries(c.enlaces||{});
+  const you=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;
+  return `<div class="platforms"><a class="primary" href="${esc(you)}?sub_confirmation=1" target="_blank" rel="noopener noreferrer">YouTube</a>${entries.filter(([n])=>n!=="YouTube").map(([n,u])=>`<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(n)}</a>`).join("")}</div>`;
+}
+function seal(c){
+  return `<span class="channel-seal" style="--seal:${esc(c.accent||"#b89146")}"><b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b></span>`;
+}
+function videoCard(v,c={}){
+  const href=v.id?`https://youtu.be/${esc(v.id)}`:(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
+  const media=v.id?`<img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
+  const cls=v.id?"video-card":"video-card is-fallback";
+  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}</span><b>${esc(v.title)}</b><small>${v.vistas?fmt(v.vistas)+" vistas · ":""}${esc(fecha(v.date)||"Seleccion destacada")}</small></a>`;
+}
+function renderRail(){
+  $("#channelRail").innerHTML=CH.map((c,i)=>`<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(i)}</span><span class="label">${esc(c.hook||c.cat)}</span></button></li>`).join("");
+}
+function renderHero(){
+  const c=CH[active];
+  const disc=document.querySelector(".record-zone");
+  if(disc){disc.style.setProperty("--disc-progress","0%");disc.querySelector(".progress-ring circle")?.style.setProperty("stroke-dashoffset","100");disc.classList.remove("is-audio-playing")}
+  $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><p class="name">${esc(c.nombre)}</p>`;
+  $("#homeAudio").innerHTML=audioBlock("Cancion del canal",c.audio,c);
+  const label=$(".label-disc");
+  label.classList.toggle("has-img",!!c.avatar);
+  label.innerHTML=c.avatar?`<img src="${esc(c.avatar)}" alt="">`:seal(c);
+  const stats=[c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · ");
+  const topVideos=c.videos.slice(0,3);
+  $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
+  document.body.classList.toggle("disc-open",panelOpen);
+  $("#openDisc").setAttribute("aria-expanded",String(panelOpen));
+  $("#touchDisc").setAttribute("aria-expanded",String(panelOpen));
+  renderRail();
+  initPlayers($("#channelPanel"));
+  initPlayers($("#homeAudio"));
+}
+function placeholderVideos(c){
+  const note=c.loaded?"Abrir canal en YouTube":"Preparando seleccion";
+  return Array.from({length:4},(_,i)=>videoCard({title:i===0?c.nombre:"Galadriel Music Studio",tag:c.cat||"Studio",vistas:0},c)).join("");
+}
+function renderListen(){
+  const ordered=[...CH].sort((a,b)=>(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b));
+  $("#listenList").innerHTML=ordered.map(c=>{
+    const vids=c.videos.slice(0,4);
+    const community=c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Comunidad en crecimiento":"Cargando comunidad");
+    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
+  }).join("");
+  initPlayers($("#listenList"));
+}
+function renderShop(){
+  $("#shopGrid").innerHTML=APP.packs.map(p=>{
+    const mobile=`img/shop/${p.slug}-mobile.jpg`;
+    const monitor=`img/shop/${p.slug}-monitor.jpg`;
+    const mobilePrice="US$2";
+    const monitorPrice="US$5";
+    const mobileSize="1440 x 3200 px";
+    const monitorSize="3840 x 2160 px";
+    const asunto=enc("Pack: "+p.t);
+    const cuerpo=enc(`Hola, quiero comprar el pack "${p.t}".\n\nFormato elegido:\n- Celular (${mobileSize}) - ${mobilePrice}\n- Monitor (${monitorSize}) - ${monitorPrice}\n\nCanal: ${p.canal}\n\nIndícame el método de pago y el enlace de entrega. Gracias.`);
+    return `<a class="shop-card" href="mailto:${APP.correo}?subject=${asunto}&body=${cuerpo}"><span class="shop-art" style="--pack-bg:${p.bg};--pack-fg:${p.fg}"><span class="mock-monitor"><img src="${esc(monitor)}" alt="" loading="lazy" onerror="this.remove()"></span><span class="mock-phone"><img src="${esc(mobile)}" alt="" loading="lazy" onerror="this.remove()"></span><span class="pack-title">${esc(p.t)}</span><span class="pack-count">${esc(p.n)}</span></span><strong>${esc(p.t)}</strong><small>${esc(p.n)}<span class="price-line">Celular ${mobileSize} · ${mobilePrice}</span><span class="price-line">Monitor ${monitorSize} · ${monitorPrice}</span></small><span class="shop-actions"><em>Ver pack</em><i aria-hidden="true">◦</i></span></a>`;
+  }).join("");
+}
+function setActive(i){active=(i+CH.length)%CH.length;panelOpen=false;renderHero()}
+function setView(next){
+  view=next;
+  if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
+  document.body.classList.toggle("view-open",view!=="canales");
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
+  document.querySelectorAll("[data-view]").forEach(b=>{if(b.matches(".nav button"))b.setAttribute("aria-current",b.dataset.view===view?"true":"false")});
+  if(innerWidth<=820){requestAnimationFrame(()=>{(view==="canales"?document.querySelector(".page"):document.querySelector(`#view-${view}`))?.scrollIntoView({block:"start"})})}
+}
+function togglePanel(force){
+  panelOpen=typeof force==="boolean"?force:!panelOpen;
+  renderHero();
+  if(panelOpen&&innerWidth<=820)requestAnimationFrame(()=>$("#channelPanel")?.scrollIntoView({block:"start",behavior:"smooth"}));
+}
+async function fetchViaApi(c){
+  const k=APP.apiKey;
+  const cj=await getJson(`https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails&forHandle=${enc(c.handle)}&key=${k}`);
+  if(cj.error||!cj.items?.[0])throw new Error(cj.error?.message||"channel");
+  const it=cj.items[0];
+  const pl=await getJson(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${it.contentDetails.relatedPlaylists.uploads}&key=${k}`);
+  const ids=(pl.items||[]).map(x=>x.snippet.resourceId.videoId).filter(Boolean);
+  const det={};
+  if(ids.length){
+    const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids.slice(0,50).join(",")}&key=${k}`);
+    (vd.items||[]).forEach(v=>det[v.id]={dur:dur(v.contentDetails.duration),vistas:+v.statistics.viewCount||0});
+  }
+  const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).sort((a,b)=>b.vistas-a.vistas);
+  return{nombre:it.snippet.title||c.nombre,avatar:it.snippet.thumbnails?.high?.url||it.snippet.thumbnails?.default?.url||"",subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos};
+}
+async function fetchFallback(c){
+  const html=await getText(APP.proxy+enc(`https://www.youtube.com/${c.handle}`));
+  const id=(html.match(/"externalId":"(UC[\w-]{22})"/)||html.match(/"channelId":"(UC[\w-]{22})"/)||[])[1];
+  const avatar=(html.match(/"avatar":\{"thumbnails":\[\{"url":"([^"]+)"/)||[])[1]?.replace(/\\u0026/g,"&").replace(/\\\//g,"/")||"";
+  let videos=[];
+  if(id){
+    const xml=await getText(APP.proxy+enc(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`));
+    const doc=new DOMParser().parseFromString(xml,"text/xml");
+    videos=[...doc.querySelectorAll("entry")].slice(0,8).map(n=>({id:n.querySelector("videoId")?.textContent||n.querySelector("yt\\:videoId")?.textContent,title:n.querySelector("title")?.textContent||"Video",date:n.querySelector("published")?.textContent||"",vistas:0,dur:""})).filter(v=>v.id);
+  }
+  return{avatar,videos};
+}
+async function loadChannel(c){
+  try{Object.assign(c,await fetchViaApi(c),{loaded:true})}
+  catch(_){try{Object.assign(c,await fetchFallback(c),{loaded:true})}catch(__){c.loaded=true}}
+  renderHero();renderListen();
+}
+document.addEventListener("click",ev=>{
+  const channel=ev.target.closest("[data-i]");if(channel){setActive(+channel.dataset.i);return}
+  const nav=ev.target.closest("[data-view]");if(nav){setView(nav.dataset.view);return}
+  if(ev.target.closest("#openDisc")||ev.target.closest("#touchDisc")){togglePanel();return}
+  if(ev.target.closest("#closePanel"))togglePanel(false);
+});
+document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(ev.key==="ArrowLeft")setActive(active-1);if(ev.key==="ArrowRight")setActive(active+1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
+const mail=$("#mail");mail.href=`mailto:${APP.correo}?subject=Contacto%20Galadriel%20Music%20Studio`;mail.textContent=APP.correo;
+const studioMail=$("#studioMail");if(studioMail)studioMail.href=`mailto:${APP.correo}?subject=Conocer%20Galadriel%20Music%20Studio`;
+const studioLower=document.querySelector(".studio-lower");
+if(studioLower){studioLower.insertAdjacentHTML("beforeend",`<div class="contact-card studio-card studio-audio-card"><h3>Audio del estudio</h3>${audioBlock("Audio del estudio",APP.studioAudio,{nombre:"Galadriel Music Studio"})}</div>`);initPlayers(studioLower)}
+const notifyForm=$("#lista-correo"),notifyMsg=$("#susc-msg");
+if(notifyForm){
+  notifyForm.addEventListener("submit",ev=>{
+    const email=notifyForm.email.value.trim();
+    const accepted=$("#consent")?.checked;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||!accepted){
+      ev.preventDefault();
+      notifyMsg.textContent=!accepted?"Acepta la politica de privacidad para continuar.":"Escribe un correo valido.";
+      notifyMsg.classList.add("error");
+      return;
+    }
+    if(notifyForm.action.includes("TU_ID")){
+      ev.preventDefault();
+      notifyMsg.classList.remove("error");
+      notifyMsg.textContent="Formulario preparado. Falta conectar Formspree o cambiarlo por tu proveedor de correo.";
+    }
+  });
+}
+function closeIntro(){const intro=$("#intro");if(!intro||intro.classList.contains("off"))return;intro.classList.add("off");setTimeout(()=>intro.remove(),950)}
+function initIntro(){
+  const intro=$("#intro"),video=$("#introVideo");
+  if(!intro)return;
+  intro.addEventListener("click",closeIntro,{once:true});
+  addEventListener("keydown",closeIntro,{once:true});
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){setTimeout(closeIntro,500);return}
+  const mobile=matchMedia("(max-width: 820px), (pointer: coarse)").matches;
+  let started=false;
+  let fallback=setTimeout(closeIntro,9000);
+  if(video){
+    const markStarted=()=>{started=true};
+    video.addEventListener("playing",markStarted,{once:true});
+    video.addEventListener("timeupdate",markStarted,{once:true});
+    setTimeout(()=>{if(mobile&&!started)closeIntro()},1600);
+    video.addEventListener("ended",()=>{clearTimeout(fallback);closeIntro()},{once:true});
+    video.addEventListener("error",()=>{clearTimeout(fallback);setTimeout(closeIntro,1200)},{once:true});
+    video.play?.().catch(()=>{if(mobile)closeIntro()});
+  }
+}
+initIntro();
+async function loadSiteData(){
+  const response=await fetch("data/channels.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("No se pudo cargar data/channels.json");
+  const data=await response.json();
+  APP=data.app||APP;
+  FALLBACK=data.fallback||{};
+}
+async function boot(){
+  try{
+    await loadSiteData();
+    buildChannels();
+    renderShop();renderHero();renderListen();setView("canales");CH.forEach(loadChannel);
+    setTimeout(()=>{CH.forEach(c=>{if(!c.loaded)c.loaded=true});renderListen();renderHero()},6200);
+  }catch(error){
+    document.body.insertAdjacentHTML("beforeend",'<p style="position:fixed;left:1rem;right:1rem;bottom:1rem;z-index:99999;padding:1rem;background:#0b0a08;color:#fff;border-radius:8px">No se pudo cargar la data del sitio. Sube tambien la carpeta data.</p>');
+    console.error(error);
+  }
+}
+boot();
