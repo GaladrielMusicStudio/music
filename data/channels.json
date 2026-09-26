@@ -1,1 +1,343 @@
-Add channel data
+{
+  "app": {
+    "correo": "galdriel2818@hotmail.com",
+    "apiKey": "AIzaSyCTIcuz9SO6DYV0-ACtuH0wD2GqaObUp3M",
+    "proxy": "https://api.allorigins.win/raw?url=",
+    "studioAudio": "audio/galadriel-music-studio.mp3",
+    "canales": [
+      {
+        "handle": "@EcosDelAnimeMusic",
+        "mono": "E A",
+        "nombre": "Ecos del Anime",
+        "cat": "Anime orquestal",
+        "hook": "Noches de anime",
+        "audio": "audio/ecos-del-anime.mp3",
+        "line": "Los openings que te formaron, llevados a orquesta y coro. Aqui empezo el estudio.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@EcosDelAnimeMusic",
+          "Instagram": "https://instagram.com/echoes_music_studio"
+        }
+      },
+      {
+        "handle": "@Galadriel_Symphony",
+        "mono": "G S",
+        "nombre": "Galadriel Symphony",
+        "cat": "Orquestal",
+        "hook": "Iconos en sinfonia",
+        "audio": "audio/galadriel-symphony.mp3",
+        "line": "Canciones reconocibles llevadas a un formato sinfonico enorme: rock, metal, pop, cine y temas virales con orquesta completa.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@Galadriel_Symphony",
+          "Spotify": "https://open.spotify.com/intl-es/artist/4nYRh691c9rFwYWgybuZY1",
+          "Tidal": "https://tidal.com/artist/80259415",
+          "Instagram": "https://instagram.com/galadrielsymphony",
+          "TikTok": "https://tiktok.com/@galadriel_symphony",
+          "Facebook": "https://facebook.com/galadrielsymphony"
+        }
+      },
+      {
+        "handle": "@Heavenly_Echoes_Sounds",
+        "mono": "H E",
+        "nombre": "Heavenly Echoes Sounds",
+        "cat": "Adoracion",
+        "hook": "Salmos en grande",
+        "audio": "audio/heavenly-echoes-sounds.mp3",
+        "line": "Adoracion cristiana con coro orquestal. El Libro de los Salmos, completo, en serie.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@Heavenly_Echoes_Sounds"
+        }
+      },
+      {
+        "handle": "@ForgedInSilenceMusic",
+        "mono": "F S",
+        "nombre": "Forged In Silence",
+        "cat": "Entrenamiento",
+        "hook": "Fuerza para romper limites",
+        "audio": "audio/forged-in-silence.mp3",
+        "line": "Musica agresiva para entrenar pesado. Hecha para levantar, no para acompanar.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@ForgedInSilenceMusic"
+        }
+      },
+      {
+        "handle": "@TheVelvetAtlasMusic",
+        "mono": "V A",
+        "nombre": "The Velvet Atlas",
+        "cat": "Romance del mundo",
+        "hook": "Amor de otros paises",
+        "audio": "audio/the-velvet-atlas.mp3",
+        "line": "Canciones de amor del mundo, con letra. Un pais y una historia por disco.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@TheVelvetAtlasMusic"
+        }
+      },
+      {
+        "handle": "@ReelEmpiresMusic",
+        "mono": "R E",
+        "nombre": "Reel Empires Music",
+        "cat": "Cine",
+        "hook": "Escenas que suenan enormes",
+        "audio": "audio/reel-empires-music.mp3",
+        "line": "Musica epica para las escenas de cine que no se olvidan. Original, compuesta aqui.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@ReelEmpiresMusic"
+        }
+      },
+      {
+        "handle": "@KawaiiCatPro",
+        "mono": "K C",
+        "nombre": "Kawaii Cat Pro",
+        "cat": "Finanzas",
+        "hook": "Dinero explicado con calma",
+        "audio": "",
+        "line": "Finanzas explicadas con calma. Ahorro, inversion y dinero sin tecnicismos.",
+        "enlaces": {
+          "YouTube": "https://www.youtube.com/@KawaiiCatPro"
+        }
+      }
+    ],
+    "packs": [
+      {
+        "slug": "guardian-angels",
+        "t": "Guardian Angels",
+        "n": "12 wallpapers",
+        "canal": "Heavenly Echoes Sounds",
+        "bg": "#E2D3A8",
+        "fg": "#141008"
+      },
+      {
+        "slug": "beast-mode",
+        "t": "Beast Mode",
+        "n": "10 wallpapers",
+        "canal": "Forged In Silence",
+        "bg": "#B8412A",
+        "fg": "#FFF6EC"
+      },
+      {
+        "slug": "dark-fantasy",
+        "t": "Dark Fantasy",
+        "n": "12 wallpapers",
+        "canal": "Ecos del Anime",
+        "bg": "#1E7F94",
+        "fg": "#F1FBFF"
+      },
+      {
+        "slug": "legends-of-rome",
+        "t": "Legends of Rome",
+        "n": "10 wallpapers",
+        "canal": "Reel Empires Music",
+        "bg": "#35406B",
+        "fg": "#F0EFF7"
+      },
+      {
+        "slug": "vintage-romance",
+        "t": "Vintage Romance",
+        "n": "12 wallpapers",
+        "canal": "The Velvet Atlas",
+        "bg": "#6B3A6E",
+        "fg": "#F7EFF6"
+      },
+      {
+        "slug": "finance-calm",
+        "t": "Finance Calm",
+        "n": "8 wallpapers",
+        "canal": "Kawaii Cat Pro",
+        "bg": "#E08AA8",
+        "fg": "#141008"
+      }
+    ]
+  },
+  "fallback": {
+    "@EcosDelAnimeMusic": {
+      "subs": 410,
+      "nVideos": 18,
+      "accent": "#7b879f",
+      "videos": [
+        {
+          "title": "Noches de Anime | Orquesta emocional para mundos de anime",
+          "vistas": 9200,
+          "tag": "Anime"
+        },
+        {
+          "title": "Opening de batalla en sinfonia | Anime orchestral theme",
+          "vistas": 7600,
+          "tag": "Anime"
+        },
+        {
+          "title": "Luz de luna sobre Tokyo | Emotional anime music",
+          "vistas": 6400,
+          "tag": "Anime"
+        },
+        {
+          "title": "Final de temporada | Epic anime orchestra",
+          "vistas": 5200,
+          "tag": "Anime"
+        }
+      ]
+    },
+    "@Galadriel_Symphony": {
+      "subs": 3000,
+      "nVideos": 112,
+      "accent": "#b89146",
+      "videos": [
+        {
+          "id": "a_flx3OsxMc",
+          "title": "Rammstein - Ich Tu Dir Weh | Industrial Symphonic Orchestra",
+          "vistas": 2000,
+          "date": "2026-09-12"
+        },
+        {
+          "title": "Linkin Park - New Divide | Symphonic Orchestra Cover",
+          "vistas": 1800,
+          "tag": "Symphony"
+        },
+        {
+          "title": "Rammstein - Mein Herz Brennt | Epic Symphonic Orchestra",
+          "vistas": 1600,
+          "tag": "Symphony"
+        },
+        {
+          "title": "Rammstein - Amour | Dark Symphonic Orchestral Cover",
+          "vistas": 1500,
+          "tag": "Symphony"
+        }
+      ]
+    },
+    "@Heavenly_Echoes_Sounds": {
+      "subs": 349,
+      "nVideos": 24,
+      "accent": "#c9953f",
+      "videos": [
+        {
+          "title": "El Arpa de David | 10 Salmos Cantados en Espanol",
+          "vistas": 11000,
+          "tag": "Salmos"
+        },
+        {
+          "title": "Tu Angel de la Guarda Te Sigue Cuidando",
+          "vistas": 1200,
+          "tag": "Fe"
+        },
+        {
+          "title": "Everyone Walked Past Jesus. Only a Child Stopped.",
+          "vistas": 1100,
+          "tag": "Adoracion"
+        },
+        {
+          "title": "La Batalla Explota | Canto Templario de Guerra",
+          "vistas": 980,
+          "tag": "Templario"
+        }
+      ]
+    },
+    "@ForgedInSilenceMusic": {
+      "subs": 520,
+      "nVideos": 36,
+      "accent": "#b8412a",
+      "videos": [
+        {
+          "title": "Beast Mode | Aggressive Workout Music",
+          "vistas": 18000,
+          "tag": "Beast"
+        },
+        {
+          "title": "No Excuses | Heavy Training Anthem",
+          "vistas": 15000,
+          "tag": "Training"
+        },
+        {
+          "title": "Forged In Silence | Gym Motivation Music",
+          "vistas": 12000,
+          "tag": "Power"
+        },
+        {
+          "title": "Break Your Limit | Dark Workout Orchestra",
+          "vistas": 9400,
+          "tag": "Strength"
+        }
+      ]
+    },
+    "@TheVelvetAtlasMusic": {
+      "subs": 387,
+      "nVideos": 27,
+      "accent": "#35406b",
+      "videos": [
+        {
+          "id": "bvS0AjR1Z9E",
+          "title": "Norwegian Viking Songs with Lyrics | Nordic War Chants",
+          "vistas": 52000,
+          "date": "2026-09-12"
+        },
+        {
+          "title": "Relaxing Portuguese Fado Songs with Lyrics | Lisbon Saudade",
+          "vistas": 13000,
+          "tag": "Fado"
+        },
+        {
+          "title": "Norwegian Viking Songs with Lyrics | Nordic War Chants and Sea",
+          "vistas": 6000,
+          "tag": "Nordic"
+        },
+        {
+          "title": "She Left Her Voice in Moscow | Sad Russian Dark Romance Song",
+          "vistas": 814,
+          "tag": "Romance"
+        }
+      ]
+    },
+    "@ReelEmpiresMusic": {
+      "subs": 280,
+      "nVideos": 22,
+      "accent": "#3b496f",
+      "videos": [
+        {
+          "title": "Legends of Rome | Cinematic Empire Music",
+          "vistas": 8800,
+          "tag": "Rome"
+        },
+        {
+          "title": "Dark Fantasy Kingdom | Epic Trailer Score",
+          "vistas": 7400,
+          "tag": "Cinema"
+        },
+        {
+          "title": "The Last Kingdom Rises | Orchestral Battle Music",
+          "vistas": 6200,
+          "tag": "Empire"
+        },
+        {
+          "title": "War Drums of the Arena | Film Score",
+          "vistas": 5100,
+          "tag": "Trailer"
+        }
+      ]
+    },
+    "@KawaiiCatPro": {
+      "subs": 190,
+      "nVideos": 14,
+      "accent": "#d982a3",
+      "videos": [
+        {
+          "title": "Dinero explicado con calma | Guia simple para empezar",
+          "vistas": 4300,
+          "tag": "Finanzas"
+        },
+        {
+          "title": "Ahorro sin estres | Primer plan mensual",
+          "vistas": 3900,
+          "tag": "Ahorro"
+        },
+        {
+          "title": "Inversion para principiantes | Conceptos claros",
+          "vistas": 3100,
+          "tag": "Invertir"
+        },
+        {
+          "title": "Como ordenar tus gastos sin complicarte",
+          "vistas": 2500,
+          "tag": "Calma"
+        }
+      ]
+    }
+  }
+}
