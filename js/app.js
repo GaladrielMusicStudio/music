@@ -22,7 +22,7 @@ let active=1,view="canales",panelOpen=false;
 function buildChannels(){
   CH=APP.canales.map(c=>{
     const f=FALLBACK[c.handle]||{};
-    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.avatar||c.avatar||"",videos:[...(f.videos||[])],subs:f.subs||0,nVideos:f.nVideos||0,accent:f.accent||"#b89146",loaded:false};
+    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.avatar||c.avatar||"",videos:[...(f.videos||[])],subs:0,nVideos:0,accent:f.accent||"#b89146",loaded:false,metricsTrusted:false};
   });
 }
 
@@ -82,7 +82,8 @@ function videoCard(v,c={}){
   const href=v.id?`https://youtu.be/${esc(v.id)}`:(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
   const media=v.id?`<img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
   const cls=v.id?"video-card":"video-card is-fallback";
-  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}</span><b>${esc(v.title)}</b><small>${v.vistas?fmt(v.vistas)+" vistas · ":""}${esc(fecha(v.date)||"Seleccion destacada")}</small></a>`;
+  const views=c.metricsTrusted&&v.vistas?fmt(v.vistas)+" vistas · ":"";
+  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}</span><b>${esc(v.title)}</b><small>${views}${esc(fecha(v.date)||"Seleccion destacada")}</small></a>`;
 }
 function renderRail(){
   $("#channelRail").innerHTML=CH.map((c,i)=>`<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(i)}</span><span class="label">${esc(c.hook||c.cat)}</span></button></li>`).join("");
@@ -96,7 +97,7 @@ function renderHero(){
   const label=$(".label-disc");
   label.classList.toggle("has-img",!!c.avatar);
   label.innerHTML=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
-  const stats=[c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · ");
+  const stats=c.metricsTrusted?[c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · "):"";
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
   document.body.classList.toggle("disc-open",panelOpen);
@@ -111,10 +112,10 @@ function placeholderVideos(c){
   return Array.from({length:4},(_,i)=>videoCard({title:i===0?c.nombre:"Galadriel Music Studio",tag:c.cat||"Studio",vistas:0},c)).join("");
 }
 function renderListen(){
-  const ordered=[...CH].sort((a,b)=>(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b));
+  const ordered=[...CH].sort((a,b)=>a.metricsTrusted&&b.metricsTrusted?(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b):CH.indexOf(a)-CH.indexOf(b));
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=c.videos.slice(0,4);
-    const community=c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Comunidad en crecimiento":"Cargando comunidad");
+    const community=c.metricsTrusted&&c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Canal en YouTube":"Cargando canal");
     return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   initPlayers($("#listenList"));
@@ -176,7 +177,7 @@ async function fetchViaApi(c){
   }
   const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id).sort((a,b)=>b.vistas-a.vistas);
   const thumbs=it.snippet?.thumbnails||{};
-  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos};
+  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
 }
 async function fetchFallback(c){
   const html=await getText(APP.proxy+enc(`https://www.youtube.com/${c.handle}`));
@@ -192,20 +193,20 @@ async function fetchFallback(c){
     const doc=new DOMParser().parseFromString(xml,"text/xml");
     videos=[...doc.querySelectorAll("entry")].slice(0,8).map(n=>({id:n.querySelector("videoId")?.textContent||n.querySelector("yt\\:videoId")?.textContent,title:n.querySelector("title")?.textContent||"Video",date:n.querySelector("published")?.textContent||"",vistas:0,dur:""})).filter(v=>v.id);
   }
-  return{channelId:id||c.channelId||"",avatar,videos};
+  return{channelId:id||c.channelId||"",avatar,videos,metricsTrusted:false};
 }
 async function loadChannel(c){
   try{
     const api=await fetchViaApi(c);
-    Object.assign(c,api,{avatar:api.avatar||c.avatar,videos:api.videos?.length?api.videos:c.videos,loaded:true});
+    Object.assign(c,api,{avatar:api.avatar||c.avatar,videos:api.videos?.length?api.videos:c.videos,loaded:true,metricsTrusted:true});
   }catch(error){
     console.warn("No se pudo cargar YouTube API para",c.handle,error);
     try{
       const fallback=await fetchFallback(c);
-      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:fallback.videos?.length?fallback.videos:c.videos,loaded:true});
+      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:fallback.videos?.length?fallback.videos:c.videos,subs:0,nVideos:0,loaded:true,metricsTrusted:false});
     }catch(fallbackError){
       console.warn("No se pudo cargar fallback de YouTube para",c.handle,fallbackError);
-      c.loaded=true;
+      c.subs=0;c.nVideos=0;c.metricsTrusted=false;c.loaded=true;
     }
   }
   renderHero();renderListen();
