@@ -83,7 +83,8 @@ function videoCard(v,c={}){
   const media=v.id?`<img src="https://i.ytimg.com/vi/${esc(v.id)}/hqdefault.jpg" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
   const cls=v.id?"video-card":"video-card is-fallback";
   const views=c.metricsTrusted&&v.vistas?fmt(v.vistas)+" vistas · ":"";
-  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}</span><b>${esc(v.title)}</b><small>${views}${esc(fecha(v.date)||"Seleccion destacada")}</small></a>`;
+  const label=v.badge||(!c.metricsTrusted&&v.featured?"Seleccion destacada":fecha(v.date)||"Seleccion destacada");
+  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
 }
 function renderRail(){
   $("#channelRail").innerHTML=CH.map((c,i)=>`<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(i)}</span><span class="label">${esc(c.hook||c.cat)}</span></button></li>`).join("");
@@ -112,7 +113,12 @@ function placeholderVideos(c){
   return Array.from({length:4},(_,i)=>videoCard({title:i===0?c.nombre:"Galadriel Music Studio",tag:c.cat||"Studio",vistas:0},c)).join("");
 }
 function renderListen(){
-  const ordered=[...CH].sort((a,b)=>a.metricsTrusted&&b.metricsTrusted?(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b):CH.indexOf(a)-CH.indexOf(b));
+  const ordered=[...CH].sort((a,b)=>{
+    if(a.metricsTrusted&&b.metricsTrusted)return(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b);
+    const pa=a.handle==="@Galadriel_Symphony"?-1:CH.indexOf(a);
+    const pb=b.handle==="@Galadriel_Symphony"?-1:CH.indexOf(b);
+    return pa-pb;
+  });
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=c.videos.slice(0,4);
     const community=c.metricsTrusted&&c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Canal en YouTube":"Cargando canal");
@@ -203,7 +209,7 @@ async function loadChannel(c){
     console.warn("No se pudo cargar YouTube API para",c.handle,error);
     try{
       const fallback=await fetchFallback(c);
-      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:fallback.videos?.length?fallback.videos:c.videos,subs:0,nVideos:0,loaded:true,metricsTrusted:false});
+      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:c.videos?.length?c.videos:fallback.videos,subs:0,nVideos:0,loaded:true,metricsTrusted:false});
     }catch(fallbackError){
       console.warn("No se pudo cargar fallback de YouTube para",c.handle,fallbackError);
       c.subs=0;c.nVideos=0;c.metricsTrusted=false;c.loaded=true;
