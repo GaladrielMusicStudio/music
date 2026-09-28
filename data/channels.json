@@ -2,7 +2,6 @@
   "app": {
     "correo": "galdriel2818@hotmail.com",
     "apiKey": "AIzaSyDZiEF4EvajpzgpvgMRMK1ngMddRn-5yGU",
-    "proxy": "https://api.allorigins.win/raw?url=",
     "studioAudio": "audio/galadriel-music-studio.mp3",
     "canales": [
       {
@@ -16,7 +15,9 @@
         "enlaces": {
           "YouTube": "https://www.youtube.com/@EcosDelAnimeMusic",
           "Instagram": "https://instagram.com/echoes_music_studio"
-        }
+        },
+        "channelId": "UCYxG1cbTAyr2tGuWgM7Kydg",
+        "accent": "#7b879f"
       },
       {
         "handle": "@Galadriel_Symphony",
@@ -33,7 +34,9 @@
           "Instagram": "https://instagram.com/galadrielsymphony",
           "TikTok": "https://tiktok.com/@galadriel_symphony",
           "Facebook": "https://facebook.com/galadrielsymphony"
-        }
+        },
+        "channelId": "UCanNEnXD6Cp1k3f22cTDSBQ",
+        "accent": "#b89146"
       },
       {
         "handle": "@Heavenly_Echoes_Sounds",
@@ -45,7 +48,9 @@
         "line": "Adoracion cristiana con coro orquestal. El Libro de los Salmos, completo, en serie.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@Heavenly_Echoes_Sounds"
-        }
+        },
+        "channelId": "UCMYXVEfpZTcV5sOlVO4d33Q",
+        "accent": "#c9953f"
       },
       {
         "handle": "@ForgedInSilenceMusic",
@@ -57,7 +62,9 @@
         "line": "Música agresiva para entrenar pesado. Hecha para levantar, no para acompanar.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@ForgedInSilenceMusic"
-        }
+        },
+        "channelId": "UC59bITQOMnd7gNWa16sMMrw",
+        "accent": "#b8412a"
       },
       {
         "handle": "@TheVelvetAtlasMusic",
@@ -69,7 +76,9 @@
         "line": "Canciones de amor del mundo, con letra. Un pais y una historia por disco.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@TheVelvetAtlasMusic"
-        }
+        },
+        "channelId": "UCikRalMdy9a0pkJu2fWv7MA",
+        "accent": "#35406b"
       },
       {
         "handle": "@ReelEmpiresMusic",
@@ -81,7 +90,9 @@
         "line": "Música epica para las escenas de cine que no se olvidan. Original, compuesta aqui.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@ReelEmpiresMusic"
-        }
+        },
+        "channelId": "UCsosbSNQoJ5y1Ct9BC6SQRw",
+        "accent": "#3b496f"
       },
       {
         "handle": "@KawaiiCatPro",
@@ -93,7 +104,9 @@
         "line": "Finanzas explicadas con calma. Ahorro, inversion y dinero sin tecnicismos.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@KawaiiCatPro"
-        }
+        },
+        "channelId": "UCh0waFI7vTEQ1VFw7TWN1dg",
+        "accent": "#d982a3"
       }
     ],
     "packs": [
@@ -147,315 +160,5 @@
         "fg": "#141008"
       }
     ]
-  },
-  "fallback": {
-    "@EcosDelAnimeMusic": {
-      "accent": "#7b879f",
-      "channelId": "UCYxG1cbTAyr2tGuWgM7Kydg",
-      "avatar": "https://yt3.googleusercontent.com/PxedA1M8CHxZ2TyOfCJFcZwZWmNRicAE6esctwsK0vfn48PE6WILEbjkhJgKr41ySa75epdyl0k=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "8qQugU7A-NY",
-          "title": "BANKAI | BLEACH Anime Rock Music",
-          "date": "2026-08-16T02:14:47+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/8qQugU7A-NY.jpg"
-        },
-        {
-          "id": "Fl-LBI9sZHY",
-          "title": "Ichigo vs Aizen | Final Getsuga Tensho BLEACH",
-          "date": "2026-08-16T02:13:11+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/Fl-LBI9sZHY.jpg"
-        },
-        {
-          "id": "BJLr4lLeK9k",
-          "title": "BLEACH Music | Ichigo vs Aizen: Final Getsuga Tensho",
-          "date": "2026-08-16T01:14:49+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/BJLr4lLeK9k.jpg"
-        },
-        {
-          "id": "VkCYKCPacws",
-          "title": "Demon Slayer Infinity Castle Soundtrack",
-          "date": "2026-08-04T16:05:51+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/VkCYKCPacws.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/ecosdelanimemusic.jpg"
-    },
-    "@Galadriel_Symphony": {
-      "accent": "#b89146",
-      "channelId": "UCanNEnXD6Cp1k3f22cTDSBQ",
-      "avatar": "https://yt3.googleusercontent.com/DzZTjaR5-zI03hIifR6RGga6nePCn8IQBCRCMPJikAdjn2fl9BoNe2Ul-iLauKVgZIGa2zYmMkg=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "bECEgkR-zZM",
-          "title": "BREAKING BENJAMIN - The Diary of Jane | Full Symphonic Orchestra Cover",
-          "date": "2026-09-21T05:19:52+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/bECEgkR-zZM.jpg"
-        },
-        {
-          "id": "JRrobxR0HnY",
-          "title": "LINKIN PARK - Given Up | Symphonic Orchestra Cover",
-          "date": "2026-09-17T18:30:26+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/JRrobxR0HnY.jpg"
-        },
-        {
-          "id": "Q-BcSq26MHE",
-          "title": "LINKIN PARK - Waiting for the End | Symphonic Orchestra Cover",
-          "date": "2026-09-17T18:30:25+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/Q-BcSq26MHE.jpg"
-        },
-        {
-          "id": "Mos8P6hxPwY",
-          "title": "LINKIN PARK - New Divide | Symphonic Orchestra Cover",
-          "date": "2026-09-17T18:00:28+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/Mos8P6hxPwY.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/galadriel_symphony.jpg"
-    },
-    "@Heavenly_Echoes_Sounds": {
-      "accent": "#c9953f",
-      "channelId": "UCMYXVEfpZTcV5sOlVO4d33Q",
-      "avatar": "https://yt3.googleusercontent.com/FN3Ar3bT74a9b4KOLYLdmhb2IVEKwprXKOxf806uaOK9GDDL0zhCDTIxKJp7MTCnft6sbBEcGQ=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "Xy4gxBLnnJc",
-          "title": "The Glory That Chose the Abyss | Dark Angelic Music",
-          "date": "2026-09-26T19:45:33+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/Xy4gxBLnnJc.jpg"
-        },
-        {
-          "id": "frE1RXNooGk",
-          "title": "Sandalphon: The Song That Rose to Heaven | Heavenly Choir Music",
-          "date": "2026-09-26T19:30:27+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/frE1RXNooGk.jpg"
-        },
-        {
-          "id": "lf6qn-4wFEY",
-          "title": "Archangel Uriel: The Fire of Truth | Epic Angelic Music",
-          "date": "2026-09-26T16:29:19+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/lf6qn-4wFEY.jpg"
-        },
-        {
-          "id": "UyiluIySA1I",
-          "title": "Metatron: The Book of Eternity | Epic Celestial Music",
-          "date": "2026-09-26T16:28:55+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/UyiluIySA1I.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/heavenly_echoes_sounds.jpg"
-    },
-    "@ForgedInSilenceMusic": {
-      "accent": "#b8412a",
-      "channelId": "UC59bITQOMnd7gNWa16sMMrw",
-      "avatar": "https://yt3.googleusercontent.com/97pcpr5r96p2iDp9j2QPXowODMIUxYaBIEsdG1KQwHYBJGRPBtEaZehkTnA52nKZ-lPVssud=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "zffVnPOq6a8",
-          "title": "Yeah Buddy Ronnie Coleman Gym Motivation | Bodybuilding Workout Music 2026",
-          "date": "2026-09-24T15:45:12+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/zffVnPOq6a8.jpg"
-        },
-        {
-          "id": "3fo-5X8nCjI",
-          "title": "Anime Gym Motivation | Workout Music 2026",
-          "date": "2026-09-24T00:29:07+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/3fo-5X8nCjI.jpg"
-        },
-        {
-          "id": "OZ4sMDvN-i4",
-          "title": "Ultra Instinct Training Mix | Gym Motivation",
-          "date": "2026-09-23T21:44:19+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/OZ4sMDvN-i4.jpg"
-        },
-        {
-          "id": "MToEyALQui8",
-          "title": "CBUM Gym Motivation | Chris Bumstead Workout Music 2026",
-          "date": "2026-09-22T18:20:04+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/MToEyALQui8.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/forgedinsilencemusic.jpg"
-    },
-    "@TheVelvetAtlasMusic": {
-      "accent": "#35406b",
-      "channelId": "UCikRalMdy9a0pkJu2fWv7MA",
-      "avatar": "https://yt3.googleusercontent.com/SJoyZCvUCrkx9wRo0PrNKr-74fL39tFJjWYseqNbiMN3V2Xi9eOJIKyV7LckqyKycB-eG41TWw=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "S2dzqOLdC_k",
-          "title": "The Rose She Never Sent | Romantic English Song",
-          "date": "2026-09-23T18:40:44+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/S2dzqOLdC_k.jpg"
-        },
-        {
-          "id": "YE0CEhh2fXU",
-          "title": "Romantic English Songs with Lyrics | Victorian Rose Garden",
-          "date": "2026-09-23T16:56:55+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/YE0CEhh2fXU.jpg"
-        },
-        {
-          "id": "-3PfbBxdzn8",
-          "title": "Fado Depois da Meia-Noite | Romantic Portuguese Fado Song",
-          "date": "2026-09-20T15:03:43+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/-3PfbBxdzn8.jpg"
-        },
-        {
-          "id": "oyStueEoFnE",
-          "title": "Romantic Portuguese Fado Songs with Lyrics",
-          "date": "2026-09-20T14:14:18+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/oyStueEoFnE.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/thevelvetatlasmusic.jpg"
-    },
-    "@ReelEmpiresMusic": {
-      "accent": "#3b496f",
-      "channelId": "UCsosbSNQoJ5y1Ct9BC6SQRw",
-      "avatar": "https://yt3.googleusercontent.com/_pPKzDQLyR9YgGT7YBPiBNVklmLDB31fynhHBUoL_3A0otey44nWSuKSDM9ftTfTxz7wrPhV=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "3Ck5mB1SkXQ",
-          "title": "Warriors Are Not Born | The Rage of Achilles",
-          "date": "2026-09-24T00:16:56+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/3Ck5mB1SkXQ.jpg"
-        },
-        {
-          "id": "MfSIe1_5QyE",
-          "title": "Gladiator | Maximus Decimus Meridius | Epic Roman Music",
-          "date": "2026-09-23T19:48:23+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/MfSIe1_5QyE.jpg"
-        },
-        {
-          "id": "VhngBLyo9TQ",
-          "title": "No Roots in the City | Grown-Up Mathilda",
-          "date": "2026-09-22T16:00:19+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/VhngBLyo9TQ.jpg"
-        },
-        {
-          "id": "jMmYgpg361A",
-          "title": "The Rage of Achilles | Original Troy Song",
-          "date": "2026-09-22T14:39:17+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/jMmYgpg361A.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/reelempiresmusic.jpg"
-    },
-    "@KawaiiCatPro": {
-      "accent": "#d982a3",
-      "channelId": "UCh0waFI7vTEQ1VFw7TWN1dg",
-      "avatar": "https://yt3.googleusercontent.com/EO8s0HfXnKYIbR2SZaAMIpKVe0z-bXJDfs44xhw8GUktsenWE1yfTI4ZyZDacAI9KfC2ES0U_Q=w1138-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj",
-      "videos": [
-        {
-          "id": "FYp3iioh5SE",
-          "title": "Ley 12: Desarma con Generosidad Estrategica",
-          "date": "2026-04-28T03:43:12+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/FYp3iioh5SE.jpg"
-        },
-        {
-          "id": "QKvGci7adhs",
-          "title": "Ley 11: Se Indispensable en el Trabajo",
-          "date": "2026-04-28T03:42:35+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/QKvGci7adhs.jpg"
-        },
-        {
-          "id": "oHDi3aP5yhg",
-          "title": "Ley 10: Alejate de lo toxico",
-          "date": "2026-04-22T23:18:30+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/oHDi3aP5yhg.jpg"
-        },
-        {
-          "id": "CkUtHTyMcUI",
-          "title": "Ley 9: Gana con acciones, no discutiendo",
-          "date": "2026-04-22T20:21:50+00:00",
-          "dur": "",
-          "featured": true,
-          "badge": "Seleccion destacada",
-          "localThumb": "img/videos/CkUtHTyMcUI.jpg"
-        }
-      ],
-      "localAvatar": "img/channels/kawaiicatpro.jpg"
-    }
   }
 }
