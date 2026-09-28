@@ -2,7 +2,7 @@
   "app": {
     "correo": "galdriel2818@hotmail.com",
     "apiKey": "AIzaSyDZiEF4EvajpzgpvgMRMK1ngMddRn-5yGU",
-    "studioAudio": "audio/galadriel-music-studio.mp3",
+    "studioAudio": "",
     "canales": [
       {
         "handle": "@EcosDelAnimeMusic",
@@ -129,6 +129,7 @@
       },
       {
         "slug": "dark-fantasy",
+        "previewEnabled": false,
         "t": "Dark Fantasy",
         "n": "12 wallpapers",
         "canal": "Ecos del Anime",
@@ -137,6 +138,7 @@
       },
       {
         "slug": "legends-of-rome",
+        "previewEnabled": false,
         "t": "Legends of Rome",
         "n": "10 wallpapers",
         "canal": "Reel Empires Music",
@@ -153,6 +155,7 @@
       },
       {
         "slug": "finance-calm",
+        "previewEnabled": false,
         "t": "Finance Calm",
         "n": "8 wallpapers",
         "canal": "Kawaii Cat Pro",
