@@ -23,7 +23,7 @@
         "mono": "G S",
         "nombre": "Galadriel Symphony",
         "cat": "Orquestal",
-        "hook": "Iconos en sinfonia",
+        "hook": "Iconos en sinfonía",
         "audio": "audio/galadriel-symphony.mp3",
         "line": "Canciones reconocibles llevadas a un formato sinfonico enorme: rock, metal, pop, cine y temas virales con orquesta completa.",
         "enlaces": {
@@ -52,9 +52,9 @@
         "mono": "F S",
         "nombre": "Forged In Silence",
         "cat": "Entrenamiento",
-        "hook": "Fuerza para romper limites",
+        "hook": "Fuerza para romper límites",
         "audio": "audio/forged-in-silence.mp3",
-        "line": "Musica agresiva para entrenar pesado. Hecha para levantar, no para acompanar.",
+        "line": "Música agresiva para entrenar pesado. Hecha para levantar, no para acompanar.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@ForgedInSilenceMusic"
         }
@@ -64,7 +64,7 @@
         "mono": "V A",
         "nombre": "The Velvet Atlas",
         "cat": "Romance del mundo",
-        "hook": "Amor de otros paises",
+        "hook": "Amor de otros países",
         "audio": "audio/the-velvet-atlas.mp3",
         "line": "Canciones de amor del mundo, con letra. Un pais y una historia por disco.",
         "enlaces": {
@@ -78,7 +78,7 @@
         "cat": "Cine",
         "hook": "Escenas que suenan enormes",
         "audio": "audio/reel-empires-music.mp3",
-        "line": "Musica epica para las escenas de cine que no se olvidan. Original, compuesta aqui.",
+        "line": "Música epica para las escenas de cine que no se olvidan. Original, compuesta aqui.",
         "enlaces": {
           "YouTube": "https://www.youtube.com/@ReelEmpiresMusic"
         }
@@ -103,7 +103,8 @@
         "n": "12 wallpapers",
         "canal": "Heavenly Echoes Sounds",
         "bg": "#E2D3A8",
-        "fg": "#141008"
+        "fg": "#141008",
+        "previewEnabled": false
       },
       {
         "slug": "beast-mode",
@@ -159,7 +160,8 @@
           "date": "2026-08-16T02:14:47+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/8qQugU7A-NY.jpg"
         },
         {
           "id": "Fl-LBI9sZHY",
@@ -167,7 +169,8 @@
           "date": "2026-08-16T02:13:11+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/Fl-LBI9sZHY.jpg"
         },
         {
           "id": "BJLr4lLeK9k",
@@ -175,7 +178,8 @@
           "date": "2026-08-16T01:14:49+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/BJLr4lLeK9k.jpg"
         },
         {
           "id": "VkCYKCPacws",
@@ -183,9 +187,11 @@
           "date": "2026-08-04T16:05:51+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/VkCYKCPacws.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/ecosdelanimemusic.jpg"
     },
     "@Galadriel_Symphony": {
       "accent": "#b89146",
@@ -198,7 +204,8 @@
           "date": "2026-09-21T05:19:52+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/bECEgkR-zZM.jpg"
         },
         {
           "id": "JRrobxR0HnY",
@@ -206,7 +213,8 @@
           "date": "2026-09-17T18:30:26+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/JRrobxR0HnY.jpg"
         },
         {
           "id": "Q-BcSq26MHE",
@@ -214,7 +222,8 @@
           "date": "2026-09-17T18:30:25+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/Q-BcSq26MHE.jpg"
         },
         {
           "id": "Mos8P6hxPwY",
@@ -222,9 +231,11 @@
           "date": "2026-09-17T18:00:28+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/Mos8P6hxPwY.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/galadriel_symphony.jpg"
     },
     "@Heavenly_Echoes_Sounds": {
       "accent": "#c9953f",
@@ -237,7 +248,8 @@
           "date": "2026-09-26T19:45:33+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/Xy4gxBLnnJc.jpg"
         },
         {
           "id": "frE1RXNooGk",
@@ -245,7 +257,8 @@
           "date": "2026-09-26T19:30:27+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/frE1RXNooGk.jpg"
         },
         {
           "id": "lf6qn-4wFEY",
@@ -253,7 +266,8 @@
           "date": "2026-09-26T16:29:19+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/lf6qn-4wFEY.jpg"
         },
         {
           "id": "UyiluIySA1I",
@@ -261,9 +275,11 @@
           "date": "2026-09-26T16:28:55+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/UyiluIySA1I.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/heavenly_echoes_sounds.jpg"
     },
     "@ForgedInSilenceMusic": {
       "accent": "#b8412a",
@@ -276,7 +292,8 @@
           "date": "2026-09-24T15:45:12+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/zffVnPOq6a8.jpg"
         },
         {
           "id": "3fo-5X8nCjI",
@@ -284,7 +301,8 @@
           "date": "2026-09-24T00:29:07+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/3fo-5X8nCjI.jpg"
         },
         {
           "id": "OZ4sMDvN-i4",
@@ -292,7 +310,8 @@
           "date": "2026-09-23T21:44:19+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/OZ4sMDvN-i4.jpg"
         },
         {
           "id": "MToEyALQui8",
@@ -300,9 +319,11 @@
           "date": "2026-09-22T18:20:04+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/MToEyALQui8.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/forgedinsilencemusic.jpg"
     },
     "@TheVelvetAtlasMusic": {
       "accent": "#35406b",
@@ -315,7 +336,8 @@
           "date": "2026-09-23T18:40:44+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/S2dzqOLdC_k.jpg"
         },
         {
           "id": "YE0CEhh2fXU",
@@ -323,7 +345,8 @@
           "date": "2026-09-23T16:56:55+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/YE0CEhh2fXU.jpg"
         },
         {
           "id": "-3PfbBxdzn8",
@@ -331,7 +354,8 @@
           "date": "2026-09-20T15:03:43+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/-3PfbBxdzn8.jpg"
         },
         {
           "id": "oyStueEoFnE",
@@ -339,9 +363,11 @@
           "date": "2026-09-20T14:14:18+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/oyStueEoFnE.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/thevelvetatlasmusic.jpg"
     },
     "@ReelEmpiresMusic": {
       "accent": "#3b496f",
@@ -354,7 +380,8 @@
           "date": "2026-09-24T00:16:56+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/3Ck5mB1SkXQ.jpg"
         },
         {
           "id": "MfSIe1_5QyE",
@@ -362,7 +389,8 @@
           "date": "2026-09-23T19:48:23+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/MfSIe1_5QyE.jpg"
         },
         {
           "id": "VhngBLyo9TQ",
@@ -370,7 +398,8 @@
           "date": "2026-09-22T16:00:19+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/VhngBLyo9TQ.jpg"
         },
         {
           "id": "jMmYgpg361A",
@@ -378,9 +407,11 @@
           "date": "2026-09-22T14:39:17+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/jMmYgpg361A.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/reelempiresmusic.jpg"
     },
     "@KawaiiCatPro": {
       "accent": "#d982a3",
@@ -393,7 +424,8 @@
           "date": "2026-04-28T03:43:12+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/FYp3iioh5SE.jpg"
         },
         {
           "id": "QKvGci7adhs",
@@ -401,7 +433,8 @@
           "date": "2026-04-28T03:42:35+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/QKvGci7adhs.jpg"
         },
         {
           "id": "oHDi3aP5yhg",
@@ -409,7 +442,8 @@
           "date": "2026-04-22T23:18:30+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/oHDi3aP5yhg.jpg"
         },
         {
           "id": "CkUtHTyMcUI",
@@ -417,9 +451,11 @@
           "date": "2026-04-22T20:21:50+00:00",
           "dur": "",
           "featured": true,
-          "badge": "Seleccion destacada"
+          "badge": "Seleccion destacada",
+          "localThumb": "img/videos/CkUtHTyMcUI.jpg"
         }
-      ]
+      ],
+      "localAvatar": "img/channels/kawaiicatpro.jpg"
     }
   }
 }
