@@ -6,7 +6,7 @@
 <title>Galadriel Music Studio — Música sonora para otros mundos</title>
 <meta name="description" content="Galadriel Music Studio compone música sonora, épica y emocional para universos originales: orquesta, adoración, cine, entrenamiento, romance, anime y cultura visual.">
 <meta name="theme-color" content="#F4EFE6">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.googleapis.com https://api.allorigins.win; frame-src https://www.youtube-nocookie.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.googleapis.com https://api.allorigins.win; frame-src https://www.youtube-nocookie.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://galadrielmusicstudio.github.io/music/">
 <meta name="robots" content="index, follow">
@@ -26,13 +26,11 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"Galadriel Music Studio","url":"https://galadrielmusicstudio.github.io/music/","sameAs":["https://www.youtube.com/@Galadriel_Symphony","https://www.youtube.com/@EcosDelAnimeMusic","https://www.youtube.com/@Heavenly_Echoes_Sounds","https://www.youtube.com/@ForgedInSilenceMusic","https://www.youtube.com/@ReelEmpiresMusic","https://open.spotify.com/intl-es/artist/4nYRh691c9rFwYWgybuZY1","https://tidal.com/artist/80259415","https://instagram.com/galadrielsymphony"]}
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Inter:wght@300;400;500;600&family=Marcellus&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/turntable.css">
 </head>
-<body>
+<body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
   <video class="intro-video" id="introVideo" src="media/galadriel-intro.mp4" autoplay muted playsinline preload="auto"></video>
 </div>
@@ -40,27 +38,27 @@
   <header class="top">
     <div class="top-in">
       <button class="brand" data-view="canales" aria-label="Volver a canales"><span class="mark" aria-hidden="true"></span><span class="brand-word" aria-label="Galadriel">GΛLΛDRIEL</span></button>
-      <nav class="nav" id="nav" aria-label="Navegacion principal">
+      <nav class="nav" id="nav" aria-label="Navegación principal">
         <button data-view="canales" aria-current="true">Canales</button>
         <button data-view="escuchar">Escuchar</button>
         <button data-view="estudio">Estudio</button>
         <button data-view="tienda">Tienda</button>
       </nav>
-      <span class="divider" aria-hidden="true"></span>
-      <span class="menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      
+      
     </div>
   </header>
   <main class="screen" id="canales">
     <section class="hero-copy" aria-labelledby="titulo">
       <p class="eyebrow">Un universo sonoro</p>
       <h1 id="titulo"><span class="brand-word" aria-label="Galadriel">GΛLΛDRIEL</span><small>Music Studio</small></h1>
-      <p class="count-label">Bienvenido a Galadriel Studios</p>
-      <p class="hero-statement">Musica cinematica y emocional para universos originales.</p>
-      <div class="current-meta" id="currentMeta"></div>
+      
+      <p class="hero-statement">Música cinematográfica y emocional para universos originales.</p>
+      
     </section>
     <section class="stage" aria-label="Canales de Galadriel Music Studio">
       <ol class="channel-rail" id="channelRail"></ol>
-      <div class="record-zone tt-zone">
+      <div class="record-zone tt-zone"><div class="current-meta" id="currentMeta"></div>
         <div class="tt-stage">
 <svg class="tt-scene" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="600 340 1000 590" role="img" aria-label="Tocadiscos de mármol y oro con vinilo satinado y brazo articulado">
 <defs>
@@ -70,7 +68,7 @@
 <clipPath id="label-cut"><circle r="97"/></clipPath>
 <radialGradient id="vinyl-material"><stop offset="0" stop-color="#100c08"/><stop offset=".55" stop-color="#1c150e"/><stop offset=".88" stop-color="#120e09"/><stop offset="1" stop-color="#292016"/></radialGradient>
 <linearGradient id="rim" x2="0" y2="1"><stop stop-color="#34281b"/><stop offset=".45" stop-color="#161009"/><stop offset="1" stop-color="#090705"/></linearGradient>
-<linearGradient id="soft-light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dec397" stop-opacity=".025"/><stop offset=".28" stop-color="#dec397" stop-opacity=".13"/><stop offset=".46" stop-color="#dec397" stop-opacity=".015"/><stop offset=".72" stop-color="#dec397" stop-opacity=".065"/><stop offset="1" stop-color="#dec397" stop-opacity=".025"/></linearGradient>
+<linearGradient id="soft-light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dec397" stop-opacity=".025"/><stop offset=".28" stop-color="#dec397" stop-opacity=".18"/><stop offset=".46" stop-color="#dec397" stop-opacity=".015"/><stop offset=".72" stop-color="#dec397" stop-opacity=".065"/><stop offset="1" stop-color="#dec397" stop-opacity=".025"/></linearGradient>
 <linearGradient id="pivot-brass"><stop stop-color="#5e431d"/><stop offset=".3" stop-color="#d8b77a"/><stop offset=".55" stop-color="#f1d9a6"/><stop offset=".8" stop-color="#946529"/><stop offset="1" stop-color="#3c2b19"/></linearGradient>
 <linearGradient id="photo-edge-h"><stop stop-color="white" stop-opacity="0"/><stop offset=".07" stop-color="white"/><stop offset=".92" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient><linearGradient id="photo-edge-v" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset=".1" stop-color="white"/><stop offset=".9" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient><mask id="photo-v" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941"><rect width="1672" height="941" fill="url(#photo-edge-v)"/></mask><mask id="photo-feather" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941"><rect width="1672" height="941" fill="url(#photo-edge-h)" mask="url(#photo-v)"/></mask><clipPath id="tt-avatar-cut"><circle r="88"/></clipPath><linearGradient id="tt-edge" x1="600" x2="1600" gradientUnits="userSpaceOnUse"><stop stop-color="white" stop-opacity="0"/><stop offset=".09" stop-color="white"/><stop offset=".91" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient><mask id="tt-feather" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="600" y="340" width="1000" height="590"><rect x="600" y="340" width="1000" height="590" fill="url(#tt-edge)" mask="url(#photo-feather)"/></mask></defs>
 <image width="1672" height="941" mask="url(#tt-feather)" xlink:href="img/turntable/background.png"/>
@@ -78,7 +76,7 @@
 <ellipse cy="4" rx="270" ry="91" fill="url(#rim)"/>
 <g transform="scale(1 .335)">
 <circle r="269" fill="url(#vinyl-material)" stroke="#3b2e20" stroke-width="1.5"/>
-<circle r="102" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="104" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="106" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="108" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="110" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="112" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="114" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="116" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="118" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="120" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="122" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="124" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="126" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="128" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="130" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="132" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="134" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="136" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="138" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="140" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="142" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="144" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="146" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="148" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="150" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="152" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="154" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="156" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="158" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="160" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="162" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="164" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="166" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="168" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="170" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="172" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="174" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="176" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="178" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="180" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="182" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="184" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="186" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="188" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="190" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="192" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="194" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="196" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="198" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="200" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="202" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="204" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="206" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="208" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="210" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="212" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="214" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="216" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="218" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="220" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="222" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="224" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="226" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="228" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="230" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="232" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="234" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="236" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="238" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="240" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="242" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="244" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="246" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="248" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="250" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="252" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="254" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="256" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="258" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="260" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="262" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/><circle r="264" fill="none" stroke="#a99677" stroke-opacity="0.075" stroke-width=".5"/><circle r="266" fill="none" stroke="#a99677" stroke-opacity="0.045" stroke-width=".5"/>
+<circle r="102" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="104" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="106" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="108" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="110" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="112" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="114" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="116" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="118" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="120" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="122" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="124" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="126" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="128" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="130" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="132" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="134" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="136" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="138" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="140" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="142" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="144" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="146" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="148" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="150" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="152" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="154" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="156" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="158" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="160" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="162" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="164" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="166" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="168" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="170" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="172" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="174" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="176" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="178" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="180" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="182" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="184" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="186" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="188" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="190" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="192" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="194" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="196" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="198" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="200" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="202" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="204" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="206" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="208" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="210" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="212" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="214" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="216" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="218" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="220" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="222" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="224" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="226" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="228" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="230" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="232" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="234" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="236" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="238" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="240" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="242" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="244" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="246" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="248" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="250" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="252" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="254" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="256" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="258" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="260" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="262" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/><circle r="264" fill="none" stroke="#a99677" stroke-opacity="0.14" stroke-width=".5"/><circle r="266" fill="none" stroke="#a99677" stroke-opacity="0.10" stroke-width=".5"/>
 <circle r="267" fill="url(#soft-light)"/>
 <g class="tt-rotor" data-angle="0"><g clip-path="url(#label-cut)"><image x="-270" y="-265.3" width="540" height="540" xlink:href="img/turntable/label.png"/></g><image class="tt-avatar" x="-88" y="-88" width="176" height="176" preserveAspectRatio="xMidYMid slice" clip-path="url(#tt-avatar-cut)" visibility="hidden"/><circle class="tt-avatar-ring" r="89" fill="none" stroke="#f0d8ab" stroke-opacity=".8" stroke-width="2" visibility="hidden"/><circle r="98" fill="none" stroke="#b9a581" stroke-opacity=".58" stroke-width="1.2"/></g>
 <circle r="13" fill="url(#pivot-brass)" stroke="#9d7238" stroke-width="1"/>
@@ -94,15 +92,16 @@
 
 </svg>
           <button class="tt-disc-hit" id="touchDisc" aria-expanded="false" aria-controls="channelPanel" aria-label="Ver el canal seleccionado"></button>
+          
           <div class="home-audio" id="homeAudio"></div>
         </div>
-        <button class="touch" id="openDisc" aria-expanded="false" aria-controls="channelPanel">Ver canal <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
+        <p class="sample-caption">Escucha una muestra del canal</p><button class="touch" id="openDisc" aria-expanded="false" aria-controls="channelPanel">Ver canal <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
       </div>
       <aside class="channel-panel" id="channelPanel" aria-live="polite"></aside>
     </section>
     <div class="footer-note">
-      <div class="left"><i aria-hidden="true"></i><span>Musica<br>para otros mundos</span></div>
-      <div class="explore">Explora</div>
+      <div class="left"><i aria-hidden="true"></i><span>Música<br>para otros mundos</span></div>
+      <a href="#escuchar" data-view="escuchar">Explorar música →</a>
       <div class="right"><span class="sound-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span><span class="footer-brand" aria-label="Galadriel">GΛLΛDRIEL</span><br><span class="footer-studio">Music Studio</span></span></div>
     </div>
   </main>
@@ -115,37 +114,26 @@
     <div class="studio-showcase">
       <div class="studio-copy">
         <h2 id="estudio-title">Estudio</h2>
-        <p class="studio-kicker">La vision detras de la musica</p>
-        <p>Galadriel Music Studio es un universo musical que reune composicion original, produccion cinematica y mundos visuales creados para sonar con identidad propia.</p>
+        <p class="studio-kicker">La visión detrás de la música</p>
+        <p>Galadriel Music Studio es un universo músical que reúne composición original, producción cinematográfica y mundos visuales creados para sonar con identidad propia.</p>
         <div class="studio-pillars" aria-label="Pilares del estudio">
-          <span><i></i>Composicion original</span>
-          <span><i></i>Produccion cinematica</span>
-          <span><i></i>Universos musicales</span>
+          <span><i></i>Composición original</span>
+          <span><i></i>Producción cinematográfica</span>
+          <span><i></i>Universos músicales</span>
           <span><i></i>Comunidad global</span>
         </div>
-        <a class="studio-cta" id="studioMail" href="#">Conoce mas <span aria-hidden="true">→</span></a>
-        <div class="studio-quote">"Musica para otros mundos"<br><small>Galadriel Music Studio</small></div>
+        <a class="studio-cta" id="studioMail" href="#">Contactar al estudio <span aria-hidden="true">→</span></a>
+        <div class="studio-quote">"Música para otros mundos"<br><small>Galadriel Music Studio</small></div>
       </div>
-      <div class="studio-visual" aria-hidden="true">
-        <div class="studio-portrait">
-          <span class="studio-face"></span>
-          <span class="studio-headphone"></span>
-          <span class="studio-light"></span>
-        </div>
-      </div>
+      <div class="studio-visual"><p class="eyebrow">Galadriel Music Studio</p><p class="studio-manifesto">Música para<br><em>otros mundos.</em></p><p>Orquesta · Cine · Emoción</p><div class="studio-lines" aria-hidden="true"></div></div>
     </div>
     <div class="studio-lower">
       <div class="contact-card studio-card">
-        <h3>Avisos privados</h3>
-        <p>Deja tu correo para recibir lanzamientos, nuevos packs y disponibilidad de musica en alta calidad.</p>
-        <form class="notify-form" id="lista-correo" action="https://formspree.io/f/TU_ID_FORMSPREE" method="POST" novalidate>
-          <input type="email" name="email" placeholder="tu@correo.com" aria-label="Tu correo" autocomplete="email" maxlength="254" required>
-          <button type="submit">Avisarme</button>
-        </form>
-        <label class="consent"><input type="checkbox" id="consent" name="consent" form="lista-correo" required><span>Acepto la <a href="privacidad.html">politica de privacidad</a>.</span></label>
-        <p class="form-msg" id="susc-msg" role="status" aria-live="polite"></p>
+        <h3>Nuevos lanzamientos</h3>
+        <p>Escríbenos si quieres recibir novedades sobre lanzamientos y colecciones.</p>
+        <a class="studio-cta" id="notifyMail" href="#">Solicitar avisos por correo →</a><p class="form-note">Se abrirá tu aplicación de correo para enviar la solicitud.</p>
       </div>
-      <div class="contact-card studio-card"><h3>Contacto</h3><p>Licencias, colaboraciones o produccion musical: <a id="mail" href="#">escribir al estudio</a></p></div>
+      <div class="contact-card studio-card"><h3>Contacto</h3><p>Licencias, colaboraciones o producción músical: <a id="mail" href="#">escribir al estudio</a></p></div>
     </div>
   </section>
   <section class="view" id="view-tienda" aria-labelledby="tienda-title">
@@ -153,22 +141,23 @@
       <div>
         <p class="shop-kicker">Colecciones digitales</p>
         <h2 id="tienda-title">Tienda</h2>
-        <p>Elige el universo que quieres llevar contigo. Cada colección incluye fondos para celular y monitor, preparados en alta resolución.</p>
+        <p>Elige el universo que quieres llevar contigo. Explora las colecciones y consulta los formatos disponibles para celular y monitor.</p>
       </div>
       <div class="shop-badges" aria-label="Detalles de compra">
-        <span>Alta resolucion 4K</span>
+        <span>Monitor 3840 × 2160</span>
         <span>Celular y monitor</span>
         <span>Entrega por correo</span>
       </div>
     </div>
     <div class="shop-grid" id="shopGrid"></div>
     <div class="contact-card">
-      <h3>Como funciona</h3>
-      <p>Al solicitar un pack, se abrirá un correo con la colección y los formatos elegidos. Te confirmaremos el pago y recibirás un enlace privado para descargarlo.</p>
-      <p><a href="privacidad.html">Politica de privacidad</a></p>
+      <h3>Cómo funciona</h3>
+      <p>Selecciona un formato y solicita información por correo. Antes de pagar, confirma con el estudio el contenido, la disponibilidad, el permiso de uso y el plazo de entrega de la colección.</p>
+      <p><a href="privacidad.html">Política de privacidad</a></p>
     </div>
   </section>
-</div>
+<footer class="site-footer"><span>Galadriel Music Studio</span><a href="privacidad.html">Privacidad</a><a href="#estudio" data-view="estudio">Contacto</a></footer></div>
+<dialog id="productPreview"><button class="preview-close" aria-label="Cerrar vista previa">Cerrar ×</button><img alt=""><p></p></dialog>
 <script src="js/turntable.js" defer></script>
 <script src="js/app.js" defer></script>
 </body>
