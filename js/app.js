@@ -22,7 +22,7 @@ let active=1,view="canales",panelOpen=false;
 function buildChannels(){
   CH=APP.canales.map(c=>{
     const f=FALLBACK[c.handle]||{};
-    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.avatar||c.avatar||"",videos:[...(f.videos||[])],subs:0,nVideos:0,accent:f.accent||"#b89146",loaded:false,metricsTrusted:false};
+    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.avatar||c.avatar||"",videos:[...(f.videos||[])],subs:0,totalViews:0,nVideos:0,accent:f.accent||"#b89146",loaded:false,metricsTrusted:false};
   });
 }
 
@@ -31,6 +31,10 @@ function audioWave(){return `<span class="audio-wave" aria-hidden="true">${Array
 function audioBlock(label,src,c={}){
   if(!SHOW_AUDIO||!src) return "";
   return `<div class="audio-card audio-orb" data-audio-player><audio preload="none" controlslist="nodownload noplaybackrate" src="${esc(src)}"></audio><button class="player-btn" type="button" data-audio-play aria-label="Reproducir ${esc(c.nombre||label)}">${iconPlay()}</button></div>`;
+}
+function homeAudioBlock(c){
+  const available=SHOW_AUDIO&&!!c.audio;
+  return `<div class="tt-console ${available?'':'is-unavailable'}" data-audio-player>${available?`<audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>`:''}<button class="tt-play" type="button" data-audio-play aria-label="Reproducir ${esc(c.nombre)}" ${available?'':'disabled'}>${iconPlay()}</button><div class="tt-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la canción" disabled><span data-audio-duration>--:--</span></div><label class="tt-volume"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 4V5L7 9H3zm12-1c3 2 3 6 0 8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><input type="range" data-audio-volume min="0" max="1" step="0.01" value="0.9" aria-label="Volumen" ${available?'':'disabled'}></label><span class="tt-status" data-audio-status role="status">${available?'':'Este canal todavía no tiene audio.'}</span></div>`;
 }
 function timeAudio(s){s=Number.isFinite(s)?Math.max(0,s):0;return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`}
 function paintRange(input,val,max=100){const pct=max?Math.min(100,Math.max(0,val/max*100)):0;input.style.setProperty("--fill",pct+"%")}
@@ -41,33 +45,39 @@ function syncDiscProgress(card,pct,playing=false){
   const ring=target.querySelector?.(".progress-ring circle");
   if(ring)ring.style.strokeDashoffset=String(100-pct);
   target.classList.toggle("is-audio-playing",playing);
+  if(card.closest("#homeAudio"))window.galadrielTurntable?.setPlaying(playing);
 }
 function initPlayers(root=document){
   root.querySelectorAll("[data-audio-player]").forEach(card=>{
     if(card.dataset.ready)return;
     card.dataset.ready="1";
     const audio=card.querySelector("audio"),play=card.querySelector("[data-audio-play]"),seek=card.querySelector("[data-audio-seek]"),vol=card.querySelector("[data-audio-volume]"),now=card.querySelector("[data-audio-current]"),end=card.querySelector("[data-audio-duration]");
+    if(!audio)return;
     audio.volume=vol?+vol.value:.9;
     if(seek)paintRange(seek,0); if(vol)paintRange(vol,+vol.value,1);
-    const update=()=>{const d=audio.duration||0,pct=d?Math.min(100,Math.max(0,audio.currentTime/d*100)):0;card.style.setProperty("--audio-progress",pct+"%");syncDiscProgress(card,pct,!audio.paused&&!audio.ended);if(seek){seek.max=d||100;seek.value=audio.currentTime||0;paintRange(seek,+seek.value,+seek.max)}if(now)now.textContent=timeAudio(audio.currentTime);if(end)end.textContent=d?timeAudio(d):"0:00"};
+    const update=()=>{const d=Number.isFinite(audio.duration)?audio.duration:0,pct=d?Math.min(100,Math.max(0,audio.currentTime/d*100)):0;card.style.setProperty("--audio-progress",pct+"%");syncDiscProgress(card,pct,!audio.paused&&!audio.ended);if(seek){seek.disabled=!d;seek.max=d||100;seek.value=audio.currentTime||0;paintRange(seek,+seek.value,+seek.max)}if(now)now.textContent=timeAudio(audio.currentTime);if(end)end.textContent=d?timeAudio(d):"--:--"};
+    const status=card.querySelector('[data-audio-status]');
+    const fail=()=>{card.classList.remove('is-loading','is-playing');card.classList.add('is-error');syncDiscProgress(card,0,false);if(status)status.textContent='Audio no disponible. Comprueba el archivo MP3 de este canal.';};
     play.addEventListener("click",()=>{
+      card.classList.remove('is-error');if(status)status.textContent='';
       if(audio.paused){
         document.querySelectorAll("audio").forEach(a=>{if(a!==audio)a.pause()});
         document.querySelectorAll("[data-audio-player]").forEach(p=>{if(p!==card)p.classList.remove("is-open","is-playing")});
         card.classList.add("is-open","is-loading");
-        audio.play().catch(()=>{card.classList.remove("is-loading");card.classList.add("is-error")});
+        audio.play().catch(fail);
       }else{audio.pause();card.classList.remove("is-open")}
     });
     seek?.addEventListener("input",()=>{audio.currentTime=+seek.value||0;update()});
     vol?.addEventListener("input",()=>{audio.volume=+vol.value;paintRange(vol,+vol.value,1)});
     audio.addEventListener("loadedmetadata",update);
     audio.addEventListener("timeupdate",update);
-    audio.addEventListener("waiting",()=>card.classList.add("is-loading"));
+    audio.addEventListener("waiting",()=>{card.classList.add("is-loading");syncDiscProgress(card,0,false)});
+    audio.addEventListener("playing",()=>{card.classList.remove("is-loading");update()});
     audio.addEventListener("canplay",()=>card.classList.remove("is-loading"));
     audio.addEventListener("play",()=>{card.classList.remove("is-loading");card.classList.add("is-playing");update()});
-    audio.addEventListener("pause",()=>{card.classList.remove("is-playing");update()});
+    audio.addEventListener("pause",()=>{card.classList.remove("is-playing","is-loading");update()});
     audio.addEventListener("ended",()=>{card.classList.remove("is-playing","is-open");card.style.setProperty("--audio-progress","100%");syncDiscProgress(card,100,false)});
-    audio.addEventListener("error",()=>{card.classList.remove("is-loading");card.classList.add("is-error")});
+    audio.addEventListener("error",fail);
   });
 }
 function links(c){
@@ -91,14 +101,20 @@ function renderRail(){
 }
 function renderHero(){
   const c=CH[active];
-  const disc=document.querySelector(".record-zone");
-  if(disc){disc.style.setProperty("--disc-progress","0%");disc.querySelector(".progress-ring circle")?.style.setProperty("stroke-dashoffset","100");disc.classList.remove("is-audio-playing")}
+  const home=$("#homeAudio");
+  const audioKey=c.handle+'|'+(c.audio||'');
+  if(home.dataset.channelAudio!==audioKey){
+    home.querySelector('audio')?.pause();
+    window.galadrielTurntable?.setPlaying(false);
+    document.querySelector('.record-zone')?.classList.remove('is-audio-playing');
+    home.dataset.channelAudio=audioKey;
+    home.innerHTML=homeAudioBlock(c);
+  }
   $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><p class="name">${esc(c.nombre)}</p>`;
-  $("#homeAudio").innerHTML=audioBlock("Cancion del canal",c.audio,c);
-  const label=$(".label-disc");
-  label.classList.toggle("has-img",!!c.avatar);
-  label.innerHTML=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
-  const stats=c.metricsTrusted?[c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · "):"";
+  const avatar=document.querySelector('.tt-avatar');
+  if(avatar){avatar.setAttribute('visibility',c.avatar?'visible':'hidden');if(c.avatar)avatar.setAttribute('href',c.avatar);else avatar.removeAttribute('href');}
+  $("#touchDisc").setAttribute('aria-label','Ver '+c.nombre);
+  const stats=c.metricsTrusted?[c.totalViews?fmt(c.totalViews)+" vistas":"",c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · "):"";
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
   document.body.classList.toggle("disc-open",panelOpen);
@@ -114,6 +130,9 @@ function placeholderVideos(c){
 }
 function renderListen(){
   const ordered=[...CH].sort((a,b)=>{
+    const av=a.metricsTrusted?a.totalViews||0:-1;
+    const bv=b.metricsTrusted?b.totalViews||0:-1;
+    if(av!==bv)return bv-av;
     if(a.metricsTrusted&&b.metricsTrusted)return(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b);
     const pa=a.handle==="@Galadriel_Symphony"?-1:CH.indexOf(a);
     const pb=b.handle==="@Galadriel_Symphony"?-1:CH.indexOf(b);
@@ -121,7 +140,7 @@ function renderListen(){
   });
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=c.videos.slice(0,4);
-    const community=c.metricsTrusted&&c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Canal en YouTube":"Cargando canal");
+    const community=c.metricsTrusted&&c.totalViews?`${fmt(c.totalViews)} vistas del canal`:c.metricsTrusted&&c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Canal en YouTube":"Cargando canal");
     return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   initPlayers($("#listenList"));
@@ -183,7 +202,7 @@ async function fetchViaApi(c){
   }
   const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id).sort((a,b)=>b.vistas-a.vistas);
   const thumbs=it.snippet?.thumbnails||{};
-  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
+  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
 }
 async function fetchFallback(c){
   const html=await getText(APP.proxy+enc(`https://www.youtube.com/${c.handle}`));
@@ -209,10 +228,10 @@ async function loadChannel(c){
     console.warn("No se pudo cargar YouTube API para",c.handle,error);
     try{
       const fallback=await fetchFallback(c);
-      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:c.videos?.length?c.videos:fallback.videos,subs:0,nVideos:0,loaded:true,metricsTrusted:false});
+      Object.assign(c,fallback,{avatar:fallback.avatar||c.avatar,videos:c.videos?.length?c.videos:fallback.videos,subs:0,totalViews:0,nVideos:0,loaded:true,metricsTrusted:false});
     }catch(fallbackError){
       console.warn("No se pudo cargar fallback de YouTube para",c.handle,fallbackError);
-      c.subs=0;c.nVideos=0;c.metricsTrusted=false;c.loaded=true;
+      c.subs=0;c.totalViews=0;c.nVideos=0;c.metricsTrusted=false;c.loaded=true;
     }
   }
   renderHero();renderListen();
