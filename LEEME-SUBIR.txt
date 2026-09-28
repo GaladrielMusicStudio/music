@@ -1,0 +1,94 @@
+GALADRIEL MUSIC STUDIO - INTEGRACION PREMIUM
+28 de septiembre de 2026
+
+El ZIP galadriel-music-studio-integrado.zip contiene el sitio completo.
+La integracion esta preparada y probada localmente. No se ha publicado en GitHub.
+
+QUE SUBIR PARA ACTUALIZAR EL REPOSITORIO music
+
+Extrae el ZIP. En la raiz del repositorio, donde esta index.html, reemplaza:
+
+index.html
+404.html
+privacidad.html
+css/styles.css
+css/fonts.css
+css/turntable.css
+js/app.js
+js/turntable.js
+data/channels.json
+
+Agrega o reemplaza estas carpetas con sus archivos:
+
+fonts/
+img/turntable/
+
+En img/turntable deben quedar background.png, label.png y arm.png.
+En fonts deben quedar las cuatro fuentes .ttf y sus dos licencias.
+Puedes arrastrar las carpetas completas en Add file > Upload files.
+Si la carpeta ya existe, conserva el mismo nombre y las mismas rutas.
+
+NO NECESITAS REPETIR ARCHIVOS QUE YA ESTAN IGUALES
+
+El ZIP tambien incluye audio/, media/, img/shop/, og.jpg, robots.txt y
+sitemap.xml para conservar una copia completa. Si ya tienes esos mismos
+archivos en GitHub, no necesitas volver a subirlos.
+
+Los seis audios incluidos se llaman:
+audio/ecos-del-anime.mp3
+audio/galadriel-symphony.mp3
+audio/heavenly-echoes-sounds.mp3
+audio/forged-in-silence.mp3
+audio/the-velvet-atlas.mp3
+audio/reel-empires-music.mp3
+
+Kawaii Cat Pro no tiene un audio configurado en el material recibido.
+El audio general del estudio no venia incluido y su control no se muestra.
+
+No hacen falta img/channels/ ni img/videos/: los logos y las miniaturas
+se obtienen de YouTube. Si ya existen esas carpetas, pueden permanecer;
+esta version no depende de ellas.
+
+No subas el archivo ZIP como si fuera la web. Sube el contenido extraido,
+sin crear otra carpeta por encima de index.html. Este instructivo es solo
+para ti y no es necesario publicarlo.
+
+AL TERMINAR
+
+Guarda los cambios con Commit changes. Cuando termine el despliegue de
+GitHub Pages, abre https://galadrielmusicstudio.github.io/music/ y recarga.
+index.html incluye nuevas versiones de CSS y JavaScript para evitar mezclar
+los archivos antiguos guardados por el navegador.
+
+CAMBIOS INTEGRADOS Y REVISADOS
+
+- Caja, disco y brazo del tocadiscos premium del ZIP recibido.
+- Giro, pausa, avance y final de la cancion sincronizados con los MP3.
+- Tiempo actual y duracion reales; volumen en escritorio y controles
+  compactos en movil, que usa el volumen del dispositivo.
+- El audio conserva su posicion al actualizar datos o abrir Ver canal.
+- Fuentes locales, navegacion, vistas previas de tienda y cambios del ZIP.
+- Canales ordenados por vistas totales y videos por vistas, de mayor a menor.
+- Consulta de todas las paginas de videos, incluidos los antiguos.
+- Logos y estadisticas actuales desde la configuracion nueva de YouTube.
+- Los numeros de prueba no estan en los archivos de la web.
+
+VERIFICACION
+
+Probado con Edge/Chromium en anchos de 320, 390, 768, 820, 1024, 1440 y
+1920 px: reproduccion de MP3 reales, avance, pausa, final, cambio de canal,
+navegacion, tienda, introduccion movil y preferencia de movimiento reducido.
+Sin errores de JavaScript ni archivos locales faltantes en esas pruebas.
+Tambien se consultaron los siete canales mediante la API real de YouTube.
+
+La clave recibida autoriza el dominio de GitHub Pages y rechaza localhost.
+No hace falta modificarla para publicar en tu direccion actual. Abrir el
+HTML directamente desde un ZIP o desde una carpeta local no equivale a
+abrir la web publicada. La vista previa preparada durante esta revision
+usa un servidor local auxiliar; ese servidor no forma parte del ZIP.
+
+CONTENIDO PENDIENTE QUE YA VENIA EN EL ZIP
+
+Las vistas previas de Dark Fantasy, Legends of Rome y Finance Calm no
+estan incluidas. Guardian Angels sigue desactivada tal como la enviaste.
+Se muestra su estado pendiente en vez de una imagen de otro producto.

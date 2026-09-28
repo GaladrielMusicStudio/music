@@ -26,9 +26,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"Galadriel Music Studio","url":"https://galadrielmusicstudio.github.io/music/","sameAs":["https://www.youtube.com/@Galadriel_Symphony","https://www.youtube.com/@EcosDelAnimeMusic","https://www.youtube.com/@Heavenly_Echoes_Sounds","https://www.youtube.com/@ForgedInSilenceMusic","https://www.youtube.com/@ReelEmpiresMusic","https://open.spotify.com/intl-es/artist/4nYRh691c9rFwYWgybuZY1","https://tidal.com/artist/80259415","https://instagram.com/galadrielsymphony"]}
 </script>
-<link rel="stylesheet" href="css/fonts.css">
-<link rel="stylesheet" href="css/styles.css">
-<link rel="stylesheet" href="css/turntable.css">
+<link rel="stylesheet" href="css/fonts.css?v=20260928">
+<link rel="stylesheet" href="css/styles.css?v=20260928">
+<link rel="stylesheet" href="css/turntable.css?v=20260928">
 </head>
 <body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
@@ -72,8 +72,8 @@
   <linearGradient id="pivot-brass"><stop stop-color="#5e431d"/><stop offset=".3" stop-color="#d8b77a"/><stop offset=".55" stop-color="#f1d9a6"/><stop offset=".8" stop-color="#946529"/><stop offset="1" stop-color="#3c2b19"/></linearGradient>
   <linearGradient id="photo-edge-h"><stop stop-color="white" stop-opacity="0"/><stop offset=".045" stop-color="white"/><stop offset=".955" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
   <linearGradient id="photo-edge-v" x2="0" y2="1"><stop stop-color="white" stop-opacity="0"/><stop offset=".055" stop-color="white"/><stop offset=".94" stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient>
-  <mask id="photo-v" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="1672" height="941"><rect width="1672" height="941" fill="url(#photo-edge-v)"/></mask>
-  <mask id="tt-feather" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="430" y="260" width="1242" height="681"><rect x="430" y="260" width="1242" height="681" fill="url(#photo-edge-h)" mask="url(#photo-v)"/></mask>
+  <mask id="photo-v" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="520" y="300" width="1120" height="620"><rect x="520" y="300" width="1120" height="620" fill="url(#photo-edge-v)"/></mask>
+  <mask id="tt-feather" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="520" y="300" width="1120" height="620"><rect x="520" y="300" width="1120" height="620" fill="url(#photo-edge-h)" mask="url(#photo-v)"/></mask>
   <filter id="disc-contact-shadow" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
 </defs>
 
@@ -102,7 +102,7 @@
           
           <div class="home-audio" id="homeAudio"></div>
         </div>
-        <p class="sample-caption">Escucha una muestra del canal</p><button class="touch" id="openDisc" aria-expanded="false" aria-controls="channelPanel">Ver canal <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
+        <p class="sample-caption"></p><button class="touch" id="openDisc" aria-expanded="false" aria-controls="channelPanel">Ver canal <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
       </div>
       <aside class="channel-panel" id="channelPanel" aria-live="polite"></aside>
     </section>
@@ -114,7 +114,7 @@
   </main>
   <section class="view" id="view-escuchar" aria-labelledby="escuchar-title">
     <h2 id="escuchar-title">Escuchar</h2>
-    <p class="intro" id="listenIntro">Cargando las estadísticas públicas de YouTube para ordenar canales y videos.</p>
+    <p class="intro" id="listenIntro">Cargando canales…</p>
     <div class="listen-list" id="listenList"></div>
   </section>
   <section class="view" id="view-estudio" aria-labelledby="estudio-title">
@@ -165,7 +165,7 @@
   </section>
 <footer class="site-footer"><span>Galadriel Music Studio</span><a href="privacidad.html">Privacidad</a><a href="#estudio" data-view="estudio">Contacto</a></footer></div>
 <dialog id="productPreview"><button class="preview-close" aria-label="Cerrar vista previa">Cerrar ×</button><img alt=""><p></p></dialog>
-<script src="js/turntable.js" defer></script>
-<script src="js/app.js" defer></script>
+<script src="js/turntable.js?v=20260928" defer></script>
+<script src="js/app.js?v=20260928" defer></script>
 </body>
 </html>
