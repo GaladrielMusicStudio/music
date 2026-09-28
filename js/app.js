@@ -8,7 +8,8 @@ const enc=s=>new URLSearchParams({q:String(s)}).toString().slice(2);
 const qs=obj=>new URLSearchParams(obj).toString();
 const cleanRemoteUrl=url=>String(url||"").replace(/\\u0026/g,"&").replace(/\\u003d/g,"=").replace(/\\\//g,"/").replace(/&amp;/g,"&");
 const pad=n=>String(n+1).padStart(2,"0");
-const fmt=n=>new Intl.NumberFormat("es-PE").format(Number(n)||0);
+const fmt=n=>{n=Math.max(0,Number(n)||0);if(n<1000)return String(Math.floor(n));const unit=n>=999950?1e6:1e3;return new Intl.NumberFormat("es-ES",{maximumFractionDigits:1}).format(n/unit)+(unit===1e6?"M":"K")};
+function popularChannels(){return [...CH].sort((a,b)=>(Number(b.metricsTrusted&&!b.subsHidden)-Number(a.metricsTrusted&&!a.subsHidden))||(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b))}
 const fecha=iso=>{if(!iso)return"";const d=(Date.now()-new Date(iso))/864e5;if(d<1)return"Hoy";if(d<2)return"Ayer";if(d<7)return`Hace ${Math.floor(d)} días`;if(d<35)return`Hace ${Math.floor(d/7)} semanas`;return new Date(iso).toLocaleDateString("es-PE",{day:"numeric",month:"long"})};
 const dur=iso=>{const m=/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso||"");if(!m)return"";const h=+m[1]||0,mi=+m[2]||0,sg=+m[3]||0;return h?`${h}:${String(mi).padStart(2,"0")}:${String(sg).padStart(2,"0")}`:`${mi}:${String(sg).padStart(2,"0")}`};
 function getText(url){
@@ -107,7 +108,7 @@ function videoCard(v,c={}){
   return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}${v.dur?`<span class="video-duration">${esc(v.dur)}</span>`:""}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
 }
 function renderRail(){
-  $("#channelRail").innerHTML=CH.map((c,i)=>`<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(i)}</span><span class="label">${esc(c.nombre)}</span></button></li>`).join("");
+  $("#channelRail").innerHTML=popularChannels().map((c,rank)=>`<li><button data-i="${CH.indexOf(c)}" aria-current="${CH.indexOf(c)===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(rank)}</span><span class="label">${esc(c.nombre)}</span></button></li>`).join("");
 }
 function renderHero(){
   const c=CH[active];
@@ -155,15 +156,7 @@ function placeholderVideos(c){
 }
 function renderListen(){
   const retained=new Map([...document.querySelectorAll("#listenList .audio-card")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
-  const ordered=[...CH].sort((a,b)=>{
-    if(a.metricsTrusted!==b.metricsTrusted)return a.metricsTrusted?-1:1;
-    if(a.metricsTrusted&&b.metricsTrusted){
-      return (b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b);
-    }
-    const pa=a.handle==="@Galadriel_Symphony"?-1:CH.indexOf(a);
-    const pb=b.handle==="@Galadriel_Symphony"?-1:CH.indexOf(b);
-    return pa-pb;
-  });
+  const ordered=popularChannels();
   const intro=$("#listenIntro");
   const allLoaded=CH.length>0&&CH.every(c=>c.loaded);
   const metricsReady=CH.some(c=>c.metricsTrusted);
@@ -198,6 +191,7 @@ function renderShop(){
  $("#shopGrid").querySelectorAll('select').forEach(select=>select.addEventListener('change',()=>{const p=APP.packs[+select.dataset.pack];const card=select.closest('.shop-card');card.querySelector('.shop-request').href=shopHref(p,select.value);const button=card.querySelector('.shop-art');if(p.previewEnabled===false)return;button.classList.remove('no-preview');button.disabled=false;button.setAttribute('aria-label','Ampliar vista previa de '+p.t);button.querySelector('img').src='img/shop/'+p.slug+'-'+select.value+'.jpg'}));
 }
 function setActive(i){active=(i+CH.length)%CH.length;panelOpen=false;renderHero()}
+function stepChannel(delta){const order=popularChannels();setActive(CH.indexOf(order[(order.indexOf(CH[active])+delta+order.length)%order.length]))}
 function setView(next,fromHistory=false){
  if(!["canales","escuchar","estudio","tienda"].includes(next))next="canales";
  const changed=view!==next;
@@ -257,7 +251,8 @@ async function fetchViaApi(c){
   }
   const videos=playlistItems.map(x=>{const id=x.snippet.resourceId.videoId;return{id,thumbnail:cleanRemoteUrl(x.snippet.thumbnails?.high?.url||x.snippet.thumbnails?.medium?.url||x.snippet.thumbnails?.default?.url||""),title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id&&det[v.id]).sort((a,b)=>b.vistas-a.vistas);
   const thumbs=it.snippet?.thumbnails||{};
-  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,subsHidden:!!it.statistics.hiddenSubscriberCount,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
+  const largest=Object.values(thumbs).sort((a,b)=>(b.width||0)*(b.height||0)-(a.width||0)*(a.height||0))[0];
+  return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(largest?.url||""),subs:+it.statistics.subscriberCount||0,subsHidden:!!it.statistics.hiddenSubscriberCount,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
 }
 async function loadChannel(c){
   try{
@@ -275,7 +270,7 @@ document.addEventListener("click",ev=>{
   if(ev.target.closest("#openDisc")||ev.target.closest("#touchDisc")){togglePanel();return}
   if(ev.target.closest("#closePanel"))togglePanel(false);
 });
-document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(view==="canales"&&ev.key==="ArrowLeft")setActive(active-1);if(view==="canales"&&ev.key==="ArrowRight")setActive(active+1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
+document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(view==="canales"&&ev.key==="ArrowLeft")stepChannel(-1);if(view==="canales"&&ev.key==="ArrowRight")stepChannel(1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
 function initStaticBindings(){
   const notify=$("#notifyMail");if(notify)notify.href=`mailto:${APP.correo}?subject=${enc("Quiero recibir nuevos lanzamientos")}`;
   const preview=$('#productPreview');

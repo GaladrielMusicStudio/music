@@ -10,7 +10,7 @@
   const target=playing&&!reduced.matches?200:0,previous=speed;
   speed=target+(speed-target)*Math.exp(-dt/(playing?.42:.62));
   angle=(angle+(previous+speed)*.5*dt)%360;
-  rotor.style.transform=`rotate(${angle}deg)`;
+  rotor.setAttribute("transform",`rotate(${angle.toFixed(3)})`);
   if((playing&&!reduced.matches)||speed>.08)frame=requestAnimationFrame(tick);
   else{frame=0;last=0;speed=0;}
  }
