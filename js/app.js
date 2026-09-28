@@ -112,7 +112,20 @@ function renderHero(){
   }
   $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><p class="name">${esc(c.nombre)}</p>`;
   const avatar=document.querySelector('.tt-avatar');
-  if(avatar){avatar.setAttribute('visibility',c.avatar?'visible':'hidden');if(c.avatar)avatar.setAttribute('href',c.avatar);else avatar.removeAttribute('href');}
+  const avatarRing=document.querySelector('.tt-avatar-ring');
+  if(avatar){
+    const iconUrl=c.avatar||"";
+    avatar.setAttribute('visibility',iconUrl?'visible':'hidden');
+    avatar.setAttribute('aria-label',`Icono del canal ${c.nombre}`);
+    avatarRing?.setAttribute('visibility',iconUrl?'visible':'hidden');
+    if(iconUrl){
+      avatar.setAttribute('href',iconUrl);
+      avatar.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',iconUrl);
+    }else{
+      avatar.removeAttribute('href');
+      avatar.removeAttributeNS('http://www.w3.org/1999/xlink','href');
+    }
+  }
   $("#touchDisc").setAttribute('aria-label','Ver '+c.nombre);
   const stats=c.metricsTrusted?[c.totalViews?fmt(c.totalViews)+" vistas":"",c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · "):"";
   const topVideos=c.videos.slice(0,3);
@@ -130,18 +143,22 @@ function placeholderVideos(c){
 }
 function renderListen(){
   const ordered=[...CH].sort((a,b)=>{
-    const av=a.metricsTrusted?a.totalViews||0:-1;
-    const bv=b.metricsTrusted?b.totalViews||0:-1;
-    if(av!==bv)return bv-av;
-    if(a.metricsTrusted&&b.metricsTrusted)return(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b);
+    if(a.metricsTrusted!==b.metricsTrusted)return a.metricsTrusted?-1:1;
+    if(a.metricsTrusted&&b.metricsTrusted){
+      return (b.subs||0)-(a.subs||0)||(b.totalViews||0)-(a.totalViews||0)||CH.indexOf(a)-CH.indexOf(b);
+    }
     const pa=a.handle==="@Galadriel_Symphony"?-1:CH.indexOf(a);
     const pb=b.handle==="@Galadriel_Symphony"?-1:CH.indexOf(b);
     return pa-pb;
   });
-  $("#listenList").innerHTML=ordered.map(c=>{
-    const vids=c.videos.slice(0,4);
-    const community=c.metricsTrusted&&c.totalViews?`${fmt(c.totalViews)} vistas del canal`:c.metricsTrusted&&c.subs?`${fmt(c.subs)} suscriptores`:(c.loaded?"Canal en YouTube":"Cargando canal");
-    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(community)}</small></span></div></div><div class="listen-videos"><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
+  $("#listenList").innerHTML=ordered.map((c,index)=>{
+    const vids=[...c.videos].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,4);
+    const stats=c.metricsTrusted
+      ?[c.subs?`${fmt(c.subs)} suscriptores`:"Suscriptores ocultos",c.totalViews?`${fmt(c.totalViews)} vistas`:"",c.nVideos?`${fmt(c.nVideos)} videos`:""] .filter(Boolean).join(" · ")
+      :(c.loaded?"Estadísticas públicas no disponibles":"Cargando estadísticas");
+    const videoHeading=c.metricsTrusted?"Videos con más vistas":"Publicaciones recientes";
+    const videoNote=c.metricsTrusted?"Ordenados por reproducciones":"Ordenadas por fecha";
+    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-rank" aria-label="Puesto ${index+1} por suscriptores">${pad(index)}</span><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   initPlayers($("#listenList"));
 }
@@ -154,8 +171,8 @@ function renderShop(){
     const mobileSize="1440 x 3200 px";
     const monitorSize="3840 x 2160 px";
     const asunto=enc("Pack: "+p.t);
-    const cuerpo=enc(`Hola, quiero comprar el pack "${p.t}".\n\nFormato elegido:\n- Celular (${mobileSize}) - ${mobilePrice}\n- Monitor (${monitorSize}) - ${monitorPrice}\n\nCanal: ${p.canal}\n\nIndícame el método de pago y el enlace de entrega. Gracias.`);
-    return `<a class="shop-card" href="mailto:${APP.correo}?subject=${asunto}&body=${cuerpo}"><span class="shop-art" style="--pack-bg:${p.bg};--pack-fg:${p.fg}"><span class="mock-monitor"><img src="${esc(monitor)}" alt="" loading="lazy" onerror="this.remove()"></span><span class="mock-phone"><img src="${esc(mobile)}" alt="" loading="lazy" onerror="this.remove()"></span><span class="pack-title">${esc(p.t)}</span><span class="pack-count">${esc(p.n)}</span></span><strong>${esc(p.t)}</strong><small>${esc(p.n)}<span class="price-line">Celular ${mobileSize} · ${mobilePrice}</span><span class="price-line">Monitor ${monitorSize} · ${monitorPrice}</span></small><span class="shop-actions"><em>Ver pack</em><i aria-hidden="true">◦</i></span></a>`;
+    const cuerpo=enc(`Hola, quiero solicitar el pack "${p.t}".\n\nFormatos disponibles:\n- Celular (${mobileSize}) - ${mobilePrice}\n- Monitor (${monitorSize}) - ${monitorPrice}\n\nIndicaré aquí el formato que deseo.\nCanal: ${p.canal}\n\nPor favor, envíame el método de pago y el enlace de descarga. Gracias.`);
+    return `<a class="shop-card" aria-label="Solicitar el pack ${esc(p.t)} por correo" href="mailto:${APP.correo}?subject=${asunto}&body=${cuerpo}"><span class="shop-art" style="--pack-bg:${p.bg};--pack-fg:${p.fg}"><span class="shop-edition">Colección digital</span><span class="mock-monitor"><img src="${esc(monitor)}" alt="Vista previa del pack ${esc(p.t)} en monitor" loading="lazy" onerror="this.remove()"></span><span class="mock-phone"><img src="${esc(mobile)}" alt="Vista previa del pack ${esc(p.t)} en celular" loading="lazy" onerror="this.remove()"></span><span class="pack-title">${esc(p.t)}</span><span class="pack-count">${esc(p.n)}</span></span><strong>${esc(p.t)}</strong><small>${esc(p.n)}<span class="price-line">Celular ${mobileSize} · ${mobilePrice}</span><span class="price-line">Monitor ${monitorSize} · ${monitorPrice}</span></small><span class="shop-actions"><em>Solicitar pack</em><i aria-hidden="true">→</i></span></a>`;
   }).join("");
 }
 function setActive(i){active=(i+CH.length)%CH.length;panelOpen=false;renderHero()}
