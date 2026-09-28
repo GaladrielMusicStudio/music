@@ -118,3 +118,27 @@
   .tt-zone .tt-arm-yaw{transition:none}
   .tt-zone .tt-arm-lift.is-cueing{animation:none}
 }
+
+/* Controls share the console's coordinates at every scene size. */
+.record-zone.tt-zone .home-audio{top:53.1%;height:9.1%}
+.tt-zone .tt-console{font-size:12px;grid-template-columns:36px minmax(0,1fr) 52px;grid-template-rows:minmax(0,1fr)}
+.tt-zone .tt-play{width:36px;height:44px}
+.tt-zone .tt-play svg{width:18px;height:18px}
+.tt-zone .tt-timeline{gap:7px;min-height:0;height:100%;grid-template-rows:minmax(0,1fr)}
+.tt-zone .sample-caption:empty{display:none}
+.record-zone.tt-zone .touch{margin-top:14px}
+@media(max-width:1150px){
+  .tt-zone .tt-console{font-size:11px;grid-template-columns:28px minmax(0,1fr);gap:3px}
+  .tt-zone .tt-volume{display:none}
+  .tt-zone .tt-play{width:28px}
+  .tt-zone .tt-timeline{gap:4px}
+}
+@media(max-width:820px){
+  .tt-zone .tt-stage{width:120%;align-self:center}
+  .tt-zone .tt-console{font-size:12px;grid-template-columns:32px minmax(0,1fr)}
+  .tt-zone .tt-play{width:32px}
+}
+@media(max-width:360px){
+  .tt-zone .tt-console{font-size:10px;grid-template-columns:28px minmax(0,1fr)}
+  .tt-zone .tt-play{width:28px}
+}
