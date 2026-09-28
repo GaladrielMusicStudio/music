@@ -22,5 +22,9 @@
   if(!reduced.matches){lift.classList.remove('is-cueing');void lift.getBoundingClientRect();lift.classList.add('is-cueing');}
   if(!frame){last=0;frame=requestAnimationFrame(tick);}
  }
+ reduced.addEventListener('change',()=>{
+  if(reduced.matches){cancelAnimationFrame(frame);frame=0;last=0;speed=0;}
+  else if(playing&&!frame)frame=requestAnimationFrame(tick);
+ });
  window.galadrielTurntable={setPlaying};
 })();

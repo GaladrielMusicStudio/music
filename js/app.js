@@ -9,7 +9,7 @@ const qs=obj=>new URLSearchParams(obj).toString();
 const cleanRemoteUrl=url=>String(url||"").replace(/\\u0026/g,"&").replace(/\\u003d/g,"=").replace(/\\\//g,"/").replace(/&amp;/g,"&");
 const pad=n=>String(n+1).padStart(2,"0");
 const fmt=n=>{n=Math.max(0,Number(n)||0);if(n<1000)return String(Math.floor(n));const unit=n>=999950?1e6:1e3;return new Intl.NumberFormat("es-ES",{maximumFractionDigits:1}).format(n/unit)+(unit===1e6?"M":"K")};
-function popularChannels(){return [...CH].sort((a,b)=>(Number(b.metricsTrusted&&!b.subsHidden)-Number(a.metricsTrusted&&!a.subsHidden))||(b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b))}
+function popularChannels(){return [...CH].sort((a,b)=>(Number(b.metricsTrusted)-Number(a.metricsTrusted))||(a.metricsTrusted&&b.metricsTrusted?b.totalViews-a.totalViews:0)||CH.indexOf(a)-CH.indexOf(b))}
 const fecha=iso=>{if(!iso)return"";const d=(Date.now()-new Date(iso))/864e5;if(d<1)return"Hoy";if(d<2)return"Ayer";if(d<7)return`Hace ${Math.floor(d)} días`;if(d<35)return`Hace ${Math.floor(d/7)} semanas`;return new Date(iso).toLocaleDateString("es-PE",{day:"numeric",month:"long"})};
 const dur=iso=>{const m=/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso||"");if(!m)return"";const h=+m[1]||0,mi=+m[2]||0,sg=+m[3]||0;return h?`${h}:${String(mi).padStart(2,"0")}:${String(sg).padStart(2,"0")}`:`${mi}:${String(sg).padStart(2,"0")}`};
 function getText(url){
@@ -121,7 +121,7 @@ function renderHero(){
     home.dataset.channelAudio=audioKey;
     home.innerHTML=homeAudioBlock(c);
   }
-  $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><div class="current-identity">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:""}<p class="name">${esc(c.nombre)}</p></div><p class="current-stats">${c.metricsTrusted?(c.subsHidden?"":fmt(c.subs)+" suscriptores"):""}</p>`;
+  $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><div class="current-identity">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:""}<p class="name">${esc(c.nombre)}</p></div><p class="current-stats">${c.metricsTrusted?fmt(c.totalViews)+" vistas"+(c.subsHidden?"":" · "+fmt(c.subs)+" suscriptores"):""}</p>`;
   const avatar=document.querySelector('.tt-avatar');
   const avatarRing=document.querySelector('.tt-avatar-ring');
   if(avatar){
@@ -139,9 +139,9 @@ function renderHero(){
     }
   }
   document.querySelectorAll('.current-identity img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
-  const caption=document.querySelector('.sample-caption');if(caption)caption.textContent=c.audio?'Escucha una muestra del canal':'Muestra de audio aún no disponible';
+  const caption=document.querySelector('.sample-caption');if(caption)caption.textContent=c.audio?'':'Muestra de audio aún no disponible';
   $("#touchDisc").setAttribute('aria-label','Ver '+c.nombre);
-  const stats=c.metricsTrusted?(c.subsHidden?"Suscriptores ocultos":fmt(c.subs)+" suscriptores"):"";
+  const stats=c.metricsTrusted?fmt(c.totalViews)+" vistas"+(c.subsHidden?"":" · "+fmt(c.subs)+" suscriptores"):"";
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
   document.body.classList.toggle("disc-open",panelOpen);
@@ -152,7 +152,7 @@ function renderHero(){
   initPlayers($("#homeAudio"));
 }
 function placeholderVideos(c){
-  return `<p class="empty">${c.loaded?(c.metricsTrusted?'Este canal no tiene videos públicos disponibles.':'No se pudo cargar YouTube.'):"Cargando videos de YouTube…"} <a href="${esc(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`)}" target="_blank" rel="noopener noreferrer">Abrir canal en YouTube →</a></p>`;
+  return `<p class="empty">${c.loaded?(c.videoError?'No se pudieron cargar los videos de YouTube.':'Este canal no tiene videos públicos disponibles.'):"Cargando videos de YouTube…"} <a href="${esc(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`)}" target="_blank" rel="noopener noreferrer">Abrir canal en YouTube →</a></p>`;
 }
 function renderListen(){
   const retained=new Map([...document.querySelectorAll("#listenList .audio-card")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
@@ -162,18 +162,18 @@ function renderListen(){
   const metricsReady=CH.some(c=>c.metricsTrusted);
   if(intro){
     intro.textContent=metricsReady
-      ?"Canales ordenados por suscriptores y videos destacados por reproducciones, según las estadísticas públicas disponibles de YouTube."
+      ?"Lo más escuchado de nuestros universos musicales."
       :allLoaded
         ?"No se pudieron cargar las estadísticas de YouTube. Puedes abrir los canales directamente en YouTube."
-        :"Cargando las estadísticas públicas de YouTube para ordenar canales y videos.";
+        :"Cargando canales…";
   }
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=[...c.videos].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,4);
     const stats=c.metricsTrusted
-      ?(c.subsHidden?"Suscriptores ocultos":`${fmt(c.subs)} suscriptores`)
-      :(c.loaded?"Estadísticas no disponibles temporalmente":"Cargando suscriptores");
-    const videoHeading=c.metricsTrusted?"Videos con más vistas":"Selección del canal";
-    const videoNote=c.metricsTrusted?"Ordenados por reproducciones":"Estadísticas pendientes";
+      ?`${fmt(c.totalViews)} vistas del canal${c.subsHidden?"":" · "+fmt(c.subs)+" suscriptores"}`
+      :(c.loaded?"Estadísticas no disponibles temporalmente":"Cargando canal");
+    const videoHeading=c.videos.length?"Videos con más vistas":"Videos del canal";
+    const videoNote="";
     return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   document.querySelectorAll("#listenList .audio-card").forEach(card=>{const old=retained.get(card.querySelector("audio")?.getAttribute("src"));if(old)card.replaceWith(old)});
@@ -227,10 +227,15 @@ async function fetchViaApi(c){
       const data=await getJson(`https://www.googleapis.com/youtube/v3/channels?${qs(params)}`);
       if(data.error)throw new Error(data.error.message||"youtube api");
       if(data.items?.[0]){cj=data;break}
-    }catch(error){lastError=error}
+    }catch(error){if(error.status===400||error.status===403)throw error;lastError=error}
   }
   if(!cj?.items?.[0])throw lastError||new Error("channel");
   const it=cj.items[0];
+  const thumbs=it.snippet?.thumbnails||{};
+  const largest=Object.values(thumbs).sort((a,b)=>(b.width||0)*(b.height||0)-(a.width||0)*(a.height||0))[0];
+  // Keep channel identity and verified totals even if a later video request fails.
+  Object.assign(c,{channelId:it.id||c.channelId,nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(largest?.url||""),subs:+it.statistics.subscriberCount||0,subsHidden:!!it.statistics.hiddenSubscriberCount,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,metricsTrusted:true});
+  renderHero();
   const uploads=it.contentDetails?.relatedPlaylists?.uploads;
   const playlistItems=[];
   let pageToken="";
@@ -250,19 +255,19 @@ async function fetchViaApi(c){
     (vd.items||[]).forEach(v=>det[v.id]={dur:dur(v.contentDetails.duration),vistas:+v.statistics.viewCount||0});
   }
   const videos=playlistItems.map(x=>{const id=x.snippet.resourceId.videoId;return{id,thumbnail:cleanRemoteUrl(x.snippet.thumbnails?.high?.url||x.snippet.thumbnails?.medium?.url||x.snippet.thumbnails?.default?.url||""),title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id&&det[v.id]).sort((a,b)=>b.vistas-a.vistas);
-  const thumbs=it.snippet?.thumbnails||{};
-  const largest=Object.values(thumbs).sort((a,b)=>(b.width||0)*(b.height||0)-(a.width||0)*(a.height||0))[0];
   return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(largest?.url||""),subs:+it.statistics.subscriberCount||0,subsHidden:!!it.statistics.hiddenSubscriberCount,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
 }
 async function loadChannel(c){
   try{
     const api=await fetchViaApi(c);
-    Object.assign(c,api,{loaded:true});
+    Object.assign(c,api,{loaded:true,videoError:false});
   }catch(error){
     console.warn("No se pudo cargar YouTube API para",c.handle,error.message);
-    Object.assign(c,{avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,metricsTrusted:false,loaded:true});
+    c.loaded=true;
+    c.videoError=true;
   }
   renderHero();
+  renderListen();
 }
 document.addEventListener("click",ev=>{
   const channel=ev.target.closest("[data-i]");if(channel){setActive(+channel.dataset.i);return}
@@ -292,8 +297,10 @@ function closeIntro(){const intro=$("#intro");if(!intro||intro.classList.contain
 function initIntro(){
   const intro=$("#intro"),video=$("#introVideo");
   if(!intro)return;
-  if(sessionStorage.getItem('galadriel-intro-seen')){intro.remove();return}
-  sessionStorage.setItem('galadriel-intro-seen','1');
+  try{
+    if(sessionStorage.getItem('galadriel-intro-seen')){intro.remove();return}
+    sessionStorage.setItem('galadriel-intro-seen','1');
+  }catch{}
   intro.insertAdjacentHTML('beforeend','<button class="intro-skip">Entrar al estudio →</button>');
   intro.addEventListener("click",closeIntro,{once:true});
   addEventListener("keydown",closeIntro,{once:true});
