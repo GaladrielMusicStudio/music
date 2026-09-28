@@ -62,7 +62,6 @@ body{background:radial-gradient(ellipse at 14% 18%,rgba(255,255,255,.82),transpa
 /* Clear ranking and metric hierarchy in the listening view. */
 .view#view-escuchar .intro{max-width:70ch}
 .listen-row{grid-template-columns:minmax(270px,340px) minmax(0,1fr);gap:2rem}
-.listen-rank{align-self:flex-start;min-width:2rem;padding-top:.25rem;color:#9b7844;font-family:"Marcellus",Georgia,serif;font-size:.8rem;letter-spacing:.08em}
 .row-id{align-items:flex-start}
 .row-id h3{line-height:1.2}
 .row-id small{display:block;margin-top:.3rem;line-height:1.55;letter-spacing:.08em;text-transform:none;font-variant-numeric:tabular-nums}
@@ -70,4 +69,4 @@ body{background:radial-gradient(ellipse at 14% 18%,rgba(255,255,255,.82),transpa
 .listen-videos-heading small{color:#867b6b;font-size:.62rem;font-weight:300;letter-spacing:.08em;text-transform:none}
 .listen-row .video-card small{font-variant-numeric:tabular-nums}
 @media(max-width:1100px){.listen-row{grid-template-columns:1fr}.listen-channel{grid-template-columns:1fr minmax(250px,360px);align-items:center}}
-@media(max-width:820px){.page::after{opacity:.12}.view#view-tienda .shop-art{min-height:220px}.listen-row{gap:1.1rem}.listen-videos-heading{align-items:flex-start;flex-direction:column;gap:.2rem}.listen-rank{min-width:1.6rem}}
+@media(max-width:820px){.page::after{opacity:.12}.view#view-tienda .shop-art{min-height:220px}.listen-row{gap:1.1rem}.listen-videos-heading{align-items:flex-start;flex-direction:column;gap:.2rem}}
