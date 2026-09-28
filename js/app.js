@@ -16,7 +16,19 @@ function getText(url){
   if(typeof XMLHttpRequest==="function") return new Promise((resolve,reject)=>{const x=new XMLHttpRequest();x.open("GET",url,true);x.onload=()=>x.status>=200&&x.status<300?resolve(x.responseText):reject(new Error("HTTP "+x.status));x.onerror=()=>reject(new Error("Network error"));x.send()});
   return Promise.reject(new Error("No network API available"));
 }
-const getJson=url=>getText(url).then(JSON.parse);
+const getJson=async url=>{
+  if(typeof fetch==="function"){
+    const response=await fetch(url);
+    const data=await response.json().catch(()=>null);
+    if(!response.ok){
+      const error=new Error(data?.error?.message||`HTTP ${response.status}`);
+      error.status=response.status;
+      throw error;
+    }
+    return data;
+  }
+  return getText(url).then(JSON.parse);
+};
 let CH=[];
 let active=1,view="canales",panelOpen=false;
 function buildChannels(){
@@ -127,7 +139,7 @@ function renderHero(){
     }
   }
   $("#touchDisc").setAttribute('aria-label','Ver '+c.nombre);
-  const stats=c.metricsTrusted?[c.totalViews?fmt(c.totalViews)+" vistas":"",c.subs?fmt(c.subs)+" suscriptores":"",c.nVideos?c.nVideos+" videos":""].filter(Boolean).join(" · "):"";
+  const stats=c.metricsTrusted?(c.subs?fmt(c.subs)+" suscriptores":"Suscriptores ocultos"):"";
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
   document.body.classList.toggle("disc-open",panelOpen);
@@ -145,20 +157,30 @@ function renderListen(){
   const ordered=[...CH].sort((a,b)=>{
     if(a.metricsTrusted!==b.metricsTrusted)return a.metricsTrusted?-1:1;
     if(a.metricsTrusted&&b.metricsTrusted){
-      return (b.subs||0)-(a.subs||0)||(b.totalViews||0)-(a.totalViews||0)||CH.indexOf(a)-CH.indexOf(b);
+      return (b.subs||0)-(a.subs||0)||CH.indexOf(a)-CH.indexOf(b);
     }
     const pa=a.handle==="@Galadriel_Symphony"?-1:CH.indexOf(a);
     const pb=b.handle==="@Galadriel_Symphony"?-1:CH.indexOf(b);
     return pa-pb;
   });
-  $("#listenList").innerHTML=ordered.map((c,index)=>{
+  const intro=$("#listenIntro");
+  const allLoaded=CH.length>0&&CH.every(c=>c.loaded);
+  const metricsReady=CH.some(c=>c.metricsTrusted);
+  if(intro){
+    intro.textContent=metricsReady
+      ?"Canales ordenados por suscriptores y videos destacados por reproducciones, según las estadísticas públicas disponibles de YouTube."
+      :allLoaded
+        ?"No se pudieron cargar las estadísticas de YouTube. Se muestran publicaciones recientes hasta que la conexión esté disponible."
+        :"Cargando las estadísticas públicas de YouTube para ordenar canales y videos.";
+  }
+  $("#listenList").innerHTML=ordered.map(c=>{
     const vids=[...c.videos].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,4);
     const stats=c.metricsTrusted
-      ?[c.subs?`${fmt(c.subs)} suscriptores`:"Suscriptores ocultos",c.totalViews?`${fmt(c.totalViews)} vistas`:"",c.nVideos?`${fmt(c.nVideos)} videos`:""] .filter(Boolean).join(" · ")
-      :(c.loaded?"Estadísticas públicas no disponibles":"Cargando estadísticas");
+      ?(c.subs?`${fmt(c.subs)} suscriptores`:"Suscriptores ocultos")
+      :(c.loaded?"Estadísticas no disponibles temporalmente":"Cargando suscriptores");
     const videoHeading=c.metricsTrusted?"Videos con más vistas":"Publicaciones recientes";
     const videoNote=c.metricsTrusted?"Ordenados por reproducciones":"Ordenadas por fecha";
-    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-rank" aria-label="Puesto ${index+1} por suscriptores">${pad(index)}</span><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
+    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   initPlayers($("#listenList"));
 }
@@ -210,14 +232,24 @@ async function fetchViaApi(c){
   if(!cj?.items?.[0])throw lastError||new Error("channel");
   const it=cj.items[0];
   const uploads=it.contentDetails?.relatedPlaylists?.uploads;
-  const pl=uploads?await getJson(`https://www.googleapis.com/youtube/v3/playlistItems?${qs({part:"snippet",maxResults:"50",playlistId:uploads,key:k})}`):{items:[]};
-  const ids=(pl.items||[]).map(x=>x.snippet.resourceId.videoId).filter(Boolean);
+  const playlistItems=[];
+  let pageToken="";
+  if(uploads){
+    do{
+      const params={part:"snippet",maxResults:"50",playlistId:uploads,key:k};
+      if(pageToken)params.pageToken=pageToken;
+      const page=await getJson(`https://www.googleapis.com/youtube/v3/playlistItems?${qs(params)}`);
+      playlistItems.push(...(page.items||[]));
+      pageToken=page.nextPageToken||"";
+    }while(pageToken);
+  }
+  const ids=playlistItems.map(x=>x.snippet.resourceId.videoId).filter(Boolean);
   const det={};
-  if(ids.length){
-    const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?${qs({part:"contentDetails,statistics",id:ids.slice(0,50).join(","),key:k})}`);
+  for(let start=0;start<ids.length;start+=50){
+    const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?${qs({part:"contentDetails,statistics",id:ids.slice(start,start+50).join(","),key:k})}`);
     (vd.items||[]).forEach(v=>det[v.id]={dur:dur(v.contentDetails.duration),vistas:+v.statistics.viewCount||0});
   }
-  const videos=(pl.items||[]).map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id).sort((a,b)=>b.vistas-a.vistas);
+  const videos=playlistItems.map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id&&det[v.id]).sort((a,b)=>b.vistas-a.vistas);
   const thumbs=it.snippet?.thumbnails||{};
   return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
 }
