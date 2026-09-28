@@ -1,5 +1,5 @@
 let APP={canales:[],packs:[]};
-let FALLBACK={};
+
 
 const SHOW_AUDIO=true;
 const $=s=>document.querySelector(s);
@@ -32,10 +32,7 @@ const getJson=async url=>{
 let CH=[];
 let active=1,view="canales",panelOpen=false;
 function buildChannels(){
-  CH=APP.canales.map(c=>{
-    const f=FALLBACK[c.handle]||{};
-    return {...c,channelId:f.channelId||c.channelId||"",avatar:f.localAvatar||f.avatar||c.avatar||"",localAvatar:f.localAvatar||"",videos:[...(f.videos||[])],subs:0,totalViews:0,nVideos:0,accent:f.accent||"#b89146",loaded:false,metricsTrusted:false};
-  });
+  CH=APP.canales.map(c=>({...c,avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,loaded:false,metricsTrusted:false}));
 }
 
 function iconPlay(){return `<svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>`}
@@ -103,7 +100,7 @@ function seal(c){
 }
 function videoCard(v,c={}){
   const href=v.id?`https://youtu.be/${esc(v.id)}`:(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
-  const media=v.id?`<img src="${esc(v.localThumb||`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`)}" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
+  const media=v.thumbnail?`<img src="${esc(v.thumbnail||"")}" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
   const cls=v.id?"video-card":"video-card is-fallback";
   const views=c.metricsTrusted?fmt(v.vistas)+" vistas · ":"";
   const label=v.badge||(!c.metricsTrusted&&v.featured?"Selección destacada":fecha(v.date)||"Selección destacada");
@@ -128,7 +125,7 @@ function renderHero(){
   const avatarRing=document.querySelector('.tt-avatar-ring');
   if(avatar){
     const iconUrl=c.avatar||"";
-    avatar.onerror=()=>{if(c.localAvatar&&avatar.getAttribute('href')!==c.localAvatar){avatar.setAttribute('href',c.localAvatar);avatar.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href',c.localAvatar)}else{avatar.setAttribute('visibility','hidden');avatarRing?.setAttribute('visibility','hidden')}};
+    avatar.onerror=()=>{avatar.setAttribute('visibility','hidden');avatarRing?.setAttribute('visibility','hidden')};
     avatar.setAttribute('visibility',iconUrl?'visible':'hidden');
     avatar.setAttribute('aria-label',`Icono del canal ${c.nombre}`);
     avatarRing?.setAttribute('visibility',iconUrl?'visible':'hidden');
@@ -140,7 +137,7 @@ function renderHero(){
       avatar.removeAttributeNS('http://www.w3.org/1999/xlink','href');
     }
   }
-  document.querySelectorAll('.current-identity img').forEach(img=>{img.onerror=()=>{if(c.localAvatar&&!img.src.endsWith(c.localAvatar)){img.src=c.localAvatar}else img.hidden=true}});
+  document.querySelectorAll('.current-identity img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
   const caption=document.querySelector('.sample-caption');if(caption)caption.textContent=c.audio?'Escucha una muestra del canal':'Muestra de audio aún no disponible';
   $("#touchDisc").setAttribute('aria-label','Ver '+c.nombre);
   const stats=c.metricsTrusted?(c.subsHidden?"Suscriptores ocultos":fmt(c.subs)+" suscriptores"):"";
@@ -154,8 +151,7 @@ function renderHero(){
   initPlayers($("#homeAudio"));
 }
 function placeholderVideos(c){
-  const note=c.loaded?"Abrir canal en YouTube":"Preparando selección";
-  return Array.from({length:4},(_,i)=>videoCard({title:i===0?c.nombre:"Galadriel Music Studio",tag:c.cat||"Studio",vistas:0},c)).join("");
+  return `<p class="empty">${c.loaded?(c.metricsTrusted?'Este canal no tiene videos públicos disponibles.':'No se pudo cargar YouTube.'):"Cargando videos de YouTube…"} <a href="${esc(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`)}" target="_blank" rel="noopener noreferrer">Abrir canal en YouTube →</a></p>`;
 }
 function renderListen(){
   const retained=new Map([...document.querySelectorAll("#listenList .audio-card")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
@@ -175,7 +171,7 @@ function renderListen(){
     intro.textContent=metricsReady
       ?"Canales ordenados por suscriptores y videos destacados por reproducciones, según las estadísticas públicas disponibles de YouTube."
       :allLoaded
-        ?"No se pudieron cargar las estadísticas de YouTube. Puedes explorar la selección de cada canal mientras se restablece la conexión."
+        ?"No se pudieron cargar las estadísticas de YouTube. Puedes abrir los canales directamente en YouTube."
         :"Cargando las estadísticas públicas de YouTube para ordenar canales y videos.";
   }
   $("#listenList").innerHTML=ordered.map(c=>{
@@ -188,7 +184,7 @@ function renderListen(){
     return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   document.querySelectorAll("#listenList .audio-card").forEach(card=>{const old=retained.get(card.querySelector("audio")?.getAttribute("src"));if(old)card.replaceWith(old)});
-  document.querySelectorAll('#listenList .row-id img').forEach((img,i)=>{const channel=ordered[i];img.onerror=()=>{if(channel?.localAvatar&&!img.src.endsWith(channel.localAvatar))img.src=channel.localAvatar;else img.hidden=true}});
+  document.querySelectorAll('#listenList .row-id img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
   initPlayers($("#listenList"));
 }
 function shopHref(pack,format){
@@ -259,39 +255,17 @@ async function fetchViaApi(c){
     const vd=await getJson(`https://www.googleapis.com/youtube/v3/videos?${qs({part:"contentDetails,statistics",id:ids.slice(start,start+50).join(","),key:k})}`);
     (vd.items||[]).forEach(v=>det[v.id]={dur:dur(v.contentDetails.duration),vistas:+v.statistics.viewCount||0});
   }
-  const videos=playlistItems.map(x=>{const id=x.snippet.resourceId.videoId;return{id,title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id&&det[v.id]).sort((a,b)=>b.vistas-a.vistas);
+  const videos=playlistItems.map(x=>{const id=x.snippet.resourceId.videoId;return{id,thumbnail:cleanRemoteUrl(x.snippet.thumbnails?.high?.url||x.snippet.thumbnails?.medium?.url||x.snippet.thumbnails?.default?.url||""),title:x.snippet.title,date:x.snippet.publishedAt,dur:det[id]?.dur||"",vistas:det[id]?.vistas||0}}).filter(v=>v.id&&det[v.id]).sort((a,b)=>b.vistas-a.vistas);
   const thumbs=it.snippet?.thumbnails||{};
   return{channelId:it.id||c.channelId||"",nombre:it.snippet.title||c.nombre,avatar:cleanRemoteUrl(thumbs.high?.url||thumbs.medium?.url||thumbs.default?.url||""),subs:+it.statistics.subscriberCount||0,subsHidden:!!it.statistics.hiddenSubscriberCount,totalViews:+it.statistics.viewCount||0,nVideos:+it.statistics.videoCount||0,videos,metricsTrusted:true};
-}
-async function fetchFallback(c){
-  const html=await getText(APP.proxy+enc(`https://www.youtube.com/${c.handle}`));
-  const id=c.channelId||(html.match(/"externalId":"(UC[\w-]{22})"/)||html.match(/"channelId":"(UC[\w-]{22})"/)||html.match(/\/channel\/(UC[\w-]{22})/)||[])[1];
-  const avatar=cleanRemoteUrl(
-    (html.match(/"avatar":\{"thumbnails":\[\{"url":"([^"]+)"/)||
-    html.match(/"avatarViewModel":\{"image":\{"sources":\[\{"url":"([^"]+)"/)||
-    html.match(/"(https:\/\/yt3\.googleusercontent\.com\/[^"\\]+)"/)||[])[1]||""
-  );
-  let videos=[];
-  if(id){
-    const xml=await getText(APP.proxy+enc(`https://www.youtube.com/feeds/videos.xml?channel_id=${id}`));
-    const doc=new DOMParser().parseFromString(xml,"text/xml");
-    videos=[...doc.querySelectorAll("entry")].slice(0,8).map(n=>({id:n.querySelector("videoId")?.textContent||n.querySelector("yt\\:videoId")?.textContent,title:n.querySelector("title")?.textContent||"Video",date:n.querySelector("published")?.textContent||"",vistas:0,dur:""})).filter(v=>v.id);
-  }
-  return{channelId:id||c.channelId||"",avatar,videos,metricsTrusted:false};
 }
 async function loadChannel(c){
   try{
     const api=await fetchViaApi(c);
-    Object.assign(c,api,{avatar:api.avatar||c.localAvatar||c.avatar,videos:api.videos?.length?api.videos.map(v=>({...v,localThumb:FALLBACK[c.handle]?.videos?.find(f=>f.id===v.id)?.localThumb})):c.videos,loaded:true,metricsTrusted:true});
+    Object.assign(c,api,{loaded:true});
   }catch(error){
-    console.warn("No se pudo cargar YouTube API para",c.handle,error);
-    try{
-      const fallback=await fetchFallback(c);
-      Object.assign(c,fallback,{avatar:fallback.avatar||c.localAvatar||c.avatar,videos:c.videos?.length?c.videos:fallback.videos,subs:0,totalViews:0,nVideos:0,loaded:true,metricsTrusted:false});
-    }catch(fallbackError){
-      console.warn("No se pudo cargar fallback de YouTube para",c.handle,fallbackError);
-      c.subs=0;c.totalViews=0;c.nVideos=0;c.metricsTrusted=false;c.loaded=true;
-    }
+    console.warn("No se pudo cargar YouTube API para",c.handle,error.message);
+    Object.assign(c,{avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,metricsTrusted:false,loaded:true});
   }
   renderHero();
 }
@@ -348,7 +322,7 @@ async function loadSiteData(){
   if(!response.ok)throw new Error("No se pudo cargar data/channels.json");
   const data=await response.json();
   APP=data.app||APP;
-  FALLBACK=data.fallback||{};
+
 }
 async function boot(){
   try{
