@@ -10,9 +10,8 @@
 .shop-art img{object-fit:contain;background:#eee5d6}
 .shop-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 
-/* The full page uses the empty marble surface from the same scene asset. */
-.page{position:relative;isolation:isolate;background:#f4eee4;border-color:#b4a38b66;box-shadow:0 18px 60px #493d2914}
-.page-surface{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.92}
+/* One uninterrupted surface, independent of the turntable's alpha silhouette. */
+.page{position:relative;isolation:isolate;background:#f8f5ee;border-color:#b4a38b66;box-shadow:0 18px 60px #493d2914}
 .top{background:#faf6ef38}.site-footer{background:transparent}
 .channel-rail button[aria-current=true]{background:#fbf5e7b0;border-color:#ad88543d}
 .current-meta{position:relative;z-index:1}
@@ -36,3 +35,6 @@ h1 small,.brand .brand-word:after{text-transform:uppercase}
 }
 @media(max-width:480px){h1>.brand-word{font-size:36px}.current-meta .name{font-size:22px}}
 @media(max-width:360px){h1>.brand-word{font-size:32px}}
+.channel-stats{display:grid;gap:3px;line-height:1.5}
+.channel-stats span{display:block;white-space:nowrap}
+.channel-stats span:only-child{white-space:normal}
