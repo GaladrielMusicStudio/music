@@ -978,3 +978,135 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   #canales .rail-cat{display:none!important}
   #canales .channel-rail .label{max-width:13ch;margin:auto;overflow-wrap:normal!important;word-break:normal!important}
 }
+
+/* ======================================================================
+   CANALES v4 — wide-screen scaling + ambient shadows + stone grounding
+   Scope: layout/visual integration only. No turntable assets or JS logic.
+   ====================================================================== */
+@media (min-width:901px){
+  /* Let the approved composition breathe on large monitors / zoomed-out views. */
+  body:not(.view-open) .page{
+    width:calc(100% - clamp(28px,3vw,64px));
+    max-width:2240px;
+    min-height:0;
+    margin:clamp(14px,1.5vw,24px) auto;
+  }
+  body:not(.view-open) .top-in{
+    min-height:clamp(78px,5vw,92px);
+    padding-left:clamp(38px,4.5vw,96px);
+    padding-right:clamp(38px,4.5vw,96px);
+  }
+
+  #canales .home-grid{
+    min-height:0;
+    height:clamp(720px,49vw,940px);
+  }
+
+  /* Left panel keeps the same approved hierarchy, but scales instead of capping too early. */
+  #canales .home-left{
+    isolation:isolate;
+    overflow:hidden;
+    padding-top:clamp(42px,4.4vw,76px);
+    padding-left:clamp(40px,4.6vw,96px);
+    padding-right:clamp(40px,4.6vw,96px);
+  }
+  #canales .home-left::before{
+    content:'';
+    position:absolute;
+    inset:-3% -2% -2% -3%;
+    z-index:0;
+    pointer-events:none;
+    opacity:.78;
+    filter:blur(1.4px);
+    background:
+      /* soft botanical light/shadow impressions — intentionally low contrast */
+      radial-gradient(ellipse 92px 24px at 2% 16%,rgba(72,60,43,.075) 0 42%,transparent 68%),
+      radial-gradient(ellipse 72px 20px at 7% 22%,rgba(72,60,43,.065) 0 40%,transparent 68%),
+      radial-gradient(ellipse 88px 22px at 3% 30%,rgba(72,60,43,.055) 0 40%,transparent 70%),
+      radial-gradient(ellipse 64px 18px at 10% 35%,rgba(72,60,43,.045) 0 40%,transparent 70%),
+      linear-gradient(63deg,transparent 0 6.2%,rgba(72,60,43,.035) 6.35% 6.6%,transparent 6.8% 100%),
+      radial-gradient(ellipse 86px 22px at 96% 53%,rgba(72,60,43,.055) 0 42%,transparent 70%),
+      radial-gradient(ellipse 66px 18px at 91% 59%,rgba(72,60,43,.045) 0 42%,transparent 70%),
+      linear-gradient(118deg,transparent 0 91.5%,rgba(72,60,43,.028) 91.7% 91.95%,transparent 92.2% 100%),
+      radial-gradient(ellipse at 35% 18%,rgba(255,255,255,.50),transparent 52%);
+  }
+  #canales .home-left > *{position:relative;z-index:1}
+
+  #canales h1>.brand-word{
+    font-size:clamp(68px,5.25vw,126px);
+  }
+  #canales h1 small{
+    font-size:clamp(11px,.74vw,16px);
+  }
+  #canales .hero-statement{
+    font-size:clamp(13px,.78vw,17px);
+  }
+
+  /* Keep the exact artwork; only let its existing SVG scene scale farther on wide screens. */
+  #canales .record-zone.tt-zone{
+    width:min(96%,1180px);
+    margin-top:clamp(12px,1.65vw,28px);
+  }
+  #canales .record-zone.tt-zone::before{
+    content:'';
+    position:absolute;
+    left:10%;
+    right:10%;
+    bottom:3.2%;
+    height:13%;
+    z-index:0;
+    pointer-events:none;
+    background:radial-gradient(ellipse at center,rgba(74,49,24,.16) 0%,rgba(74,49,24,.08) 38%,transparent 72%);
+    filter:blur(16px);
+    opacity:.72;
+  }
+  #canales .tt-zone .tt-stage{position:relative;z-index:1}
+
+  /* The right panel stays visually identical, but aligns vertically with the fluid hero. */
+  #canales .channel-browser{
+    margin-top:clamp(92px,7.2vw,154px);
+  }
+  #canales .channel-info-wrap{
+    margin-top:clamp(32px,2.5vw,52px);
+  }
+}
+
+/* Extra-wide: preserve the approved 61/39 balance while allowing the whole composition to scale. */
+@media (min-width:1900px){
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#f5f0e7 0 61%,#0f1318 61% 100%);
+  }
+  #canales .home-grid{
+    grid-template-columns:minmax(0,61fr) minmax(520px,39fr);
+    height:clamp(800px,44vw,980px);
+  }
+  #canales .hero-copy{width:min(100%,1120px)}
+  #canales .record-zone.tt-zone{width:min(96%,1240px)}
+  #canales .channel-browser{margin-top:clamp(108px,6.2vw,164px)}
+}
+
+/* Medium desktop retains the v3 proportions; only prevent early visual compression. */
+@media (max-width:1320px) and (min-width:901px){
+  body:not(.view-open) .page{
+    width:calc(100% - 28px);
+    margin:14px auto;
+  }
+  #canales .home-grid{
+    height:auto;
+    min-height:clamp(700px,calc(100svh - 112px),860px);
+  }
+  #canales .home-left::before{opacity:.60}
+  #canales .record-zone.tt-zone{width:min(96%,880px)}
+}
+
+@media (max-width:900px){
+  /* Keep mobile/tablet behavior unchanged; only retain a faint ambience. */
+  #canales .home-left{position:relative;isolation:isolate;overflow:hidden}
+  #canales .home-left::before{
+    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.42;
+    background:
+      radial-gradient(ellipse 70px 18px at 2% 18%,rgba(72,60,43,.06) 0 42%,transparent 70%),
+      radial-gradient(ellipse 64px 16px at 96% 60%,rgba(72,60,43,.04) 0 42%,transparent 70%);
+  }
+  #canales .home-left > *{position:relative;z-index:1}
+}
