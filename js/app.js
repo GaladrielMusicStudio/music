@@ -31,7 +31,7 @@ const getJson=async url=>{
   return getText(url).then(JSON.parse);
 };
 let CH=[];
-let active=1,view="canales",panelOpen=false,railOffset=0;
+let active=1,view="canales",panelOpen=false,railOffset=0,railSettleTimer=0;
 function buildChannels(){
   CH=APP.canales.map(c=>({...c,avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,loaded:false,metricsTrusted:false}));
 }
@@ -138,10 +138,10 @@ function renderRail(){
   const order=popularChannels();
   ensureRailWindow(order);
   const rail=$("#channelRail");
-  rail.innerHTML=order.map((c,rank)=>{
+  rail.innerHTML=order.map(c=>{
     const i=CH.indexOf(c);
     const avatar=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
-    return `<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="rail-avatar">${avatar}</span><span class="rail-copy"><span class="num">${pad(rank)}</span><span class="label">${esc(c.nombre)}</span><span class="rail-cat">${esc(c.cat||c.hook||"")}</span></span></button></li>`;
+    return `<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="rail-avatar">${avatar}</span><span class="rail-copy"><span class="label">${esc(c.nombre)}</span></span></button></li>`;
   }).join("");
   requestAnimationFrame(()=>applyRailPosition(false));
 }
@@ -150,11 +150,19 @@ function nudgeArrow(button,direction){
   button.animate([{transform:"translateX(0)"},{transform:`translateX(${direction*3}px)`},{transform:"translateX(0)"}],{duration:190,easing:"ease-out"});
 }
 function moveRail(delta){
-  const order=popularChannels(),max=Math.max(0,order.length-railVisibleCount());
+  const order=popularChannels(),visible=railVisibleCount(),max=Math.max(0,order.length-visible);
   const next=Math.max(0,Math.min(max,railOffset+delta));
   if(next===railOffset){nudgeArrow(delta<0?$("#channelPrev"):$("#channelNext"),delta);return}
   railOffset=next;
   applyRailPosition(true);
+  clearTimeout(railSettleTimer);
+  const activePos=Math.max(0,order.indexOf(CH[active]));
+  let targetPos=-1;
+  if(activePos<next)targetPos=next;
+  else if(activePos>=next+visible)targetPos=next+visible-1;
+  if(targetPos>=0){
+    railSettleTimer=setTimeout(()=>setActive(CH.indexOf(order[targetPos])),420);
+  }
 }
 function animateChannelInfo(){
   if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
