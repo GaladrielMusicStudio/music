@@ -31,7 +31,7 @@ const getJson=async url=>{
   return getText(url).then(JSON.parse);
 };
 let CH=[];
-let active=1,view="canales",panelOpen=false;
+let active=1,view="canales",panelOpen=false,railOffset=0;
 function buildChannels(){
   CH=APP.canales.map(c=>({...c,avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,loaded:false,metricsTrusted:false}));
 }
@@ -107,8 +107,29 @@ function videoCard(v,c={}){
   const label=v.badge||(!c.metricsTrusted&&v.featured?"Selección destacada":fecha(v.date)||"Selección destacada");
   return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}${v.dur?`<span class="video-duration">${esc(v.dur)}</span>`:""}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
 }
+function ensureRailWindow(order){
+  const visible=3,max=Math.max(0,order.length-visible),activePos=Math.max(0,order.indexOf(CH[active]));
+  if(activePos<railOffset)railOffset=activePos;
+  if(activePos>=railOffset+visible)railOffset=activePos-visible+1;
+  railOffset=Math.max(0,Math.min(max,railOffset));
+}
 function renderRail(){
-  $("#channelRail").innerHTML=popularChannels().map((c,rank)=>`<li><button data-i="${CH.indexOf(c)}" aria-current="${CH.indexOf(c)===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="num">${pad(rank)}</span><span class="label">${esc(c.nombre)}</span></button></li>`).join("");
+  const order=popularChannels();
+  ensureRailWindow(order);
+  const visible=order.slice(railOffset,railOffset+3);
+  $("#channelRail").innerHTML=visible.map((c,slot)=>{
+    const i=CH.indexOf(c),rank=railOffset+slot;
+    const avatar=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
+    return `<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="rail-avatar">${avatar}</span><span class="rail-copy"><span class="num">${pad(rank)}</span><span class="label">${esc(c.nombre)}</span><span class="rail-cat">${esc(c.cat||c.hook||"")}</span></span></button></li>`;
+  }).join("");
+  const prev=$("#channelPrev"),next=$("#channelNext"),max=Math.max(0,order.length-3);
+  if(prev)prev.disabled=railOffset<=0;
+  if(next)next.disabled=railOffset>=max;
+}
+function moveRail(delta){
+  const order=popularChannels(),max=Math.max(0,order.length-3);
+  railOffset=Math.max(0,Math.min(max,railOffset+delta));
+  renderRail();
 }
 function renderHero(){
   const c=CH[active];
@@ -121,7 +142,12 @@ function renderHero(){
     home.dataset.channelAudio=audioKey;
     home.innerHTML=homeAudioBlock(c);
   }
-  $("#currentMeta").innerHTML=`<p class="cat">${esc(c.hook||c.cat)}</p><div class="current-identity">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:""}<p class="name">${esc(c.nombre)}</p></div><p class="current-stats">${c.metricsTrusted?fmt(c.totalViews)+" vistas"+(c.subsHidden?"":" · "+fmt(c.subs)+" suscriptores"):""}</p>`;
+  const order=popularChannels(),position=Math.max(0,order.indexOf(c));
+  const views=c.metricsTrusted?fmt(c.totalViews):"—";
+  const subs=c.metricsTrusted?(c.subsHidden?"Ocultos":fmt(c.subs)):"—";
+  $("#currentMeta").innerHTML=`<div class="meta-index"><span>${pad(position)} / ${String(order.length).padStart(2,"0")}</span><i aria-hidden="true"></i></div><p class="name">${esc(c.nombre)}</p><p class="cat">${esc(c.hook||c.cat)}</p><p class="meta-description">${esc(c.line||"")}</p><div class="current-stats"><span><b>${esc(views)}</b><small>Vistas</small></span><i aria-hidden="true"></i><span><b>${esc(subs)}</b><small>Suscriptores</small></span></div>`;
+  const directLink=$("#currentChannelLink");
+  if(directLink){directLink.href=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;directLink.setAttribute("aria-label",`Ver canal ${c.nombre}`)}
   const avatar=document.querySelector('.tt-avatar');
   const avatarRing=document.querySelector('.tt-avatar-ring');
   if(avatar){
@@ -145,7 +171,7 @@ function renderHero(){
   const topVideos=c.videos.slice(0,3);
   $("#channelPanel").innerHTML=`<div class="panel-actions"><button class="ghost" id="closePanel">Cerrar</button></div><div class="panel-top"><div class="panel-copy"><strong class="ghost">${esc(c.handle)}</strong><p>${esc(c.line)}</p>${stats?`<p>${esc(stats)}</p>`:""}${links(c)}</div></div>${topVideos.length?`<div class="panel-videos"><div class="videos">${topVideos.map(v=>videoCard(v,c)).join("")}</div></div>`:""}`;
   document.body.classList.toggle("disc-open",panelOpen);
-  $("#openDisc").setAttribute("aria-expanded",String(panelOpen));
+  $("#openDisc")?.setAttribute("aria-expanded",String(panelOpen));
   $("#touchDisc").setAttribute("aria-expanded",String(panelOpen));
   renderRail();
   initPlayers($("#channelPanel"));
@@ -270,6 +296,8 @@ async function loadChannel(c){
   renderListen();
 }
 document.addEventListener("click",ev=>{
+  if(ev.target.closest("#channelPrev")){moveRail(-1);return}
+  if(ev.target.closest("#channelNext")){moveRail(1);return}
   const channel=ev.target.closest("[data-i]");if(channel){setActive(+channel.dataset.i);return}
   const nav=ev.target.closest("[data-view]");if(nav){ev.preventDefault();setView(nav.dataset.view);return}
   if(ev.target.closest("#openDisc")||ev.target.closest("#touchDisc")){togglePanel();return}
