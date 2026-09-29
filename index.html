@@ -28,7 +28,7 @@
 </script>
 <link rel="stylesheet" href="css/fonts.css?v=20260928">
 <link rel="stylesheet" href="css/styles.css?v=20260928b">
-<link rel="stylesheet" href="css/turntable.css?v=20260928b">
+<link rel="stylesheet" href="css/turntable.css?v=20260929a">
 </head>
 <body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
@@ -49,17 +49,16 @@
     </div>
   </header>
   <main class="screen" id="canales">
-    <section class="hero-copy" aria-labelledby="titulo">
+    <div class="home-grid">
+      <section class="home-left" aria-labelledby="titulo">
+<section class="hero-copy" aria-labelledby="titulo">
       <p class="eyebrow">Un universo sonoro</p>
       <h1 id="titulo"><span class="brand-word" aria-label="Galadriel">GΛLΛDRIEL</span><small>Music Studio</small></h1>
       
       <p class="hero-statement">Música cinematográfica y emocional para universos originales.</p>
       
     </section>
-    <section class="stage" aria-label="Canales de Galadriel Music Studio">
-      <ol class="channel-rail" id="channelRail"></ol>
-      <div class="record-zone tt-zone"><div class="current-meta" id="currentMeta"></div>
-        <div class="tt-stage">
+      <div class="record-zone tt-zone"><div class="tt-stage">
 <svg class="tt-scene" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="500 340 1240 590" role="img" aria-label="Tocadiscos de mármol y oro con vinilo negro y brazo articulado">
 <defs>
   <image id="arm-photo" width="1672" height="941" xlink:href="img/turntable/arm.png"/>
@@ -116,14 +115,39 @@
           
           <div class="home-audio" id="homeAudio"></div>
         </div>
-        <p class="sample-caption"></p><button class="touch" id="openDisc" aria-expanded="false" aria-controls="channelPanel">Ver canal <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span></button>
-      </div>
-      <aside class="channel-panel" id="channelPanel" aria-live="polite"></aside>
-    </section>
-    <div class="footer-note">
-      <div class="left"><i aria-hidden="true"></i><span>Música<br>para otros mundos</span></div>
-      <a href="#escuchar" data-view="escuchar">Explorar música →</a>
-      <div class="right"><span class="sound-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span><span><span class="footer-brand" aria-label="Galadriel">GΛLΛDRIEL</span><br><span class="footer-studio">Music Studio</span></span></div>
+        <p class="sample-caption"></p>
+</div>
+        <div class="home-signature"><i aria-hidden="true"></i><span>Música<br>para otros mundos</span></div>
+      </section>
+
+      <aside class="home-right" aria-label="Explorar canales de Galadriel Music Studio">
+        <div class="channel-browser">
+          <div class="channel-browser-head"><span>Canales destacados</span><i aria-hidden="true"></i></div>
+          <div class="channel-carousel">
+            <button class="carousel-arrow carousel-prev" id="channelPrev" type="button" aria-label="Canales anteriores">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+            </button>
+            <ol class="channel-rail" id="channelRail"></ol>
+            <button class="carousel-arrow carousel-next" id="channelNext" type="button" aria-label="Canales siguientes">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="channel-info-wrap">
+          <div class="current-meta" id="currentMeta"></div>
+          <a class="channel-cta" id="currentChannelLink" href="#" target="_blank" rel="noopener noreferrer">
+            <span class="channel-cta-play" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9 6l9 6-9 6z"/></svg>
+            </span>
+            <span>Ver canal</span>
+            <span class="channel-cta-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <a class="home-explore" href="#escuchar" data-view="escuchar">Explorar música →</a>
+<aside class="channel-panel" id="channelPanel" aria-live="polite"></aside>
+      </aside>
     </div>
   </main>
   <section class="view" id="view-escuchar" aria-labelledby="escuchar-title">
@@ -180,6 +204,6 @@
 <footer class="site-footer"><span>Galadriel Music Studio</span><a href="privacidad.html">Privacidad</a><a href="#estudio" data-view="estudio">Contacto</a></footer></div>
 <dialog id="productPreview"><button class="preview-close" aria-label="Cerrar vista previa">Cerrar ×</button><img alt=""><p></p></dialog>
 <script src="js/turntable.js?v=20260928b" defer></script>
-<script src="js/app.js?v=20260928b" defer></script>
+<script src="js/app.js?v=20260929a" defer></script>
 </body>
 </html>
