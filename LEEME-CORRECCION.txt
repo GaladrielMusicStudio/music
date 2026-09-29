@@ -1,0 +1,75 @@
+GALADRIEL - CORRECCION DE FONDO, VINILO Y ESTADISTICAS
+28 de septiembre de 2026
+
+Esta actualizacion se aplica sobre galadriel-music-studio-integrado.zip.
+No es una web independiente: contiene solamente los seis archivos cambiados.
+No se ha publicado automaticamente en GitHub.
+
+ARCHIVOS QUE SUBIR A TU REPOSITORIO music
+
+Reemplaza, conservando exactamente estas rutas:
+index.html
+css/styles.css
+css/turntable.css
+js/app.js
+js/turntable.js
+
+Agrega este archivo nuevo dentro de img/turntable:
+img/turntable/chassis-transparent.png
+
+No necesitas volver a subir audio, media, fonts, data ni imagenes de tienda.
+Conserva img/turntable/arm.png y img/turntable/label.png: siguen utilizandose.
+background.png ya no se usa en esta version; puede permanecer sin afectar
+el funcionamiento. No hace falta borrar carpetas ni crear otro repositorio.
+
+Descomprime el ZIP y sube su contenido en las mismas carpetas del repositorio.
+No subas el ZIP como archivo de la web. Este instructivo tampoco necesita
+publicarse. Cuando termine GitHub Pages, recarga la web.
+
+CAMBIOS CONCRETOS
+
+- Fondo uniforme continuo. Se retiro la foto duplicada y estirada, asi como
+  las mascaras que desvanecian y cortaban los extremos del pedestal.
+- Caja y pedestal completos, con transparencia real y contornos definidos.
+- Vinilo mas oscuro, brillo reducido y surcos discretos. La iluminacion y
+  el borde quedan fijos; la etiqueta gira centrada en el plano del disco.
+- En Escuchar: primera linea de vistas y segunda linea de suscriptores.
+- Se conserva el orden por vistas, la configuracion de YouTube y los audios.
+
+VERIFICACION
+
+Reproduccion, pausa, avance, final de la cancion y cambios de canal probados
+con los MP3 reales. Pruebas de pantalla en siete anchos, de 320 a 1920 px.
+El eje conserva su posicion a 0, 90, 180 y 270 grados. La comparacion de
+pixeles confirma que el brillo y el contorno no giran junto a la etiqueta.
+El pedestal completo cabe en el encuadre y no tiene mascaras de difuminado.
+Las dos lineas de estadisticas se verificaron con los siete canales reales.
+
+RECURSO VISUAL
+
+Se uso la herramienta integrada image_gen para preparar un recurso con
+transparencia a partir de la imagen existente. No se uso la API por CLI.
+Archivo del proyecto: img/turntable/chassis-transparent.png.
+El brazo, el disco, los controles y la animacion siguen siendo capas
+independientes en la web.
+
+Prompt usado para el recurso visual:
+Edit target: provided Galadriel turntable chassis photograph. This is a precise
+transparent asset extraction for an existing interactive website. Return PNG
+with true alpha transparency, not a white or checkerboard background. Keep
+the marble-and-gold turntable chassis, its black elliptical platter, blank
+black front console, knobs, feet and oval marble pedestal with the gold/white
+leaves. Keep the camera angle, material textures, original appearance and
+lighting. NO tonearm, NO added text, NO controls, NO new objects. Remove the
+entire environment, wall, reflective floor and floor reflections outside the
+pedestal. Preserve sharp natural object silhouettes, no vignette, no fade,
+no feathered object edges, no blurred edges. The right edge of the pedestal/
+leaves is cut in the reference: reconstruct a fully rounded, complete right
+end, symmetric in extent to the left end, and leave transparent clearance on
+BOTH sides. Do NOT cut off any of the pedestal or leaves. Position the full
+assembly centered on a transparent wide landscape canvas with 6% transparent
+clearance at either side. Keep the device geometry identical so animated vinyl
+and HTML controls can be positioned over it; especially keep the blank front
+black horizontal control panel unchanged. Prefer output 1672x941 landscape.
+Only background removal and completing the cut pedestal edge; do not redesign
+this product.
