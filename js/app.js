@@ -170,11 +170,11 @@ function renderListen(){
   $("#listenList").innerHTML=ordered.map(c=>{
     const vids=[...c.videos].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,4);
     const stats=c.metricsTrusted
-      ?`${fmt(c.totalViews)} vistas del canal${c.subsHidden?"":" · "+fmt(c.subs)+" suscriptores"}`
-      :(c.loaded?"Estadísticas no disponibles temporalmente":"Cargando canal");
+      ?`<span>${fmt(c.totalViews)} vistas</span><span>${c.subsHidden?"Suscriptores ocultos":fmt(c.subs)+" suscriptores"}</span>`
+      :`<span>${c.loaded?"Estadísticas no disponibles temporalmente":"Cargando canal"}</span>`;
     const videoHeading=c.videos.length?"Videos con más vistas":"Videos del canal";
     const videoNote="";
-    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small>${esc(stats)}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
+    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small class="channel-stats">${stats}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
   }).join("");
   document.querySelectorAll("#listenList .audio-card").forEach(card=>{const old=retained.get(card.querySelector("audio")?.getAttribute("src"));if(old)card.replaceWith(old)});
   document.querySelectorAll('#listenList .row-id img').forEach(img=>{img.onerror=()=>{img.hidden=true}});

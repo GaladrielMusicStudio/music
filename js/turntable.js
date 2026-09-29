@@ -3,6 +3,14 @@
  const zone=document.querySelector('.tt-zone');
  if(!zone)return;
  const rotor=zone.querySelector('.tt-rotor'),lift=zone.querySelector('.tt-arm-lift');
+ const grooves=zone.querySelector('.tt-grooves');
+ if(grooves){
+  for(let radius=108;radius<268;radius+=2.6){
+   const groove=document.createElementNS('http://www.w3.org/2000/svg','circle');
+   groove.setAttribute('r',radius.toFixed(1));
+   grooves.append(groove);
+  }
+ }
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
  let playing=false,speed=0,angle=0,last=0,frame=0;
  function tick(now){
