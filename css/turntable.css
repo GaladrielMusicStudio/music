@@ -1110,3 +1110,90 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   }
   #canales .home-left > *{position:relative;z-index:1}
 }
+
+
+/* ======================================================================
+   CANALES v5 — natural window shadows + grounded presentation surface
+   Scope: left-panel ambience only. No assets, audio, carousel or JS touched.
+   ====================================================================== */
+@media (min-width:901px){
+  #canales .home-left{
+    background:
+      radial-gradient(ellipse 74% 31% at 50% 92%,rgba(190,161,123,.16) 0%,rgba(190,161,123,.075) 38%,transparent 72%),
+      radial-gradient(ellipse 66% 42% at 48% 12%,rgba(255,255,255,.78) 0%,rgba(255,255,255,.28) 48%,transparent 76%),
+      linear-gradient(180deg,#faf7f1 0%,#f7f2e9 54%,#f1e9dd 100%);
+  }
+
+  /* Botanical shadow cast from an imagined window, not a decorative illustration. */
+  #canales .home-left::before{
+    content:'';
+    position:absolute;
+    left:-7%;
+    top:4%;
+    width:47%;
+    height:66%;
+    z-index:0;
+    pointer-events:none;
+    background:#655541;
+    opacity:.16;
+    filter:blur(7px);
+    transform:rotate(-4deg) scale(1.06);
+    transform-origin:20% 20%;
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20420%20560%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M-18%20500%20C70%20418%2088%20315%20128%20230%20C170%20140%20230%2080%20336%208%22%20fill%3D%22none%22%20stroke-width%3D%227%22%2F%3E%0A%3Cpath%20d%3D%22M62%20421%20C32%20380%2018%20347%208%20310%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M89%20353%20C132%20331%20158%20298%20183%20263%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M116%20286%20C83%20252%2072%20214%2069%20174%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M154%20220%20C196%20201%20228%20170%20250%20135%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M207%20152%20C183%20116%20180%2084%20185%2055%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cellipse%20cx%3D%2218%22%20cy%3D%22326%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2852%2018%20326%29%22%2F%3E%0A%3Cellipse%20cx%3D%2242%22%20cy%3D%22369%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%2842%2042%20369%29%22%2F%3E%0A%3Cellipse%20cx%3D%2278%22%20cy%3D%22389%22%20rx%3D%2242%22%20ry%3D%2214%22%20transform%3D%22rotate%28-18%2078%20389%29%22%2F%3E%0A%3Cellipse%20cx%3D%22107%22%20cy%3D%22336%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%28-35%20107%20336%29%22%2F%3E%0A%3Cellipse%20cx%3D%22140%22%20cy%3D%22307%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-42%20140%20307%29%22%2F%3E%0A%3Cellipse%20cx%3D%2276%22%20cy%3D%22236%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%2855%2076%20236%29%22%2F%3E%0A%3Cellipse%20cx%3D%2292%22%20cy%3D%22197%22%20rx%3D%2234%22%20ry%3D%2212%22%20transform%3D%22rotate%2860%2092%20197%29%22%2F%3E%0A%3Cellipse%20cx%3D%22163%22%20cy%3D%22205%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%28-30%20163%20205%29%22%2F%3E%0A%3Cellipse%20cx%3D%22208%22%20cy%3D%22174%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-38%20208%20174%29%22%2F%3E%0A%3Cellipse%20cx%3D%22189%22%20cy%3D%22109%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2858%20189%20109%29%22%2F%3E%0A%3Cellipse%20cx%3D%22210%22%20cy%3D%2277%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%2864%20210%2077%29%22%2F%3E%0A%3Cellipse%20cx%3D%22252%22%20cy%3D%22119%22%20rx%3D%2237%22%20ry%3D%2212%22%20transform%3D%22rotate%28-39%20252%20119%29%22%2F%3E%0A%3Cellipse%20cx%3D%22293%22%20cy%3D%2278%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%28-43%20293%2078%29%22%2F%3E%0A%3Cellipse%20cx%3D%22329%22%20cy%3D%2239%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%28-47%20329%2039%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20420%20560%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M-18%20500%20C70%20418%2088%20315%20128%20230%20C170%20140%20230%2080%20336%208%22%20fill%3D%22none%22%20stroke-width%3D%227%22%2F%3E%0A%3Cpath%20d%3D%22M62%20421%20C32%20380%2018%20347%208%20310%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M89%20353%20C132%20331%20158%20298%20183%20263%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M116%20286%20C83%20252%2072%20214%2069%20174%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M154%20220%20C196%20201%20228%20170%20250%20135%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M207%20152%20C183%20116%20180%2084%20185%2055%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cellipse%20cx%3D%2218%22%20cy%3D%22326%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2852%2018%20326%29%22%2F%3E%0A%3Cellipse%20cx%3D%2242%22%20cy%3D%22369%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%2842%2042%20369%29%22%2F%3E%0A%3Cellipse%20cx%3D%2278%22%20cy%3D%22389%22%20rx%3D%2242%22%20ry%3D%2214%22%20transform%3D%22rotate%28-18%2078%20389%29%22%2F%3E%0A%3Cellipse%20cx%3D%22107%22%20cy%3D%22336%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%28-35%20107%20336%29%22%2F%3E%0A%3Cellipse%20cx%3D%22140%22%20cy%3D%22307%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-42%20140%20307%29%22%2F%3E%0A%3Cellipse%20cx%3D%2276%22%20cy%3D%22236%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%2855%2076%20236%29%22%2F%3E%0A%3Cellipse%20cx%3D%2292%22%20cy%3D%22197%22%20rx%3D%2234%22%20ry%3D%2212%22%20transform%3D%22rotate%2860%2092%20197%29%22%2F%3E%0A%3Cellipse%20cx%3D%22163%22%20cy%3D%22205%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%28-30%20163%20205%29%22%2F%3E%0A%3Cellipse%20cx%3D%22208%22%20cy%3D%22174%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-38%20208%20174%29%22%2F%3E%0A%3Cellipse%20cx%3D%22189%22%20cy%3D%22109%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2858%20189%20109%29%22%2F%3E%0A%3Cellipse%20cx%3D%22210%22%20cy%3D%2277%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%2864%20210%2077%29%22%2F%3E%0A%3Cellipse%20cx%3D%22252%22%20cy%3D%22119%22%20rx%3D%2237%22%20ry%3D%2212%22%20transform%3D%22rotate%28-39%20252%20119%29%22%2F%3E%0A%3Cellipse%20cx%3D%22293%22%20cy%3D%2278%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%28-43%20293%2078%29%22%2F%3E%0A%3Cellipse%20cx%3D%22329%22%20cy%3D%2239%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%28-47%20329%2039%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size:100% 100%;
+    mask-size:100% 100%;
+  }
+
+  /* A second, lighter cast shadow keeps the turntable from looking cut out. */
+  #canales .record-zone.tt-zone::after{
+    content:'';
+    position:absolute;
+    right:-14%;
+    top:7%;
+    width:34%;
+    height:66%;
+    z-index:0;
+    pointer-events:none;
+    background:#6d5a44;
+    opacity:.11;
+    filter:blur(8px);
+    transform:rotate(5deg);
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20420%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M334%20398%20C268%20333%20237%20255%20206%20184%20C174%20111%20125%2058%2047%20-8%22%20fill%3D%22none%22%20stroke-width%3D%226%22%2F%3E%0A%3Cpath%20d%3D%22M270%20330%20C298%20299%20307%20268%20310%20236%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M237%20263%20C201%20245%20180%20216%20164%20190%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M208%20202%20C235%20173%20244%20141%20244%20110%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M171%20137%20C139%20122%20117%2097%2099%2070%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cellipse%20cx%3D%22300%22%20cy%3D%22254%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%28-55%20300%20254%29%22%2F%3E%0A%3Cellipse%20cx%3D%22274%22%20cy%3D%22296%22%20rx%3D%2234%22%20ry%3D%2211%22%20transform%3D%22rotate%28-38%20274%20296%29%22%2F%3E%0A%3Cellipse%20cx%3D%22246%22%20cy%3D%22280%22%20rx%3D%2235%22%20ry%3D%2211%22%20transform%3D%22rotate%2821%20246%20280%29%22%2F%3E%0A%3Cellipse%20cx%3D%22219%22%20cy%3D%22231%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2835%20219%20231%29%22%2F%3E%0A%3Cellipse%20cx%3D%22188%22%20cy%3D%22207%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2842%20188%20207%29%22%2F%3E%0A%3Cellipse%20cx%3D%22240%22%20cy%3D%22154%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%28-58%20240%20154%29%22%2F%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22121%22%20rx%3D%2230%22%20ry%3D%2210%22%20transform%3D%22rotate%28-62%20220%20121%29%22%2F%3E%0A%3Cellipse%20cx%3D%22165%22%20cy%3D%22125%22%20rx%3D%2232%22%20ry%3D%2210%22%20transform%3D%22rotate%2831%20165%20125%29%22%2F%3E%0A%3Cellipse%20cx%3D%22132%22%20cy%3D%2299%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%2838%20132%2099%29%22%2F%3E%0A%3Cellipse%20cx%3D%2296%22%20cy%3D%2261%22%20rx%3D%2228%22%20ry%3D%229%22%20transform%3D%22rotate%2845%2096%2061%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20420%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M334%20398%20C268%20333%20237%20255%20206%20184%20C174%20111%20125%2058%2047%20-8%22%20fill%3D%22none%22%20stroke-width%3D%226%22%2F%3E%0A%3Cpath%20d%3D%22M270%20330%20C298%20299%20307%20268%20310%20236%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M237%20263%20C201%20245%20180%20216%20164%20190%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M208%20202%20C235%20173%20244%20141%20244%20110%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M171%20137%20C139%20122%20117%2097%2099%2070%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cellipse%20cx%3D%22300%22%20cy%3D%22254%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%28-55%20300%20254%29%22%2F%3E%0A%3Cellipse%20cx%3D%22274%22%20cy%3D%22296%22%20rx%3D%2234%22%20ry%3D%2211%22%20transform%3D%22rotate%28-38%20274%20296%29%22%2F%3E%0A%3Cellipse%20cx%3D%22246%22%20cy%3D%22280%22%20rx%3D%2235%22%20ry%3D%2211%22%20transform%3D%22rotate%2821%20246%20280%29%22%2F%3E%0A%3Cellipse%20cx%3D%22219%22%20cy%3D%22231%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2835%20219%20231%29%22%2F%3E%0A%3Cellipse%20cx%3D%22188%22%20cy%3D%22207%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2842%20188%20207%29%22%2F%3E%0A%3Cellipse%20cx%3D%22240%22%20cy%3D%22154%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%28-58%20240%20154%29%22%2F%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22121%22%20rx%3D%2230%22%20ry%3D%2210%22%20transform%3D%22rotate%28-62%20220%20121%29%22%2F%3E%0A%3Cellipse%20cx%3D%22165%22%20cy%3D%22125%22%20rx%3D%2232%22%20ry%3D%2210%22%20transform%3D%22rotate%2831%20165%20125%29%22%2F%3E%0A%3Cellipse%20cx%3D%22132%22%20cy%3D%2299%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%2838%20132%2099%29%22%2F%3E%0A%3Cellipse%20cx%3D%2296%22%20cy%3D%2261%22%20rx%3D%2228%22%20ry%3D%229%22%20transform%3D%22rotate%2845%2096%2061%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size:100% 100%;
+    mask-size:100% 100%;
+  }
+
+  /* Contact shadow + warm surface falloff: the existing stone stays untouched. */
+  #canales .record-zone.tt-zone{
+    background:
+      radial-gradient(ellipse 57% 12% at 50% 85%,rgba(83,56,28,.10) 0%,rgba(83,56,28,.045) 45%,transparent 78%),
+      radial-gradient(ellipse 84% 24% at 50% 96%,rgba(214,190,157,.13),transparent 72%);
+  }
+  #canales .record-zone.tt-zone::before{
+    left:8%;
+    right:8%;
+    bottom:1.2%;
+    height:15%;
+    background:radial-gradient(ellipse at center,rgba(62,42,23,.20) 0%,rgba(62,42,23,.105) 38%,rgba(62,42,23,.035) 58%,transparent 76%);
+    filter:blur(18px);
+    opacity:.62;
+  }
+  #canales .tt-zone .tt-stage{position:relative;z-index:2}
+  #canales .hero-copy,#canales .home-signature{position:relative;z-index:2}
+}
+
+@media (min-width:1800px){
+  #canales .home-left::before{left:-5%;top:2%;width:43%;height:64%;opacity:.15;filter:blur(8px)}
+  #canales .record-zone.tt-zone::after{right:-12%;top:4%;width:32%;height:64%;opacity:.10;filter:blur(9px)}
+}
+
+@media (max-width:1100px) and (min-width:901px){
+  #canales .home-left::before{left:-11%;top:6%;width:50%;height:58%;opacity:.13;filter:blur(7px)}
+  #canales .record-zone.tt-zone::after{right:-18%;width:38%;opacity:.085}
+}
