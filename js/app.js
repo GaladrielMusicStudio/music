@@ -107,29 +107,61 @@ function videoCard(v,c={}){
   const label=v.badge||(!c.metricsTrusted&&v.featured?"Selección destacada":fecha(v.date)||"Selección destacada");
   return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}${v.dur?`<span class="video-duration">${esc(v.dur)}</span>`:""}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
 }
+function railVisibleCount(){return innerWidth<=560?1:innerWidth<=900?2:3}
 function ensureRailWindow(order){
-  const visible=3,max=Math.max(0,order.length-visible),activePos=Math.max(0,order.indexOf(CH[active]));
+  const visible=railVisibleCount(),max=Math.max(0,order.length-visible),activePos=Math.max(0,order.indexOf(CH[active]));
   if(activePos<railOffset)railOffset=activePos;
   if(activePos>=railOffset+visible)railOffset=activePos-visible+1;
   railOffset=Math.max(0,Math.min(max,railOffset));
 }
+function updateRailControls(){
+  const order=popularChannels(),max=Math.max(0,order.length-railVisibleCount());
+  const prev=$("#channelPrev"),next=$("#channelNext");
+  if(prev){prev.disabled=railOffset<=0;prev.setAttribute("aria-disabled",String(railOffset<=0))}
+  if(next){next.disabled=railOffset>=max;next.setAttribute("aria-disabled",String(railOffset>=max))}
+}
+function applyRailPosition(animate=true){
+  const rail=$("#channelRail"),viewport=$("#channelViewport");
+  if(!rail||!viewport)return;
+  viewport.dataset.visible=String(railVisibleCount());
+  const first=rail.querySelector("li");
+  if(!first){rail.style.transform="translate3d(0,0,0)";return}
+  const gap=parseFloat(getComputedStyle(rail).columnGap||getComputedStyle(rail).gap)||0;
+  const step=first.getBoundingClientRect().width+gap;
+  if(!animate)rail.classList.add("no-transition");
+  rail.style.transform=`translate3d(${-railOffset*step}px,0,0)`;
+  rail.dataset.offset=String(railOffset);
+  updateRailControls();
+  if(!animate)requestAnimationFrame(()=>requestAnimationFrame(()=>rail.classList.remove("no-transition")));
+}
 function renderRail(){
   const order=popularChannels();
   ensureRailWindow(order);
-  const visible=order.slice(railOffset,railOffset+3);
-  $("#channelRail").innerHTML=visible.map((c,slot)=>{
-    const i=CH.indexOf(c),rank=railOffset+slot;
+  const rail=$("#channelRail");
+  rail.innerHTML=order.map((c,rank)=>{
+    const i=CH.indexOf(c);
     const avatar=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:seal(c);
     return `<li><button data-i="${i}" aria-current="${i===active?"true":"false"}" aria-label="Ver ${esc(c.nombre)}"><span class="rail-avatar">${avatar}</span><span class="rail-copy"><span class="num">${pad(rank)}</span><span class="label">${esc(c.nombre)}</span><span class="rail-cat">${esc(c.cat||c.hook||"")}</span></span></button></li>`;
   }).join("");
-  const prev=$("#channelPrev"),next=$("#channelNext"),max=Math.max(0,order.length-3);
-  if(prev)prev.disabled=railOffset<=0;
-  if(next)next.disabled=railOffset>=max;
+  requestAnimationFrame(()=>applyRailPosition(false));
+}
+function nudgeArrow(button,direction){
+  if(!button?.animate||matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  button.animate([{transform:"translateX(0)"},{transform:`translateX(${direction*3}px)`},{transform:"translateX(0)"}],{duration:190,easing:"ease-out"});
 }
 function moveRail(delta){
-  const order=popularChannels(),max=Math.max(0,order.length-3);
-  railOffset=Math.max(0,Math.min(max,railOffset+delta));
-  renderRail();
+  const order=popularChannels(),max=Math.max(0,order.length-railVisibleCount());
+  const next=Math.max(0,Math.min(max,railOffset+delta));
+  if(next===railOffset){nudgeArrow(delta<0?$("#channelPrev"):$("#channelNext"),delta);return}
+  railOffset=next;
+  applyRailPosition(true);
+}
+function animateChannelInfo(){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const info=document.querySelector("#canales .channel-info-wrap");
+  const selected=document.querySelector("#channelRail button[aria-current=true]");
+  info?.animate([{opacity:.35,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:360,easing:"cubic-bezier(.22,1,.36,1)"});
+  selected?.animate([{transform:"translateY(4px)",opacity:.6},{transform:"translateY(0)",opacity:1}],{duration:320,easing:"cubic-bezier(.22,1,.36,1)"});
 }
 function renderHero(){
   const c=CH[active];
@@ -216,7 +248,7 @@ function renderShop(){
  $("#shopGrid").querySelectorAll('.shop-art img').forEach(img=>img.onerror=()=>{img.parentElement.classList.add('no-preview');img.parentElement.disabled=true;img.parentElement.setAttribute('aria-label','Vista previa aún no disponible')});
  $("#shopGrid").querySelectorAll('select').forEach(select=>select.addEventListener('change',()=>{const p=APP.packs[+select.dataset.pack];const card=select.closest('.shop-card');card.querySelector('.shop-request').href=shopHref(p,select.value);const button=card.querySelector('.shop-art');if(p.previewEnabled===false)return;button.classList.remove('no-preview');button.disabled=false;button.setAttribute('aria-label','Ampliar vista previa de '+p.t);button.querySelector('img').src='img/shop/'+p.slug+'-'+select.value+'.jpg'}));
 }
-function setActive(i){active=(i+CH.length)%CH.length;panelOpen=false;renderHero()}
+function setActive(i){const next=(i+CH.length)%CH.length;if(next===active)return;active=next;panelOpen=false;renderHero();animateChannelInfo()}
 function stepChannel(delta){const order=popularChannels();setActive(CH.indexOf(order[(order.indexOf(CH[active])+delta+order.length)%order.length]))}
 function setView(next,fromHistory=false){
  if(!["canales","escuchar","estudio","tienda"].includes(next))next="canales";
@@ -304,6 +336,8 @@ document.addEventListener("click",ev=>{
   if(ev.target.closest("#closePanel"))togglePanel(false);
 });
 document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(view==="canales"&&ev.key==="ArrowLeft")stepChannel(-1);if(view==="canales"&&ev.key==="ArrowRight")stepChannel(1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
+let railResizeFrame=0;
+addEventListener("resize",()=>{cancelAnimationFrame(railResizeFrame);railResizeFrame=requestAnimationFrame(()=>applyRailPosition(false))},{passive:true});
 function initStaticBindings(){
   const notify=$("#notifyMail");if(notify)notify.href=`mailto:${APP.correo}?subject=${enc("Quiero recibir nuevos lanzamientos")}`;
   const preview=$('#productPreview');
