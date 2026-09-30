@@ -263,28 +263,24 @@ function setView(next,fromHistory=false){
  const changed=view!==next;
  if(changed)document.querySelectorAll('audio').forEach(a=>a.pause());
  const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
- const commit=()=>{
-  view=next;
-  if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
-  document.body.classList.toggle("view-open",view!=="canales");
-  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
-  document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"page":"false"));
-  if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
-  if(changed){
-   window.scrollTo({top:0,behavior:'auto'});
-   const heading=next==='canales'?$('#titulo'):document.querySelector(`#view-${next} h2`);
-   heading?.setAttribute('tabindex','-1');
-   heading?.focus({preventScroll:true});
-  }
- };
- if(changed&&!reduced&&typeof document.startViewTransition==="function") document.startViewTransition(commit);
- else {
-  commit();
-  if(changed&&!reduced){
+ view=next;
+ if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
+ document.body.classList.toggle("view-open",view!=="canales");
+ document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
+ document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"page":"false"));
+ if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
+ if(changed){
+  window.scrollTo({top:0,behavior:'auto'});
+  const heading=next==='canales'?$('#titulo'):document.querySelector(`#view-${next} h2`);
+  heading?.setAttribute('tabindex','-1');
+  heading?.focus({preventScroll:true});
+  if(!reduced){
    const incoming=next==="canales"?$("#canales"):document.querySelector(`#view-${next}`);
    if(incoming){
     incoming.classList.remove("view-enter");
-    requestAnimationFrame(()=>{incoming.classList.add("view-enter");setTimeout(()=>incoming.classList.remove("view-enter"),480)});
+    void incoming.offsetWidth;
+    incoming.classList.add("view-enter");
+    setTimeout(()=>incoming.classList.remove("view-enter"),380);
    }
   }
  }
