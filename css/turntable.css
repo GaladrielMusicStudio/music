@@ -1377,3 +1377,88 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   body:not(.view-open) .site-footer{margin:0;max-width:none}
   body:not(.view-open) .site-footer a{color:#75695d}
 }
+
+/* ======================================================================
+   CANALES v8 — fill tall viewports without leaving an orphan beige band
+   Scope: page sizing only. Visual design, media, turntable and JS unchanged.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The shell should occupy the viewport; the hero, not the body background,
+     absorbs any extra vertical space on tall browser windows. */
+  body:not(.view-open) .page{
+    min-height:calc(100svh - 28px);
+    display:flex;
+    flex-direction:column;
+  }
+  body:not(.view-open) #canales.screen{
+    flex:1 1 auto;
+    width:100%;
+    display:flex;
+    min-height:0;
+  }
+  body:not(.view-open) #canales .home-grid{
+    flex:1 1 auto;
+    width:100%;
+    height:auto!important;
+    min-height:700px;
+  }
+  body:not(.view-open) .site-footer{
+    flex:0 0 auto;
+  }
+}
+
+/* Mid-size desktop previously forced a short 690–760px hero. That created
+   the large empty beige area visible below the footer on tall windows. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) #canales .home-grid{
+    height:auto!important;
+    min-height:700px;
+  }
+}
+
+/* ======================================================================
+   CANALES v9 — mid-size grounding correction
+   Scope: only the left ambient crop / scene alignment between 901–1180px.
+   No turntable assets, player controls, carousel, right panel or JS changed.
+   ====================================================================== */
+@media (max-width:1180px) and (min-width:901px){
+  /* On narrower desktop windows the portrait ambient video otherwise shows
+     too much wall and places the floor horizon below the existing stone.
+     Enlarge the background from its bottom edge so the floor rises naturally
+     behind the stone without changing the turntable artwork itself. */
+  #canales .home-left-bg-video{
+    object-position:center bottom;
+    transform:scale(1.16);
+    transform-origin:center bottom;
+  }
+}
+
+@media (max-width:1080px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.34);
+  }
+
+  /* Preserve the existing horizontal centering rule and lower the complete
+     untouched SVG scene just enough to meet the floor plane visually. */
+  #canales .record-zone.tt-zone{
+    transform:translateX(-50%) translateY(22px);
+  }
+
+  /* Contact shadow remains restrained; it merely closes the small visual gap
+     between the original stone asset and the animated floor. */
+  #canales .record-zone.tt-zone::before{
+    bottom:0;
+    height:10%;
+    opacity:.38;
+    filter:blur(14px);
+  }
+}
+
+@media (max-width:980px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.42);
+  }
+  #canales .record-zone.tt-zone{
+    transform:translateX(-50%) translateY(28px);
+  }
+}
