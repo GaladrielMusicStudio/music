@@ -1276,3 +1276,104 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){
   #canales .home-left-bg-video{display:none}
 }
+
+/* ======================================================================
+   CANALES v7 — responsive scene alignment + chromatic continuity
+   Scope: desktop/tablet sizing and the top/bottom framing bands only.
+   The turntable SVG/assets, audio controls, carousel logic and right-panel
+   content are intentionally untouched.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The framing bands now belong to the same warm/carbón world as the hero. */
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+  body:not(.view-open) .site-footer{
+    max-width:none;
+    margin:0;
+    padding:20px clamp(38px,4.5vw,96px);
+    border-top:1px solid rgba(184,138,74,.20);
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+  body:not(.view-open) .site-footer span{color:#75695d}
+  body:not(.view-open) .site-footer a{color:#aca49a}
+  body:not(.view-open) .site-footer a:hover{color:#f3ede3}
+
+  /* Keep the video surface and the physical stone visually on the same plane. */
+  #canales .home-left-bg-video{
+    transform:none;
+    transform-origin:center bottom;
+    transition:none;
+  }
+}
+
+/* Mid-size desktop: keep the hero compact enough that the stone still lands
+   on the animated floor instead of floating over a tall wall crop. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%);
+  }
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%);
+    padding-left:28px;
+    padding-right:28px;
+  }
+  #canales .home-grid{
+    height:clamp(690px,75vw,760px);
+    min-height:0;
+  }
+  #canales .home-left{
+    padding-top:clamp(34px,4vw,48px);
+    padding-bottom:22px;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(113%,790px);
+    max-width:none;
+    left:50%;
+    transform:translateX(-50%);
+    margin-top:clamp(18px,2.6vw,28px);
+  }
+  #canales .home-signature{padding-top:8px}
+}
+
+/* Around the user's ~1000px desktop viewport, object-fit changes axis.
+   A restrained scale anchored to the floor keeps the wall/floor horizon
+   behind the existing stone instead of dropping far below it. */
+@media (max-width:1030px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.18);
+    transform-origin:center bottom;
+    object-position:center bottom;
+  }
+  #canales .home-left-ambient::after{
+    background:
+      linear-gradient(180deg,rgba(250,247,241,.10) 0%,rgba(250,247,241,.035) 44%,rgba(245,240,231,.01) 100%),
+      radial-gradient(ellipse 70% 48% at 52% 24%,rgba(255,255,255,.08),transparent 72%);
+  }
+}
+
+/* Wide desktop: the framing split follows the approved 61/39 composition. */
+@media (min-width:1321px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+}
+
+/* 1101–1320 uses the same split as the existing v3/v4 home grid. */
+@media (max-width:1320px) and (min-width:1101px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 58%,#0f1318 58% 100%);
+  }
+}
+
+/* Once the layout stacks, a split footer/header would be artificial. */
+@media (max-width:900px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:#efe4d5;
+  }
+  body:not(.view-open) .site-footer{margin:0;max-width:none}
+  body:not(.view-open) .site-footer a{color:#75695d}
+}
