@@ -1609,3 +1609,135 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   #canales.view-enter,
   .view.view-enter{animation:none!important}
 }
+
+/* ======================================================================
+   CANALES v13 — responsive guardrail for the turntable scene
+   Fixes the desktop/tablet dead-zone where the turntable could collapse to
+   a miniature while the split layout remained active. The artwork itself is
+   untouched: we change only when the two-column composition is allowed.
+   ====================================================================== */
+
+/* Keep the premium split only while both columns can sustain their content.
+   The left stage is never allowed to shrink below a professional product
+   presentation size. */
+@media (min-width:1181px){
+  body:not(.view-open) #canales .home-grid{
+    grid-template-columns:minmax(650px,61fr) minmax(480px,39fr)!important;
+  }
+
+  #canales .record-zone.tt-zone{
+    width:min(96%,980px)!important;
+    min-width:560px;
+    max-width:980px;
+    justify-self:center;
+  }
+
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    min-width:0;
+    aspect-ratio:1240/590;
+  }
+}
+
+/* Tablet / narrow-desktop mode begins BEFORE the left column can crush the
+   turntable. This is intentional: reflow is preferable to shrinking the hero
+   object into a thumbnail. */
+@media (max-width:1180px) and (min-width:901px){
+  body:not(.view-open) .page{
+    width:calc(100% - 28px);
+    margin:14px auto;
+    min-height:0;
+  }
+
+  body:not(.view-open) .top{
+    background:#efe4d5!important;
+  }
+  body:not(.view-open) .nav button{color:#6d6257!important}
+  body:not(.view-open) .nav button:hover,
+  body:not(.view-open) .nav button[aria-current=true]{color:#1b1713!important}
+  body:not(.view-open) .nav button[aria-current=true]:after{background:#b88a4a}
+
+  body:not(.view-open) #canales.screen{
+    display:block!important;
+    min-height:0!important;
+  }
+
+  body:not(.view-open) #canales .home-grid{
+    display:block!important;
+    height:auto!important;
+    min-height:0!important;
+  }
+
+  #canales .home-left{
+    display:grid!important;
+    grid-template-rows:auto auto auto;
+    min-height:680px;
+    padding:clamp(34px,4vw,52px) clamp(28px,5vw,58px) 26px;
+  }
+
+  #canales .hero-copy{
+    width:min(100%,850px);
+    margin:0 auto;
+  }
+  #canales h1>.brand-word{
+    font-size:clamp(58px,7vw,82px)!important;
+  }
+  #canales h1 small{
+    font-size:clamp(10px,1.2vw,13px)!important;
+  }
+  #canales .hero-statement{
+    font-size:clamp(12px,1.4vw,15px)!important;
+  }
+
+  #canales .record-zone.tt-zone{
+    width:min(92%,820px)!important;
+    min-width:520px;
+    max-width:820px;
+    margin:clamp(18px,2.6vw,28px) auto 0!important;
+    align-self:auto;
+    justify-self:center;
+    left:auto!important;
+    transform:none!important;
+  }
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    aspect-ratio:1240/590;
+  }
+
+  #canales .home-signature{
+    margin-top:12px!important;
+    padding-top:10px;
+  }
+
+  #canales .home-left-bg-video{
+    object-fit:cover;
+    object-position:center bottom!important;
+    transform:none!important;
+  }
+
+  #canales .home-right{
+    min-height:620px;
+    padding:54px clamp(32px,6vw,64px) 40px;
+  }
+  #canales .channel-browser{margin-top:0!important}
+  #canales .channel-info-wrap{margin-top:42px}
+
+  body:not(.view-open) .site-footer{
+    background:#efe4d5!important;
+    color:#75695d;
+  }
+  body:not(.view-open) .site-footer a{color:#75695d!important}
+}
+
+/* At the exact handoff there must be no residual minimum width that can force
+   fragments of the player outside the stage. */
+@media (max-width:900px){
+  #canales .record-zone.tt-zone{
+    min-width:0!important;
+    width:100%!important;
+    max-width:720px!important;
+    left:auto!important;
+    transform:none!important;
+  }
+  #canales .tt-zone .tt-stage{width:100%!important;min-width:0!important}
+}
