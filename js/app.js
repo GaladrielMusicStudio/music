@@ -262,14 +262,32 @@ function setView(next,fromHistory=false){
  if(!["canales","escuchar","estudio","tienda"].includes(next))next="canales";
  const changed=view!==next;
  if(changed)document.querySelectorAll('audio').forEach(a=>a.pause());
- view=next;
- if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
- document.body.classList.toggle("view-open",view!=="canales");
- document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
- document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"page":"false"));
- document.querySelectorAll(".nav [data-view]").forEach(b=>{if(b.dataset.view===view)b.setAttribute('aria-current','true')});
- if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
- if(changed){window.scrollTo({top:0,behavior:'instant'});const heading=next==='canales'?$('#titulo'):document.querySelector(`#view-${next} h2`);heading?.setAttribute('tabindex','-1');heading?.focus({preventScroll:true})}
+ const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+ const commit=()=>{
+  view=next;
+  if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
+  document.body.classList.toggle("view-open",view!=="canales");
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
+  document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"page":"false"));
+  if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
+  if(changed){
+   window.scrollTo({top:0,behavior:'auto'});
+   const heading=next==='canales'?$('#titulo'):document.querySelector(`#view-${next} h2`);
+   heading?.setAttribute('tabindex','-1');
+   heading?.focus({preventScroll:true});
+  }
+ };
+ if(changed&&!reduced&&typeof document.startViewTransition==="function") document.startViewTransition(commit);
+ else {
+  commit();
+  if(changed&&!reduced){
+   const incoming=next==="canales"?$("#canales"):document.querySelector(`#view-${next}`);
+   if(incoming){
+    incoming.classList.remove("view-enter");
+    requestAnimationFrame(()=>{incoming.classList.add("view-enter");setTimeout(()=>incoming.classList.remove("view-enter"),480)});
+   }
+  }
+ }
 }
 addEventListener('popstate',()=>setView(location.hash.slice(1)||'canales',true));
 function togglePanel(force){
@@ -367,25 +385,35 @@ function closeIntro(){const intro=$("#intro");if(!intro||intro.classList.contain
 function initIntro(){
   const intro=$("#intro"),video=$("#introVideo");
   if(!intro)return;
-  try{
-    if(sessionStorage.getItem('galadriel-intro-seen')){intro.remove();return}
-    sessionStorage.setItem('galadriel-intro-seen','1');
-  }catch{}
+  // The intro is a real opening sequence: show it once on every fresh page load.
+  // SPA tab changes do not reload the document, so it will not replay while navigating the site.
   intro.insertAdjacentHTML('beforeend','<button class="intro-skip">Entrar al estudio →</button>');
   intro.addEventListener("click",closeIntro,{once:true});
   addEventListener("keydown",closeIntro,{once:true});
   if(matchMedia("(prefers-reduced-motion: reduce)").matches){setTimeout(closeIntro,500);return}
   const mobile=matchMedia("(max-width: 820px), (pointer: coarse)").matches;
   let started=false;
-  let fallback=setTimeout(closeIntro,9000);
+  let fallback=setTimeout(closeIntro,7000);
   if(video){
+    video.muted=true;
+    video.defaultMuted=true;
+    video.playsInline=true;
+    try{video.currentTime=0}catch{}
     const markStarted=()=>{started=true};
     video.addEventListener("playing",markStarted,{once:true});
     video.addEventListener("timeupdate",markStarted,{once:true});
-    setTimeout(()=>{if(mobile&&!started)closeIntro()},1600);
+    setTimeout(()=>{if(mobile&&!started)closeIntro()},2200);
     video.addEventListener("ended",()=>{clearTimeout(fallback);closeIntro()},{once:true});
     video.addEventListener("error",()=>{clearTimeout(fallback);setTimeout(closeIntro,1200)},{once:true});
-    video.play?.().catch(()=>{if(mobile)closeIntro()});
+    const tryPlay=()=>{
+      const result=video.play?.();
+      if(result&&typeof result.catch==="function")result.catch(()=>{
+        // Some browsers need a second autoplay attempt after metadata is available.
+        video.addEventListener("canplay",()=>video.play?.().catch(()=>{if(mobile)closeIntro()}),{once:true});
+      });
+    };
+    if(video.readyState>=2)requestAnimationFrame(tryPlay);
+    else video.addEventListener("loadeddata",tryPlay,{once:true});
   }
 }
 initIntro();
