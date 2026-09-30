@@ -1583,3 +1583,50 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
     transform:none!important;
   }
 }
+
+/* ================================================================
+   CANALES v11 — opening video reliability + elegant section changes
+   Keeps the approved layout, turntable, carousel and content intact.
+   ================================================================ */
+
+/* Only the changing content participates; the header stays visually stable. */
+#canales.screen,
+.view.on{
+  view-transition-name:galadriel-content;
+}
+
+@keyframes galadriel-view-out{
+  from{opacity:1;transform:translateY(0) scale(1)}
+  to{opacity:0;transform:translateY(-7px) scale(.998)}
+}
+@keyframes galadriel-view-in{
+  from{opacity:0;transform:translateY(11px) scale(.998)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+::view-transition-group(galadriel-content){
+  animation-duration:.42s;
+  animation-timing-function:cubic-bezier(.22,.72,.18,1);
+}
+::view-transition-old(galadriel-content){
+  animation:galadriel-view-out .22s cubic-bezier(.4,0,1,1) both;
+}
+::view-transition-new(galadriel-content){
+  animation:galadriel-view-in .42s cubic-bezier(.16,1,.3,1) both;
+}
+
+/* Fallback for browsers without the View Transitions API. */
+.view-enter{
+  animation:galadriel-view-in .42s cubic-bezier(.16,1,.3,1) both;
+}
+
+/* Intro fade is deliberately slower than a normal UI fade so it reads as an
+   opening sequence rather than a loading overlay. */
+#intro{transition:opacity .65s cubic-bezier(.22,.72,.18,1)}
+
+@media(prefers-reduced-motion:reduce){
+  #canales.screen,.view.on{view-transition-name:none}
+  ::view-transition-old(galadriel-content),
+  ::view-transition-new(galadriel-content),
+  .view-enter{animation:none!important}
+}
