@@ -1462,3 +1462,124 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
     transform:translateX(-50%) translateY(28px);
   }
 }
+
+/* ======================================================================
+   CANALES v10 — grounded left-stage responsive system
+   Scope: left hero geometry + page height only.
+   Keeps the approved turntable/video assets, player, right panel and JS intact.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The home composition follows its own width-driven aspect instead of
+     stretching to fill arbitrary viewport heights. Short windows scroll;
+     tall windows do not inflate the scene. */
+  body:not(.view-open) .page{
+    min-height:0;
+    display:block;
+  }
+  body:not(.view-open) #canales.screen{
+    display:block;
+    width:100%;
+    min-height:0;
+  }
+  body:not(.view-open) #canales .home-grid{
+    display:grid;
+    height:clamp(700px,49vw,940px)!important;
+    min-height:0!important;
+  }
+
+  /* Treat the left half as a real set: editorial copy, physical stage,
+     signature. The turntable now belongs to the stage rather than to a
+     fixed top coordinate. */
+  #canales .home-left{
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    align-items:stretch;
+    min-height:0;
+  }
+  #canales .hero-copy{
+    align-self:start;
+  }
+  #canales .record-zone.tt-zone{
+    align-self:end;
+    justify-self:center;
+    left:auto!important;
+    transform:none!important;
+    margin-top:clamp(8px,1.2vw,18px)!important;
+    margin-bottom:clamp(-6px,-.18vw,-2px);
+  }
+  #canales .home-signature{
+    align-self:end;
+    margin-top:clamp(4px,.7vw,10px);
+  }
+
+  /* One stable crop model for the physical room: anchor the portrait video
+     to its floor edge and let object-fit do the crop. No breakpoint scaling. */
+  #canales .home-left-bg-video{
+    object-fit:cover;
+    object-position:center bottom!important;
+    transform:none!important;
+    transform-origin:center bottom;
+  }
+
+  /* The existing stone gets a soft warm contact shadow, not a hard halo. */
+  #canales .record-zone.tt-zone::before{
+    left:10%;
+    right:10%;
+    bottom:-.5%;
+    height:10%;
+    opacity:.50;
+    filter:blur(15px);
+    background:radial-gradient(ellipse at center,
+      rgba(57,39,22,.17) 0%,
+      rgba(57,39,22,.08) 42%,
+      rgba(57,39,22,.025) 60%,
+      transparent 76%);
+  }
+
+  body:not(.view-open) .site-footer{
+    flex:none;
+  }
+}
+
+/* Wide but vertically tight browser windows: preserve the object's scale,
+   compact only the editorial gaps, and let the document scroll if needed. */
+@media (min-width:1100px) and (max-height:820px){
+  body:not(.view-open) #canales .home-grid{
+    height:clamp(660px,43vw,790px)!important;
+  }
+  #canales .home-left{
+    padding-top:clamp(28px,3.2vh,42px);
+    padding-bottom:20px;
+  }
+  #canales .eyebrow{margin-bottom:10px}
+  #canales h1{margin-bottom:10px}
+  #canales h1 small{margin-top:8px}
+  #canales .record-zone.tt-zone{
+    margin-top:6px!important;
+    margin-bottom:-4px;
+  }
+  #canales .home-signature{padding-top:4px;margin-top:2px}
+}
+
+/* Medium desktop keeps the same stage logic. It does not scale the video or
+   manually push the SVG; both stay anchored to the shared floor plane. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) #canales .home-grid{
+    height:clamp(700px,72vw,820px)!important;
+  }
+  #canales .home-left{
+    padding-top:clamp(30px,4vw,44px);
+    padding-bottom:20px;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(104%,800px);
+    left:auto!important;
+    transform:none!important;
+    margin-top:8px!important;
+    margin-bottom:-2px;
+  }
+  #canales .home-left-bg-video{
+    object-position:center bottom!important;
+    transform:none!important;
+  }
+}
