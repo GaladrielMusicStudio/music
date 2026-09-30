@@ -687,3 +687,1156 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   #canales .rail-avatar,
   #canales .carousel-arrow{transition:none!important}
 }
+
+
+/* ======================================================================
+   CANALES v3 — quiet-luxury editorial refinement
+   Layout/colors only. The turntable artwork and integrated audio console
+   keep their existing DOM/assets and behavior.
+   ====================================================================== */
+@media (min-width:901px){
+  body:not(.view-open){
+    background:#e8e1d5;
+  }
+  body:not(.view-open) .page{
+    --home-ivory:#f5f0e7;
+    --home-ivory-soft:#faf7f1;
+    --home-ink:#1a1714;
+    --home-charcoal:#0f1318;
+    --home-charcoal-2:#12171c;
+    --home-cream:#f3ede3;
+    --home-muted:#a89e90;
+    --home-bronze:#b88a4a;
+    --home-bronze-soft:#9f7741;
+    --home-line:rgba(184,138,74,.24);
+    background:var(--home-ivory);
+  }
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,var(--home-ivory) 0 61%,var(--home-charcoal) 61% 100%);
+    border-bottom:0;
+  }
+  body:not(.view-open) .top::after{
+    content:'';
+    position:absolute;
+    left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(270deg,rgba(184,138,74,.34) 0%,rgba(184,138,74,.18) 38%,rgba(184,138,74,.12) 61%,rgba(184,138,74,.2) 100%);
+    pointer-events:none;
+  }
+  body:not(.view-open) .nav button{color:#b9b2a8}
+  body:not(.view-open) .nav button:hover,
+  body:not(.view-open) .nav button[aria-current=true]{color:#f4eee5}
+  body:not(.view-open) .nav button[aria-current=true]:after{background:var(--home-bronze)}
+
+  #canales.screen{min-height:0}
+  #canales .home-grid{
+    position:relative;
+    grid-template-columns:minmax(0,61fr) minmax(490px,39fr);
+    min-height:clamp(680px,calc(100svh - 133px),860px);
+    background:var(--home-ivory);
+  }
+  #canales .home-left{
+    position:relative;
+    background:
+      radial-gradient(ellipse at 33% 16%,rgba(255,255,255,.72),transparent 52%),
+      linear-gradient(145deg,var(--home-ivory-soft) 0%,var(--home-ivory) 74%);
+    color:var(--home-ink);
+    padding:clamp(40px,5vh,62px) clamp(38px,4.6vw,82px) 28px;
+  }
+  #canales .home-left::after{
+    content:'';
+    position:absolute;
+    right:-1px;top:0;bottom:0;width:1px;
+    background:linear-gradient(180deg,rgba(184,138,74,.18),rgba(184,138,74,.36) 42%,rgba(184,138,74,.16));
+    pointer-events:none;
+  }
+  #canales .hero-copy{width:min(100%,980px)}
+  #canales .eyebrow{
+    color:#957044;
+    margin-bottom:14px;
+    font-size:9px;
+    letter-spacing:.39em;
+  }
+  #canales h1{margin-bottom:14px}
+  #canales h1>.brand-word{
+    font-size:clamp(68px,6.15vw,102px);
+    letter-spacing:.115em;
+    text-indent:.115em;
+  }
+  #canales h1 small{
+    margin-top:12px;
+    font-size:clamp(11px,.86vw,14px);
+    letter-spacing:.48em;
+  }
+  #canales .hero-statement{
+    color:#6c645b;
+    font-size:clamp(13px,.96vw,15px);
+    letter-spacing:.012em;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(94%,1000px);
+    margin:clamp(14px,2.2vh,24px) auto 0;
+  }
+  #canales .home-signature{
+    padding-top:10px;
+    color:#74695d;
+  }
+  #canales .home-signature i{border-left-color:var(--home-bronze)}
+
+  #canales .home-right{
+    background:
+      radial-gradient(ellipse at 24% 46%,rgba(184,138,74,.035),transparent 36%),
+      linear-gradient(180deg,var(--home-charcoal) 0%,#0e1216 100%);
+    color:var(--home-cream);
+    padding:0 clamp(32px,3.8vw,66px) 30px;
+  }
+  #canales .home-right:after{display:none}
+  #canales .channel-browser{
+    margin-top:clamp(96px,11.5vh,132px);
+  }
+  #canales .channel-browser-head{
+    margin-bottom:18px;
+    color:#c9c1b6;
+    font-size:9px;
+    letter-spacing:.29em;
+    gap:16px;
+  }
+  #canales .channel-browser-head i{background:var(--home-line)}
+  #canales .channel-carousel{
+    grid-template-columns:34px minmax(0,1fr) 34px;
+    gap:10px;
+  }
+  #canales .carousel-arrow{
+    width:34px;height:34px;
+    border-color:rgba(243,237,227,.3);
+    color:#d7d0c6;
+  }
+  #canales .carousel-arrow:hover{border-color:var(--home-bronze);color:#d1a05e}
+  #canales .channel-viewport{padding:3px 0 5px}
+  #canales .channel-rail{gap:12px}
+  #canales .channel-viewport[data-visible="3"] .channel-rail li{flex-basis:calc((100% - 24px)/3)}
+  #canales .channel-rail button{
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+    min-height:104px;
+    gap:8px;
+    padding:5px 2px 10px;
+    border-bottom:1px solid rgba(243,237,227,.11);
+    color:#d8d1c8;
+    overflow:visible;
+  }
+  #canales .channel-rail button:hover{color:#fff;transform:translateY(-1px)}
+  #canales .channel-rail button[aria-current=true]{
+    color:#fff;
+    border-bottom-color:var(--home-bronze);
+    box-shadow:none;
+  }
+  #canales .rail-avatar{
+    width:48px;height:48px;
+    border:1px solid rgba(184,138,74,.48);
+    box-shadow:none;
+  }
+  #canales .channel-rail button:hover .rail-avatar{transform:scale(1.025)}
+  #canales .channel-rail button[aria-current=true] .rail-avatar{
+    transform:scale(1.035);
+    border-color:rgba(199,155,88,.85);
+    box-shadow:0 0 0 2px rgba(184,138,74,.06);
+  }
+  #canales .rail-copy{
+    display:block;
+    width:100%;
+    text-align:center;
+    overflow:visible;
+  }
+  #canales .channel-rail .num,
+  #canales .rail-cat{display:none!important}
+  #canales .channel-rail .label{
+    display:block;
+    max-width:12ch;
+    margin:0 auto;
+    color:inherit;
+    font:400 11px/1.15 Marcellus,Georgia,serif;
+    white-space:normal;
+    overflow-wrap:normal!important;
+    word-break:normal!important;
+    text-wrap:balance;
+  }
+
+  #canales .channel-info-wrap{
+    width:min(100%,520px);
+    margin:clamp(34px,4.2vh,48px) auto 0;
+  }
+  #canales .meta-index{
+    margin-bottom:18px;
+    color:#bbb3a8;
+    font-size:9px;
+    letter-spacing:.16em;
+    gap:14px;
+  }
+  #canales .meta-index i{
+    width:min(190px,46%);
+    background:rgba(184,138,74,.36);
+  }
+  #canales .current-meta .name{
+    margin-bottom:9px;
+    color:#f3ede3;
+    font-size:clamp(34px,2.85vw,48px);
+    line-height:1.07;
+  }
+  #canales .current-meta .cat{
+    margin-bottom:18px;
+    color:#c79b58;
+    font-size:10px;
+    letter-spacing:.3em;
+  }
+  #canales .meta-description{
+    max-width:46ch;
+    color:#c2baaf;
+    font-size:13px;
+    line-height:1.62;
+  }
+  #canales .current-stats{
+    gap:22px;
+    margin-top:23px;
+  }
+  #canales .current-stats b{font-size:clamp(25px,1.85vw,31px)}
+  #canales .current-stats small{color:#9f978d}
+  #canales .channel-cta{
+    width:min(100%,360px);
+    min-height:54px;
+    margin-top:22px;
+    border-color:var(--home-bronze-soft);
+    color:#eee8df;
+    padding-right:17px;
+  }
+  #canales .channel-cta:hover{
+    background:rgba(184,138,74,.055);
+    border-color:var(--home-bronze);
+  }
+  #canales .channel-cta-play{
+    width:36px;height:36px;
+    background:#f1eadf;
+    color:#101419;
+  }
+  #canales .channel-cta-arrow{color:#c79b58}
+  #canales .home-explore{
+    color:#9f978d;
+    border-bottom-color:rgba(184,138,74,.28);
+    padding-left:58px;
+  }
+}
+
+/* Medium desktop: protect the carousel before sacrificing the right panel. */
+@media (max-width:1320px) and (min-width:1101px){
+  body:not(.view-open) .top{background:linear-gradient(90deg,#f5f0e7 0 58%,#0f1318 58% 100%)}
+  #canales .home-grid{grid-template-columns:minmax(0,58fr) minmax(450px,42fr)}
+  #canales .home-left{padding-left:clamp(28px,3.4vw,46px);padding-right:clamp(28px,3.4vw,46px)}
+  #canales h1>.brand-word{font-size:clamp(62px,5.8vw,82px)}
+  #canales .home-right{padding-left:26px;padding-right:26px}
+  #canales .channel-browser{margin-top:clamp(88px,10vh,112px)}
+  #canales .rail-avatar{width:44px;height:44px}
+  #canales .channel-rail .label{font-size:10px}
+  #canales .channel-info-wrap{width:min(100%,500px);margin-top:34px}
+}
+
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) .top{background:linear-gradient(90deg,#f5f0e7 0 54%,#0f1318 54% 100%)}
+  #canales .home-grid{grid-template-columns:minmax(0,54fr) minmax(430px,46fr)}
+  #canales .home-left{padding-left:24px;padding-right:24px}
+  #canales h1>.brand-word{font-size:clamp(52px,5.4vw,64px)}
+  #canales h1 small{font-size:10px;letter-spacing:.38em}
+  #canales .hero-statement{font-size:12px}
+  #canales .record-zone.tt-zone{width:min(98%,760px)}
+  #canales .home-right{padding-left:20px;padding-right:20px}
+  #canales .channel-browser{margin-top:82px}
+  #canales .channel-carousel{grid-template-columns:30px minmax(0,1fr) 30px;gap:7px}
+  #canales .carousel-arrow{width:30px;height:30px}
+  #canales .channel-rail{gap:8px}
+  #canales .channel-viewport[data-visible="3"] .channel-rail li{flex-basis:calc((100% - 16px)/3)}
+  #canales .channel-rail button{min-height:96px;gap:7px}
+  #canales .rail-avatar{width:40px;height:40px}
+  #canales .channel-rail .label{font-size:9px}
+  #canales .channel-info-wrap{margin-top:30px}
+  #canales .current-meta .name{font-size:clamp(30px,3vw,38px)}
+  #canales .meta-description{font-size:12px}
+  #canales .channel-cta{min-height:50px}
+}
+
+@media (max-width:900px){
+  #canales .channel-rail button{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    gap:7px;
+    text-align:center;
+    padding:7px 3px 9px;
+  }
+  #canales .rail-copy{text-align:center;width:100%;overflow:visible}
+  #canales .channel-rail .num,
+  #canales .rail-cat{display:none!important}
+  #canales .channel-rail .label{max-width:13ch;margin:auto;overflow-wrap:normal!important;word-break:normal!important}
+}
+
+/* ======================================================================
+   CANALES v4 — wide-screen scaling + ambient shadows + stone grounding
+   Scope: layout/visual integration only. No turntable assets or JS logic.
+   ====================================================================== */
+@media (min-width:901px){
+  /* Let the approved composition breathe on large monitors / zoomed-out views. */
+  body:not(.view-open) .page{
+    width:calc(100% - clamp(28px,3vw,64px));
+    max-width:2240px;
+    min-height:0;
+    margin:clamp(14px,1.5vw,24px) auto;
+  }
+  body:not(.view-open) .top-in{
+    min-height:clamp(78px,5vw,92px);
+    padding-left:clamp(38px,4.5vw,96px);
+    padding-right:clamp(38px,4.5vw,96px);
+  }
+
+  #canales .home-grid{
+    min-height:0;
+    height:clamp(720px,49vw,940px);
+  }
+
+  /* Left panel keeps the same approved hierarchy, but scales instead of capping too early. */
+  #canales .home-left{
+    isolation:isolate;
+    overflow:hidden;
+    padding-top:clamp(42px,4.4vw,76px);
+    padding-left:clamp(40px,4.6vw,96px);
+    padding-right:clamp(40px,4.6vw,96px);
+  }
+  #canales .home-left::before{
+    content:'';
+    position:absolute;
+    inset:-3% -2% -2% -3%;
+    z-index:0;
+    pointer-events:none;
+    opacity:.78;
+    filter:blur(1.4px);
+    background:
+      /* soft botanical light/shadow impressions — intentionally low contrast */
+      radial-gradient(ellipse 92px 24px at 2% 16%,rgba(72,60,43,.075) 0 42%,transparent 68%),
+      radial-gradient(ellipse 72px 20px at 7% 22%,rgba(72,60,43,.065) 0 40%,transparent 68%),
+      radial-gradient(ellipse 88px 22px at 3% 30%,rgba(72,60,43,.055) 0 40%,transparent 70%),
+      radial-gradient(ellipse 64px 18px at 10% 35%,rgba(72,60,43,.045) 0 40%,transparent 70%),
+      linear-gradient(63deg,transparent 0 6.2%,rgba(72,60,43,.035) 6.35% 6.6%,transparent 6.8% 100%),
+      radial-gradient(ellipse 86px 22px at 96% 53%,rgba(72,60,43,.055) 0 42%,transparent 70%),
+      radial-gradient(ellipse 66px 18px at 91% 59%,rgba(72,60,43,.045) 0 42%,transparent 70%),
+      linear-gradient(118deg,transparent 0 91.5%,rgba(72,60,43,.028) 91.7% 91.95%,transparent 92.2% 100%),
+      radial-gradient(ellipse at 35% 18%,rgba(255,255,255,.50),transparent 52%);
+  }
+  #canales .home-left > *{position:relative;z-index:1}
+
+  #canales h1>.brand-word{
+    font-size:clamp(68px,5.25vw,126px);
+  }
+  #canales h1 small{
+    font-size:clamp(11px,.74vw,16px);
+  }
+  #canales .hero-statement{
+    font-size:clamp(13px,.78vw,17px);
+  }
+
+  /* Keep the exact artwork; only let its existing SVG scene scale farther on wide screens. */
+  #canales .record-zone.tt-zone{
+    width:min(96%,1180px);
+    margin-top:clamp(12px,1.65vw,28px);
+  }
+  #canales .record-zone.tt-zone::before{
+    content:'';
+    position:absolute;
+    left:10%;
+    right:10%;
+    bottom:3.2%;
+    height:13%;
+    z-index:0;
+    pointer-events:none;
+    background:radial-gradient(ellipse at center,rgba(74,49,24,.16) 0%,rgba(74,49,24,.08) 38%,transparent 72%);
+    filter:blur(16px);
+    opacity:.72;
+  }
+  #canales .tt-zone .tt-stage{position:relative;z-index:1}
+
+  /* The right panel stays visually identical, but aligns vertically with the fluid hero. */
+  #canales .channel-browser{
+    margin-top:clamp(92px,7.2vw,154px);
+  }
+  #canales .channel-info-wrap{
+    margin-top:clamp(32px,2.5vw,52px);
+  }
+}
+
+/* Extra-wide: preserve the approved 61/39 balance while allowing the whole composition to scale. */
+@media (min-width:1900px){
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#f5f0e7 0 61%,#0f1318 61% 100%);
+  }
+  #canales .home-grid{
+    grid-template-columns:minmax(0,61fr) minmax(520px,39fr);
+    height:clamp(800px,44vw,980px);
+  }
+  #canales .hero-copy{width:min(100%,1120px)}
+  #canales .record-zone.tt-zone{width:min(96%,1240px)}
+  #canales .channel-browser{margin-top:clamp(108px,6.2vw,164px)}
+}
+
+/* Medium desktop retains the v3 proportions; only prevent early visual compression. */
+@media (max-width:1320px) and (min-width:901px){
+  body:not(.view-open) .page{
+    width:calc(100% - 28px);
+    margin:14px auto;
+  }
+  #canales .home-grid{
+    height:auto;
+    min-height:clamp(700px,calc(100svh - 112px),860px);
+  }
+  #canales .home-left::before{opacity:.60}
+  #canales .record-zone.tt-zone{width:min(96%,880px)}
+}
+
+@media (max-width:900px){
+  /* Keep mobile/tablet behavior unchanged; only retain a faint ambience. */
+  #canales .home-left{position:relative;isolation:isolate;overflow:hidden}
+  #canales .home-left::before{
+    content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.42;
+    background:
+      radial-gradient(ellipse 70px 18px at 2% 18%,rgba(72,60,43,.06) 0 42%,transparent 70%),
+      radial-gradient(ellipse 64px 16px at 96% 60%,rgba(72,60,43,.04) 0 42%,transparent 70%);
+  }
+  #canales .home-left > *{position:relative;z-index:1}
+}
+
+
+/* ======================================================================
+   CANALES v5 — natural window shadows + grounded presentation surface
+   Scope: left-panel ambience only. No assets, audio, carousel or JS touched.
+   ====================================================================== */
+@media (min-width:901px){
+  #canales .home-left{
+    background:
+      radial-gradient(ellipse 74% 31% at 50% 92%,rgba(190,161,123,.16) 0%,rgba(190,161,123,.075) 38%,transparent 72%),
+      radial-gradient(ellipse 66% 42% at 48% 12%,rgba(255,255,255,.78) 0%,rgba(255,255,255,.28) 48%,transparent 76%),
+      linear-gradient(180deg,#faf7f1 0%,#f7f2e9 54%,#f1e9dd 100%);
+  }
+
+  /* Botanical shadow cast from an imagined window, not a decorative illustration. */
+  #canales .home-left::before{
+    content:'';
+    position:absolute;
+    left:-7%;
+    top:4%;
+    width:47%;
+    height:66%;
+    z-index:0;
+    pointer-events:none;
+    background:#655541;
+    opacity:.16;
+    filter:blur(7px);
+    transform:rotate(-4deg) scale(1.06);
+    transform-origin:20% 20%;
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20420%20560%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M-18%20500%20C70%20418%2088%20315%20128%20230%20C170%20140%20230%2080%20336%208%22%20fill%3D%22none%22%20stroke-width%3D%227%22%2F%3E%0A%3Cpath%20d%3D%22M62%20421%20C32%20380%2018%20347%208%20310%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M89%20353%20C132%20331%20158%20298%20183%20263%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M116%20286%20C83%20252%2072%20214%2069%20174%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M154%20220%20C196%20201%20228%20170%20250%20135%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M207%20152%20C183%20116%20180%2084%20185%2055%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cellipse%20cx%3D%2218%22%20cy%3D%22326%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2852%2018%20326%29%22%2F%3E%0A%3Cellipse%20cx%3D%2242%22%20cy%3D%22369%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%2842%2042%20369%29%22%2F%3E%0A%3Cellipse%20cx%3D%2278%22%20cy%3D%22389%22%20rx%3D%2242%22%20ry%3D%2214%22%20transform%3D%22rotate%28-18%2078%20389%29%22%2F%3E%0A%3Cellipse%20cx%3D%22107%22%20cy%3D%22336%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%28-35%20107%20336%29%22%2F%3E%0A%3Cellipse%20cx%3D%22140%22%20cy%3D%22307%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-42%20140%20307%29%22%2F%3E%0A%3Cellipse%20cx%3D%2276%22%20cy%3D%22236%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%2855%2076%20236%29%22%2F%3E%0A%3Cellipse%20cx%3D%2292%22%20cy%3D%22197%22%20rx%3D%2234%22%20ry%3D%2212%22%20transform%3D%22rotate%2860%2092%20197%29%22%2F%3E%0A%3Cellipse%20cx%3D%22163%22%20cy%3D%22205%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%28-30%20163%20205%29%22%2F%3E%0A%3Cellipse%20cx%3D%22208%22%20cy%3D%22174%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-38%20208%20174%29%22%2F%3E%0A%3Cellipse%20cx%3D%22189%22%20cy%3D%22109%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2858%20189%20109%29%22%2F%3E%0A%3Cellipse%20cx%3D%22210%22%20cy%3D%2277%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%2864%20210%2077%29%22%2F%3E%0A%3Cellipse%20cx%3D%22252%22%20cy%3D%22119%22%20rx%3D%2237%22%20ry%3D%2212%22%20transform%3D%22rotate%28-39%20252%20119%29%22%2F%3E%0A%3Cellipse%20cx%3D%22293%22%20cy%3D%2278%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%28-43%20293%2078%29%22%2F%3E%0A%3Cellipse%20cx%3D%22329%22%20cy%3D%2239%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%28-47%20329%2039%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20420%20560%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M-18%20500%20C70%20418%2088%20315%20128%20230%20C170%20140%20230%2080%20336%208%22%20fill%3D%22none%22%20stroke-width%3D%227%22%2F%3E%0A%3Cpath%20d%3D%22M62%20421%20C32%20380%2018%20347%208%20310%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M89%20353%20C132%20331%20158%20298%20183%20263%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M116%20286%20C83%20252%2072%20214%2069%20174%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M154%20220%20C196%20201%20228%20170%20250%20135%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cpath%20d%3D%22M207%20152%20C183%20116%20180%2084%20185%2055%22%20fill%3D%22none%22%20stroke-width%3D%224%22%2F%3E%0A%3Cellipse%20cx%3D%2218%22%20cy%3D%22326%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2852%2018%20326%29%22%2F%3E%0A%3Cellipse%20cx%3D%2242%22%20cy%3D%22369%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%2842%2042%20369%29%22%2F%3E%0A%3Cellipse%20cx%3D%2278%22%20cy%3D%22389%22%20rx%3D%2242%22%20ry%3D%2214%22%20transform%3D%22rotate%28-18%2078%20389%29%22%2F%3E%0A%3Cellipse%20cx%3D%22107%22%20cy%3D%22336%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%28-35%20107%20336%29%22%2F%3E%0A%3Cellipse%20cx%3D%22140%22%20cy%3D%22307%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-42%20140%20307%29%22%2F%3E%0A%3Cellipse%20cx%3D%2276%22%20cy%3D%22236%22%20rx%3D%2239%22%20ry%3D%2213%22%20transform%3D%22rotate%2855%2076%20236%29%22%2F%3E%0A%3Cellipse%20cx%3D%2292%22%20cy%3D%22197%22%20rx%3D%2234%22%20ry%3D%2212%22%20transform%3D%22rotate%2860%2092%20197%29%22%2F%3E%0A%3Cellipse%20cx%3D%22163%22%20cy%3D%22205%22%20rx%3D%2240%22%20ry%3D%2213%22%20transform%3D%22rotate%28-30%20163%20205%29%22%2F%3E%0A%3Cellipse%20cx%3D%22208%22%20cy%3D%22174%22%20rx%3D%2238%22%20ry%3D%2213%22%20transform%3D%22rotate%28-38%20208%20174%29%22%2F%3E%0A%3Cellipse%20cx%3D%22189%22%20cy%3D%22109%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%2858%20189%20109%29%22%2F%3E%0A%3Cellipse%20cx%3D%22210%22%20cy%3D%2277%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%2864%20210%2077%29%22%2F%3E%0A%3Cellipse%20cx%3D%22252%22%20cy%3D%22119%22%20rx%3D%2237%22%20ry%3D%2212%22%20transform%3D%22rotate%28-39%20252%20119%29%22%2F%3E%0A%3Cellipse%20cx%3D%22293%22%20cy%3D%2278%22%20rx%3D%2235%22%20ry%3D%2212%22%20transform%3D%22rotate%28-43%20293%2078%29%22%2F%3E%0A%3Cellipse%20cx%3D%22329%22%20cy%3D%2239%22%20rx%3D%2231%22%20ry%3D%2211%22%20transform%3D%22rotate%28-47%20329%2039%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size:100% 100%;
+    mask-size:100% 100%;
+  }
+
+  /* A second, lighter cast shadow keeps the turntable from looking cut out. */
+  #canales .record-zone.tt-zone::after{
+    content:'';
+    position:absolute;
+    right:-14%;
+    top:7%;
+    width:34%;
+    height:66%;
+    z-index:0;
+    pointer-events:none;
+    background:#6d5a44;
+    opacity:.11;
+    filter:blur(8px);
+    transform:rotate(5deg);
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20420%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M334%20398%20C268%20333%20237%20255%20206%20184%20C174%20111%20125%2058%2047%20-8%22%20fill%3D%22none%22%20stroke-width%3D%226%22%2F%3E%0A%3Cpath%20d%3D%22M270%20330%20C298%20299%20307%20268%20310%20236%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M237%20263%20C201%20245%20180%20216%20164%20190%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M208%20202%20C235%20173%20244%20141%20244%20110%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M171%20137%20C139%20122%20117%2097%2099%2070%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cellipse%20cx%3D%22300%22%20cy%3D%22254%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%28-55%20300%20254%29%22%2F%3E%0A%3Cellipse%20cx%3D%22274%22%20cy%3D%22296%22%20rx%3D%2234%22%20ry%3D%2211%22%20transform%3D%22rotate%28-38%20274%20296%29%22%2F%3E%0A%3Cellipse%20cx%3D%22246%22%20cy%3D%22280%22%20rx%3D%2235%22%20ry%3D%2211%22%20transform%3D%22rotate%2821%20246%20280%29%22%2F%3E%0A%3Cellipse%20cx%3D%22219%22%20cy%3D%22231%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2835%20219%20231%29%22%2F%3E%0A%3Cellipse%20cx%3D%22188%22%20cy%3D%22207%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2842%20188%20207%29%22%2F%3E%0A%3Cellipse%20cx%3D%22240%22%20cy%3D%22154%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%28-58%20240%20154%29%22%2F%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22121%22%20rx%3D%2230%22%20ry%3D%2210%22%20transform%3D%22rotate%28-62%20220%20121%29%22%2F%3E%0A%3Cellipse%20cx%3D%22165%22%20cy%3D%22125%22%20rx%3D%2232%22%20ry%3D%2210%22%20transform%3D%22rotate%2831%20165%20125%29%22%2F%3E%0A%3Cellipse%20cx%3D%22132%22%20cy%3D%2299%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%2838%20132%2099%29%22%2F%3E%0A%3Cellipse%20cx%3D%2296%22%20cy%3D%2261%22%20rx%3D%2228%22%20ry%3D%229%22%20transform%3D%22rotate%2845%2096%2061%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20420%22%3E%0A%3Cg%20fill%3D%22white%22%20stroke%3D%22white%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%3Cpath%20d%3D%22M334%20398%20C268%20333%20237%20255%20206%20184%20C174%20111%20125%2058%2047%20-8%22%20fill%3D%22none%22%20stroke-width%3D%226%22%2F%3E%0A%3Cpath%20d%3D%22M270%20330%20C298%20299%20307%20268%20310%20236%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M237%20263%20C201%20245%20180%20216%20164%20190%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M208%20202%20C235%20173%20244%20141%20244%20110%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cpath%20d%3D%22M171%20137%20C139%20122%20117%2097%2099%2070%22%20fill%3D%22none%22%20stroke-width%3D%223.5%22%2F%3E%0A%3Cellipse%20cx%3D%22300%22%20cy%3D%22254%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%28-55%20300%20254%29%22%2F%3E%0A%3Cellipse%20cx%3D%22274%22%20cy%3D%22296%22%20rx%3D%2234%22%20ry%3D%2211%22%20transform%3D%22rotate%28-38%20274%20296%29%22%2F%3E%0A%3Cellipse%20cx%3D%22246%22%20cy%3D%22280%22%20rx%3D%2235%22%20ry%3D%2211%22%20transform%3D%22rotate%2821%20246%20280%29%22%2F%3E%0A%3Cellipse%20cx%3D%22219%22%20cy%3D%22231%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2835%20219%20231%29%22%2F%3E%0A%3Cellipse%20cx%3D%22188%22%20cy%3D%22207%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%2842%20188%20207%29%22%2F%3E%0A%3Cellipse%20cx%3D%22240%22%20cy%3D%22154%22%20rx%3D%2233%22%20ry%3D%2211%22%20transform%3D%22rotate%28-58%20240%20154%29%22%2F%3E%0A%3Cellipse%20cx%3D%22220%22%20cy%3D%22121%22%20rx%3D%2230%22%20ry%3D%2210%22%20transform%3D%22rotate%28-62%20220%20121%29%22%2F%3E%0A%3Cellipse%20cx%3D%22165%22%20cy%3D%22125%22%20rx%3D%2232%22%20ry%3D%2210%22%20transform%3D%22rotate%2831%20165%20125%29%22%2F%3E%0A%3Cellipse%20cx%3D%22132%22%20cy%3D%2299%22%20rx%3D%2231%22%20ry%3D%2210%22%20transform%3D%22rotate%2838%20132%2099%29%22%2F%3E%0A%3Cellipse%20cx%3D%2296%22%20cy%3D%2261%22%20rx%3D%2228%22%20ry%3D%229%22%20transform%3D%22rotate%2845%2096%2061%29%22%2F%3E%0A%3C%2Fg%3E%3C%2Fsvg%3E");
+    -webkit-mask-repeat:no-repeat;
+    mask-repeat:no-repeat;
+    -webkit-mask-size:100% 100%;
+    mask-size:100% 100%;
+  }
+
+  /* Contact shadow + warm surface falloff: the existing stone stays untouched. */
+  #canales .record-zone.tt-zone{
+    background:
+      radial-gradient(ellipse 57% 12% at 50% 85%,rgba(83,56,28,.10) 0%,rgba(83,56,28,.045) 45%,transparent 78%),
+      radial-gradient(ellipse 84% 24% at 50% 96%,rgba(214,190,157,.13),transparent 72%);
+  }
+  #canales .record-zone.tt-zone::before{
+    left:8%;
+    right:8%;
+    bottom:1.2%;
+    height:15%;
+    background:radial-gradient(ellipse at center,rgba(62,42,23,.20) 0%,rgba(62,42,23,.105) 38%,rgba(62,42,23,.035) 58%,transparent 76%);
+    filter:blur(18px);
+    opacity:.62;
+  }
+  #canales .tt-zone .tt-stage{position:relative;z-index:2}
+  #canales .hero-copy,#canales .home-signature{position:relative;z-index:2}
+}
+
+@media (min-width:1800px){
+  #canales .home-left::before{left:-5%;top:2%;width:43%;height:64%;opacity:.15;filter:blur(8px)}
+  #canales .record-zone.tt-zone::after{right:-12%;top:4%;width:32%;height:64%;opacity:.10;filter:blur(9px)}
+}
+
+@media (max-width:1100px) and (min-width:901px){
+  #canales .home-left::before{left:-11%;top:6%;width:50%;height:58%;opacity:.13;filter:blur(7px)}
+  #canales .record-zone.tt-zone::after{right:-18%;width:38%;opacity:.085}
+}
+
+/* ======================================================================
+   CANALES v6 — real animated ambience on the approved left panel
+   Scope: left background layer only. Turntable, player, right panel,
+   carousel and JS behavior remain untouched.
+   ====================================================================== */
+#canales .home-left{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+#canales .home-left-ambient{
+  position:absolute!important;
+  inset:0;
+  z-index:0!important;
+  overflow:hidden;
+  pointer-events:none;
+  background:#f5f0e7 url('../img/galadriel-left-ambient-poster.webp') center bottom / cover no-repeat;
+}
+#canales .home-left-bg-video{
+  position:absolute!important;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0!important;
+  display:block;
+  object-fit:cover;
+  object-position:center bottom;
+  opacity:.72;
+  filter:saturate(.78) brightness(1.035) contrast(.96);
+  pointer-events:none;
+}
+#canales .home-left-ambient::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(250,247,241,.13) 0%,rgba(250,247,241,.05) 43%,rgba(245,240,231,.02) 100%),
+    radial-gradient(ellipse 68% 48% at 54% 27%,rgba(255,255,255,.10),transparent 72%);
+}
+/* Remove the CSS-drawn botanical silhouettes now that the real video supplies them. */
+#canales .home-left::before{display:none!important}
+#canales .record-zone.tt-zone::after{display:none!important}
+/* Keep only a restrained grounding shadow beneath the existing stone asset. */
+#canales .record-zone.tt-zone{
+  position:relative;
+  background:radial-gradient(ellipse 56% 11% at 50% 86%,rgba(73,47,24,.10) 0%,rgba(73,47,24,.04) 45%,transparent 76%)!important;
+}
+#canales .record-zone.tt-zone::before{
+  content:'';
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:2%;
+  height:12%;
+  z-index:1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(52,35,20,.15) 0%,rgba(52,35,20,.07) 42%,transparent 74%);
+  filter:blur(18px);
+  opacity:.46;
+}
+#canales .home-left > .hero-copy,
+#canales .home-left > .record-zone,
+#canales .home-left > .home-signature{position:relative;z-index:2}
+
+@media (min-width:1800px){
+  #canales .home-left-bg-video{object-position:center 94%;opacity:.70}
+}
+@media (max-width:1100px) and (min-width:901px){
+  #canales .home-left-bg-video{object-position:center 90%;opacity:.68}
+}
+@media (max-width:900px){
+  #canales .home-left-bg-video{object-position:center 74%;opacity:.62}
+}
+@media (prefers-reduced-motion:reduce){
+  #canales .home-left-bg-video{display:none}
+}
+
+/* ======================================================================
+   CANALES v7 — responsive scene alignment + chromatic continuity
+   Scope: desktop/tablet sizing and the top/bottom framing bands only.
+   The turntable SVG/assets, audio controls, carousel logic and right-panel
+   content are intentionally untouched.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The framing bands now belong to the same warm/carbón world as the hero. */
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+  body:not(.view-open) .site-footer{
+    max-width:none;
+    margin:0;
+    padding:20px clamp(38px,4.5vw,96px);
+    border-top:1px solid rgba(184,138,74,.20);
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+  body:not(.view-open) .site-footer span{color:#75695d}
+  body:not(.view-open) .site-footer a{color:#aca49a}
+  body:not(.view-open) .site-footer a:hover{color:#f3ede3}
+
+  /* Keep the video surface and the physical stone visually on the same plane. */
+  #canales .home-left-bg-video{
+    transform:none;
+    transform-origin:center bottom;
+    transition:none;
+  }
+}
+
+/* Mid-size desktop: keep the hero compact enough that the stone still lands
+   on the animated floor instead of floating over a tall wall crop. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) .top{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%);
+  }
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%);
+    padding-left:28px;
+    padding-right:28px;
+  }
+  #canales .home-grid{
+    height:clamp(690px,75vw,760px);
+    min-height:0;
+  }
+  #canales .home-left{
+    padding-top:clamp(34px,4vw,48px);
+    padding-bottom:22px;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(113%,790px);
+    max-width:none;
+    left:50%;
+    transform:translateX(-50%);
+    margin-top:clamp(18px,2.6vw,28px);
+  }
+  #canales .home-signature{padding-top:8px}
+}
+
+/* Around the user's ~1000px desktop viewport, object-fit changes axis.
+   A restrained scale anchored to the floor keeps the wall/floor horizon
+   behind the existing stone instead of dropping far below it. */
+@media (max-width:1030px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.18);
+    transform-origin:center bottom;
+    object-position:center bottom;
+  }
+  #canales .home-left-ambient::after{
+    background:
+      linear-gradient(180deg,rgba(250,247,241,.10) 0%,rgba(250,247,241,.035) 44%,rgba(245,240,231,.01) 100%),
+      radial-gradient(ellipse 70% 48% at 52% 24%,rgba(255,255,255,.08),transparent 72%);
+  }
+}
+
+/* Wide desktop: the framing split follows the approved 61/39 composition. */
+@media (min-width:1321px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%);
+  }
+}
+
+/* 1101–1320 uses the same split as the existing v3/v4 home grid. */
+@media (max-width:1320px) and (min-width:1101px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 58%,#0f1318 58% 100%);
+  }
+}
+
+/* Once the layout stacks, a split footer/header would be artificial. */
+@media (max-width:900px){
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:#efe4d5;
+  }
+  body:not(.view-open) .site-footer{margin:0;max-width:none}
+  body:not(.view-open) .site-footer a{color:#75695d}
+}
+
+/* ======================================================================
+   CANALES v8 — fill tall viewports without leaving an orphan beige band
+   Scope: page sizing only. Visual design, media, turntable and JS unchanged.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The shell should occupy the viewport; the hero, not the body background,
+     absorbs any extra vertical space on tall browser windows. */
+  body:not(.view-open) .page{
+    min-height:calc(100svh - 28px);
+    display:flex;
+    flex-direction:column;
+  }
+  body:not(.view-open) #canales.screen{
+    flex:1 1 auto;
+    width:100%;
+    display:flex;
+    min-height:0;
+  }
+  body:not(.view-open) #canales .home-grid{
+    flex:1 1 auto;
+    width:100%;
+    height:auto!important;
+    min-height:700px;
+  }
+  body:not(.view-open) .site-footer{
+    flex:0 0 auto;
+  }
+}
+
+/* Mid-size desktop previously forced a short 690–760px hero. That created
+   the large empty beige area visible below the footer on tall windows. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) #canales .home-grid{
+    height:auto!important;
+    min-height:700px;
+  }
+}
+
+/* ======================================================================
+   CANALES v9 — mid-size grounding correction
+   Scope: only the left ambient crop / scene alignment between 901–1180px.
+   No turntable assets, player controls, carousel, right panel or JS changed.
+   ====================================================================== */
+@media (max-width:1180px) and (min-width:901px){
+  /* On narrower desktop windows the portrait ambient video otherwise shows
+     too much wall and places the floor horizon below the existing stone.
+     Enlarge the background from its bottom edge so the floor rises naturally
+     behind the stone without changing the turntable artwork itself. */
+  #canales .home-left-bg-video{
+    object-position:center bottom;
+    transform:scale(1.16);
+    transform-origin:center bottom;
+  }
+}
+
+@media (max-width:1080px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.34);
+  }
+
+  /* Preserve the existing horizontal centering rule and lower the complete
+     untouched SVG scene just enough to meet the floor plane visually. */
+  #canales .record-zone.tt-zone{
+    transform:translateX(-50%) translateY(22px);
+  }
+
+  /* Contact shadow remains restrained; it merely closes the small visual gap
+     between the original stone asset and the animated floor. */
+  #canales .record-zone.tt-zone::before{
+    bottom:0;
+    height:10%;
+    opacity:.38;
+    filter:blur(14px);
+  }
+}
+
+@media (max-width:980px) and (min-width:901px){
+  #canales .home-left-bg-video{
+    transform:scale(1.42);
+  }
+  #canales .record-zone.tt-zone{
+    transform:translateX(-50%) translateY(28px);
+  }
+}
+
+/* ======================================================================
+   CANALES v10 — grounded left-stage responsive system
+   Scope: left hero geometry + page height only.
+   Keeps the approved turntable/video assets, player, right panel and JS intact.
+   ====================================================================== */
+@media (min-width:901px){
+  /* The home composition follows its own width-driven aspect instead of
+     stretching to fill arbitrary viewport heights. Short windows scroll;
+     tall windows do not inflate the scene. */
+  body:not(.view-open) .page{
+    min-height:0;
+    display:block;
+  }
+  body:not(.view-open) #canales.screen{
+    display:block;
+    width:100%;
+    min-height:0;
+  }
+  body:not(.view-open) #canales .home-grid{
+    display:grid;
+    height:clamp(700px,49vw,940px)!important;
+    min-height:0!important;
+  }
+
+  /* Treat the left half as a real set: editorial copy, physical stage,
+     signature. The turntable now belongs to the stage rather than to a
+     fixed top coordinate. */
+  #canales .home-left{
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    align-items:stretch;
+    min-height:0;
+  }
+  #canales .hero-copy{
+    align-self:start;
+  }
+  #canales .record-zone.tt-zone{
+    align-self:end;
+    justify-self:center;
+    left:auto!important;
+    transform:none!important;
+    margin-top:clamp(8px,1.2vw,18px)!important;
+    margin-bottom:clamp(-6px,-.18vw,-2px);
+  }
+  #canales .home-signature{
+    align-self:end;
+    margin-top:clamp(4px,.7vw,10px);
+  }
+
+  /* One stable crop model for the physical room: anchor the portrait video
+     to its floor edge and let object-fit do the crop. No breakpoint scaling. */
+  #canales .home-left-bg-video{
+    object-fit:cover;
+    object-position:center bottom!important;
+    transform:none!important;
+    transform-origin:center bottom;
+  }
+
+  /* The existing stone gets a soft warm contact shadow, not a hard halo. */
+  #canales .record-zone.tt-zone::before{
+    left:10%;
+    right:10%;
+    bottom:-.5%;
+    height:10%;
+    opacity:.50;
+    filter:blur(15px);
+    background:radial-gradient(ellipse at center,
+      rgba(57,39,22,.17) 0%,
+      rgba(57,39,22,.08) 42%,
+      rgba(57,39,22,.025) 60%,
+      transparent 76%);
+  }
+
+  body:not(.view-open) .site-footer{
+    flex:none;
+  }
+}
+
+/* Wide but vertically tight browser windows: preserve the object's scale,
+   compact only the editorial gaps, and let the document scroll if needed. */
+@media (min-width:1100px) and (max-height:820px){
+  body:not(.view-open) #canales .home-grid{
+    height:clamp(660px,43vw,790px)!important;
+  }
+  #canales .home-left{
+    padding-top:clamp(28px,3.2vh,42px);
+    padding-bottom:20px;
+  }
+  #canales .eyebrow{margin-bottom:10px}
+  #canales h1{margin-bottom:10px}
+  #canales h1 small{margin-top:8px}
+  #canales .record-zone.tt-zone{
+    margin-top:6px!important;
+    margin-bottom:-4px;
+  }
+  #canales .home-signature{padding-top:4px;margin-top:2px}
+}
+
+/* Medium desktop keeps the same stage logic. It does not scale the video or
+   manually push the SVG; both stay anchored to the shared floor plane. */
+@media (max-width:1100px) and (min-width:901px){
+  body:not(.view-open) #canales .home-grid{
+    height:clamp(700px,72vw,820px)!important;
+  }
+  #canales .home-left{
+    padding-top:clamp(30px,4vw,44px);
+    padding-bottom:20px;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(104%,800px);
+    left:auto!important;
+    transform:none!important;
+    margin-top:8px!important;
+    margin-bottom:-2px;
+  }
+  #canales .home-left-bg-video{
+    object-position:center bottom!important;
+    transform:none!important;
+  }
+}
+
+/* ================================================================
+   CANALES v12 — stable tab transition
+   Keeps the approved layout and turntable geometry untouched.
+   The previous native View Transition snapshot could briefly rescale the
+   complete CANALES scene (especially the SVG turntable) while navigating.
+   This replacement animates opacity only, so no descendant is transformed.
+   ================================================================ */
+
+@keyframes galadriel-view-fade-in{
+  from{opacity:.18}
+  to{opacity:1}
+}
+
+#canales.view-enter,
+.view.view-enter{
+  animation:galadriel-view-fade-in .34s cubic-bezier(.22,.72,.18,1) both;
+}
+
+/* Intro remains deliberately slower than ordinary UI motion. */
+#intro{transition:opacity .65s cubic-bezier(.22,.72,.18,1)}
+
+@media(prefers-reduced-motion:reduce){
+  #canales.view-enter,
+  .view.view-enter{animation:none!important}
+}
+
+/* ======================================================================
+   CANALES v14 — continuous responsive handoff
+   Goal: remove the 901–1180 dead-zone introduced in v13. The premium split
+   remains active while both columns still have usable room; once that is no
+   longer true, the layout switches directly to the proven vertical tablet
+   composition. There is no intermediate state where the turntable becomes a
+   thumbnail or floats beside the title.
+   ====================================================================== */
+
+/* Desktop + narrow desktop: keep the approved split. The left stage may
+   scale down only to a useful presentation size; it is never given a hard
+   min-width that can force overflow or trigger a strange secondary layout. */
+@media (min-width:1041px){
+  body:not(.view-open) #canales .home-grid{
+    display:grid!important;
+    grid-template-columns:minmax(0,54fr) minmax(410px,46fr)!important;
+    height:clamp(700px,58vw,860px)!important;
+    min-height:0!important;
+  }
+
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%)!important;
+  }
+
+  #canales .home-left{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto minmax(0,1fr) auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding-left:clamp(20px,2.7vw,44px)!important;
+    padding-right:clamp(20px,2.7vw,44px)!important;
+  }
+
+  #canales .hero-copy{
+    width:min(100%,820px)!important;
+    margin-inline:auto!important;
+    min-width:0!important;
+  }
+
+  #canales h1>.brand-word{
+    font-size:clamp(52px,5.15vw,80px)!important;
+  }
+  #canales h1 small{
+    font-size:clamp(10px,.95vw,13px)!important;
+  }
+  #canales .hero-statement{
+    font-size:clamp(12px,1.05vw,15px)!important;
+  }
+
+  #canales .record-zone.tt-zone{
+    position:relative!important;
+    width:min(100%,820px)!important;
+    min-width:0!important;
+    max-width:820px!important;
+    align-self:end!important;
+    justify-self:center!important;
+    left:auto!important;
+    transform:none!important;
+    margin:clamp(8px,1.2vw,16px) auto -2px!important;
+  }
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    min-width:0!important;
+    aspect-ratio:1240/590!important;
+  }
+
+  #canales .home-signature{
+    align-self:end!important;
+    margin-top:clamp(4px,.7vw,10px)!important;
+  }
+
+  #canales .home-right{
+    min-width:0!important;
+    min-height:0!important;
+    padding-left:clamp(18px,2.2vw,30px)!important;
+    padding-right:clamp(18px,2.2vw,30px)!important;
+  }
+  #canales .channel-browser{
+    margin-top:clamp(78px,8.5vw,112px)!important;
+  }
+  #canales .channel-info-wrap{
+    margin-top:clamp(28px,3vw,42px)!important;
+  }
+}
+
+/* Large desktop returns to the approved wider 61/39 balance. */
+@media (min-width:1321px){
+  body:not(.view-open) #canales .home-grid{
+    grid-template-columns:minmax(0,61fr) minmax(480px,39fr)!important;
+    height:clamp(720px,49vw,940px)!important;
+  }
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%)!important;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(96%,980px)!important;
+    max-width:980px!important;
+  }
+  #canales h1>.brand-word{
+    font-size:clamp(68px,5.25vw,126px)!important;
+  }
+}
+
+/* True tablet handoff. This is the ONLY intermediate reflow: title, stage and
+   signature remain in one vertical column, then the dark channel panel follows.
+   Explicit one-column placement prevents legacy rules from putting the
+   turntable beside the title. */
+@media (max-width:1040px) and (min-width:901px){
+  body:not(.view-open) .page{
+    width:calc(100% - 28px)!important;
+    margin:14px auto!important;
+    min-height:0!important;
+  }
+
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:#efe4d5!important;
+  }
+  body:not(.view-open) .nav button{color:#6d6257!important}
+  body:not(.view-open) .nav button:hover,
+  body:not(.view-open) .nav button[aria-current=true]{color:#1b1713!important}
+  body:not(.view-open) .nav button[aria-current=true]:after{background:#b88a4a!important}
+
+  body:not(.view-open) #canales.screen{
+    display:block!important;
+    width:100%!important;
+    min-height:0!important;
+  }
+  body:not(.view-open) #canales .home-grid{
+    display:block!important;
+    height:auto!important;
+    min-height:0!important;
+  }
+
+  #canales .home-left{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    grid-auto-flow:row!important;
+    min-height:0!important;
+    padding:clamp(34px,4.5vw,52px) clamp(28px,5vw,56px) 28px!important;
+  }
+  #canales .hero-copy,
+  #canales .record-zone.tt-zone,
+  #canales .home-signature{
+    grid-column:1!important;
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+  }
+
+  #canales .hero-copy{
+    width:min(100%,820px)!important;
+    margin:0 auto!important;
+  }
+  #canales h1>.brand-word{
+    font-size:clamp(58px,7.2vw,76px)!important;
+  }
+  #canales h1 small{
+    font-size:clamp(10px,1.25vw,13px)!important;
+  }
+  #canales .hero-statement{
+    font-size:clamp(12px,1.45vw,15px)!important;
+  }
+
+  #canales .record-zone.tt-zone{
+    width:min(88%,760px)!important;
+    min-width:0!important;
+    max-width:760px!important;
+    justify-self:center!important;
+    align-self:auto!important;
+    margin:clamp(22px,3vw,32px) auto 0!important;
+  }
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    min-width:0!important;
+    aspect-ratio:1240/590!important;
+  }
+  #canales .home-signature{
+    justify-self:start!important;
+    align-self:auto!important;
+    margin-top:14px!important;
+    padding-top:8px!important;
+  }
+
+  #canales .home-left-bg-video{
+    object-fit:cover!important;
+    object-position:center bottom!important;
+    transform:none!important;
+  }
+
+  #canales .home-right{
+    min-height:620px!important;
+    padding:54px clamp(32px,6vw,64px) 40px!important;
+  }
+  #canales .channel-browser{margin-top:0!important}
+  #canales .channel-info-wrap{margin-top:42px!important}
+
+  body:not(.view-open) .site-footer{
+    color:#75695d!important;
+  }
+  body:not(.view-open) .site-footer a{color:#75695d!important}
+}
+
+/* Mobile keeps the established stacked design. Remove every desktop minimum
+   so the complete turntable/player unit scales together instead of leaving
+   detached fragments. */
+@media (max-width:900px){
+  #canales .record-zone.tt-zone{
+    position:relative!important;
+    min-width:0!important;
+    width:100%!important;
+    max-width:720px!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
+  }
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
