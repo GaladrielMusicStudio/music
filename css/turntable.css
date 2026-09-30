@@ -1197,3 +1197,82 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
   #canales .home-left::before{left:-11%;top:6%;width:50%;height:58%;opacity:.13;filter:blur(7px)}
   #canales .record-zone.tt-zone::after{right:-18%;width:38%;opacity:.085}
 }
+
+/* ======================================================================
+   CANALES v6 — real animated ambience on the approved left panel
+   Scope: left background layer only. Turntable, player, right panel,
+   carousel and JS behavior remain untouched.
+   ====================================================================== */
+#canales .home-left{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+#canales .home-left-ambient{
+  position:absolute!important;
+  inset:0;
+  z-index:0!important;
+  overflow:hidden;
+  pointer-events:none;
+  background:#f5f0e7 url('../img/galadriel-left-ambient-poster.webp') center bottom / cover no-repeat;
+}
+#canales .home-left-bg-video{
+  position:absolute!important;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:0!important;
+  display:block;
+  object-fit:cover;
+  object-position:center bottom;
+  opacity:.72;
+  filter:saturate(.78) brightness(1.035) contrast(.96);
+  pointer-events:none;
+}
+#canales .home-left-ambient::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(250,247,241,.13) 0%,rgba(250,247,241,.05) 43%,rgba(245,240,231,.02) 100%),
+    radial-gradient(ellipse 68% 48% at 54% 27%,rgba(255,255,255,.10),transparent 72%);
+}
+/* Remove the CSS-drawn botanical silhouettes now that the real video supplies them. */
+#canales .home-left::before{display:none!important}
+#canales .record-zone.tt-zone::after{display:none!important}
+/* Keep only a restrained grounding shadow beneath the existing stone asset. */
+#canales .record-zone.tt-zone{
+  position:relative;
+  background:radial-gradient(ellipse 56% 11% at 50% 86%,rgba(73,47,24,.10) 0%,rgba(73,47,24,.04) 45%,transparent 76%)!important;
+}
+#canales .record-zone.tt-zone::before{
+  content:'';
+  position:absolute;
+  left:12%;
+  right:12%;
+  bottom:2%;
+  height:12%;
+  z-index:1;
+  pointer-events:none;
+  background:radial-gradient(ellipse at center,rgba(52,35,20,.15) 0%,rgba(52,35,20,.07) 42%,transparent 74%);
+  filter:blur(18px);
+  opacity:.46;
+}
+#canales .home-left > .hero-copy,
+#canales .home-left > .record-zone,
+#canales .home-left > .home-signature{position:relative;z-index:2}
+
+@media (min-width:1800px){
+  #canales .home-left-bg-video{object-position:center 94%;opacity:.70}
+}
+@media (max-width:1100px) and (min-width:901px){
+  #canales .home-left-bg-video{object-position:center 90%;opacity:.68}
+}
+@media (max-width:900px){
+  #canales .home-left-bg-video{object-position:center 74%;opacity:.62}
+}
+@media (prefers-reduced-motion:reduce){
+  #canales .home-left-bg-video{display:none}
+}
