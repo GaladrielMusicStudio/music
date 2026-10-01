@@ -329,3 +329,83 @@
 /* Preserve the approved one-cover mobile carousel: the profile-only styling
    must not override the side-sleeve display:none from the tablet breakpoint. */
 @media(max-width:720px){#view-escuchar .listen-side-sleeve{display:none}}
+
+/* V20 — preserve the approved composition while fixing the player details. */
+/* Full, symmetrical headphones: their grid cell is independent of the wave. */
+#view-escuchar .listen-wave-art{
+  grid-template-columns:66px minmax(0,1fr) 48px;
+  column-gap:5px;
+  padding-right:4px;
+}
+#view-escuchar .listen-headphones{
+  display:block;justify-self:end;align-self:center;
+  width:35px;height:35px;margin:0 1px 0 0;overflow:visible;
+  flex:none;position:relative;z-index:5;
+}
+#view-escuchar .listen-wave-canvas{max-width:100%;min-width:0}
+
+/* Balance the two figures in the available panel width. */
+#view-escuchar .listen-stats{
+  width:100%;display:flex;justify-content:center;align-items:center;
+  gap:clamp(20px,2.7vw,36px);margin:19px 0 12px;
+}
+#view-escuchar .listen-stats>span{
+  text-align:center;align-items:center;min-width:clamp(86px,8vw,116px);
+}
+#view-escuchar .listen-stats>i{height:45px;flex:0 0 1px}
+#view-escuchar .listen-channel-identity{display:flex;align-items:center;gap:18px;min-width:0;color:inherit;text-decoration:none}
+#view-escuchar .listen-channel-identity h3{transition:color .2s ease}
+#view-escuchar .listen-channel-identity:hover h3{color:#e9bd78}
+#view-escuchar .listen-channel-identity:focus-visible{outline:2px solid #e9bd78;outline-offset:5px;border-radius:4px}
+#view-escuchar .listen-subscribe{
+  display:flex;align-items:center;justify-content:center;width:max-content;max-width:100%;
+  margin:0 auto;color:#d2ab70;border-bottom:1px solid rgba(210,171,112,.42);
+  text-decoration:none;gap:9px;font:500 10px/1.5 Inter,sans-serif;
+  letter-spacing:.065em;padding:6px 4px;transition:color .18s,border-color .18s;
+}
+#view-escuchar .listen-subscribe:hover{color:#f2d7a7;border-color:#f2d7a7}
+#view-escuchar .listen-subscribe:focus-visible{outline:2px solid #f2d7a7;outline-offset:3px}
+
+/* Switch a channel as editorial layers, never scaling the hero or turntable. */
+#view-escuchar .listen-list.listen-is-leaving .listen-feature,
+#view-escuchar .listen-list.listen-is-leaving .listen-side-sleeve,
+#view-escuchar .listen-list.listen-is-leaving .listen-detail-title,
+#view-escuchar .listen-list.listen-is-leaving .listen-player,
+#view-escuchar .listen-list.listen-is-leaving .listen-stats,
+#view-escuchar .listen-list.listen-is-leaving .listen-subscribe,
+#view-escuchar .listen-list.listen-is-leaving .listen-popular-head,
+#view-escuchar .listen-list.listen-is-leaving .listen-video-grid{
+  opacity:0;translate:var(--listen-exit-x,-18px) 0;
+  transition:opacity .17s ease,translate .17s ease;
+}
+@keyframes listenV20Enter{
+  from{opacity:0;translate:var(--listen-enter-x,22px) 0;filter:blur(2px)}
+  to{opacity:1;translate:0 0;filter:blur(0)}
+}
+#view-escuchar .listen-list.listen-is-entering .listen-feature,
+#view-escuchar .listen-list.listen-is-entering .listen-side-sleeve,
+#view-escuchar .listen-list.listen-is-entering .listen-detail-title{
+  animation:listenV20Enter .39s cubic-bezier(.2,.72,.23,1) both;
+}
+#view-escuchar .listen-list.listen-is-entering .listen-player,
+#view-escuchar .listen-list.listen-is-entering .listen-stats,
+#view-escuchar .listen-list.listen-is-entering .listen-subscribe,
+#view-escuchar .listen-list.listen-is-entering .listen-popular-head,
+#view-escuchar .listen-list.listen-is-entering .listen-video-grid{
+  animation:listenV20Enter .38s .055s cubic-bezier(.2,.72,.23,1) both;
+}
+@media(max-width:720px){
+  #view-escuchar .listen-wave-art{grid-template-columns:50px minmax(0,1fr) 39px;gap:4px;padding-right:2px}
+  #view-escuchar .listen-headphones{width:31px;height:31px;margin:0}
+  #view-escuchar .listen-stats>span{min-width:90px}
+}
+@media(max-width:520px){
+  #view-escuchar .listen-wave-art{grid-template-columns:42px minmax(0,1fr) 32px;gap:3px}
+  #view-escuchar .listen-headphones{width:25px;height:25px}
+  #view-escuchar .listen-stats>span{min-width:77px}
+  #view-escuchar .listen-channel-identity{gap:12px}
+}
+@media(prefers-reduced-motion:reduce){
+  #view-escuchar .listen-list.listen-is-leaving *,
+  #view-escuchar .listen-list.listen-is-entering *{animation:none!important;transition:none!important;translate:none!important}
+}
