@@ -54,11 +54,8 @@ function syncDiscProgress(card,pct,playing=false){
   if(card.classList.contains("listen-player")){
     const hero=document.querySelector("#view-escuchar .listen-hero");
     hero?.classList.toggle("is-audio-playing",playing);
-    const vinylPlay=hero?.querySelector("[data-listen-vinyl-play]");
-    if(vinylPlay){
-      vinylPlay.setAttribute("aria-pressed",String(playing));
-      vinylPlay.setAttribute("aria-label",playing?"Pausar muestra del canal":"Reproducir muestra del canal");
-    }
+    // The actual, accessible [data-audio-play] button now lives directly on the
+    // small waveform vinyl; initPlayers() synchronizes its play/pause state.
     return;
   }
   const target=card.closest("#homeAudio")?document.querySelector(".record-zone"):card.closest(".listen-disc");
@@ -245,8 +242,8 @@ function listenAvatar(c,cls=""){
 function listenCover(c){return listenVideos(c,1)[0]?.thumbnail||""}
 const listenWaveStates=new WeakMap();
 let listenAudioContext=null;
-function listenWave(){
-  return `<span class="listen-wave-art" aria-hidden="true"><span class="listen-wave-vinyl"><i></i></span><canvas class="listen-wave-canvas" data-audio-wave width="760" height="120"></canvas><svg class="listen-headphones" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+function listenWave(available=false,name=""){
+  return `<div class="listen-wave-art"><span class="listen-wave-vinyl" aria-hidden="true"><i></i></span>${available?`<button class="listen-wave-play" type="button" data-audio-play aria-label="Reproducir muestra de ${esc(name)}" aria-pressed="false" title="Reproducir o pausar muestra de audio">${iconPlay()}</button>`:""}<canvas class="listen-wave-canvas" aria-hidden="true" data-audio-wave width="760" height="120"></canvas><svg class="listen-headphones" aria-hidden="true" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 1 3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
 }
 function sizeListenWaveCanvas(canvas){
   if(!canvas)return null;
@@ -354,9 +351,9 @@ function renderListen(){
   const avatar=listenAvatar(c,"listen-avatar--active");
   const sleeveIdentity=listenAvatar(c,"listen-avatar--cover");
   const vinylLabel=c.avatar?`<img class="listen-vinyl-avatar" src="${esc(c.avatar)}" alt="Foto de perfil de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
-  // The sole visible audio control is positioned on the exposed vinyl. The internal
-  // control preserves the existing player lifecycle when API data re-renders the hero.
-  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-internal-play" type="button" data-audio-play tabindex="-1" aria-hidden="true">${iconPlay()}</button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><p class="listen-unavailable-note">Muestra de audio no disponible</p></div>`;
+  // The waveform's small vinyl contains the one real audio control: no proxy
+  // click handler and no duplicate play button on the decorative large vinyl.
+  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave(true,c.nombre)}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><p class="listen-unavailable-note">Muestra de audio no disponible</p></div>`;
   const intro=$("#listenIntro");
   const allLoaded=CH.length>0&&CH.every(ch=>ch.loaded);
   const metricsReady=CH.some(ch=>ch.metricsTrusted);
@@ -371,7 +368,6 @@ function renderListen(){
           <div class="listen-feature" aria-live="polite">
             <div class="listen-vinyl" aria-hidden="true"><span>${vinylLabel}</span></div>
             <div class="listen-cover" aria-label="Carátula del canal ${esc(c.nombre)}"><div class="listen-cover-mark">${sleeveIdentity}</div></div>
-            <button class="listen-vinyl-play" data-listen-vinyl-play type="button" aria-label="Reproducir muestra de ${esc(c.nombre)}" aria-pressed="false" ${c.audio?'':'disabled'}>${iconPlay()}</button>
           </div>
           ${listenSleeve(next,nextIndex,"next")}
           <button class="listen-arrow listen-arrow--next" type="button" data-listen-step="1" aria-label="Canal siguiente">›</button>
@@ -396,7 +392,7 @@ function renderListen(){
   });
   initPlayers(host);
   // A previous audio element may have been retained while YouTube stats refreshed.
-  // Bring the newly rendered vinyl button back into sync with that same player.
+  // Restore the hero playback state; the real button is retained with its audio.
   const currentPlayer=host.querySelector('.listen-player[data-audio-player]');
   const currentAudio=currentPlayer?.querySelector('audio');
   if(currentAudio)syncDiscProgress(currentPlayer,0,!currentAudio.paused&&!currentAudio.ended);
@@ -520,11 +516,6 @@ async function loadChannel(c){
   renderListen();
 }
 document.addEventListener("click",ev=>{
-  const vinylPlay=ev.target.closest("[data-listen-vinyl-play]");
-  if(vinylPlay){
-    if(!vinylPlay.disabled)document.querySelector("#view-escuchar .listen-player [data-audio-play]")?.click();
-    return;
-  }
   const listenStep=ev.target.closest("[data-listen-step]");if(listenStep){stepListen(+listenStep.dataset.listenStep||1);return}
   const listenChannel=ev.target.closest("[data-listen-i]");if(listenChannel){setListenActive(+listenChannel.dataset.listenI);return}
   if(ev.target.closest("#channelPrev")){moveRail(-1);return}
