@@ -392,7 +392,6 @@ function renderListen(){
     <section class="listen-hero" aria-label="Canal seleccionado: ${esc(c.nombre)}">
       <div class="listen-showcase">
         <video class="listen-ambient" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="img/galadriel-left-ambient-poster.webp" aria-hidden="true"><source src="media/galadriel-left-ambient.mp4" type="video/mp4"></video>
-        <button class="ambient-play-toggle" type="button" data-ambient-play hidden aria-label="Activar fondo animado">▶ Activar fondo</button>
         <div class="listen-carousel" aria-label="Selector de canales">
           <button class="listen-arrow listen-arrow--prev" type="button" data-listen-step="-1" aria-label="Canal anterior">‹</button>
           ${listenSleeve(prev,prevIndex,"prev")}
@@ -603,71 +602,72 @@ function initStaticBindings(){
     initPlayers(studioLower);
   }
 }
-// Mobile Safari and WhatsApp WebViews may refuse muted autoplay (notably in
-// Low Power Mode). Preserve the poster, and provide a genuine user-gesture Play.
+// Safari on iPhone can block even silent autoplay (e.g. Low Power Mode).
+// Keep the original poster visible and never cover the content with extra UI.
 function initAmbientVideo(video){
-  if(!video)return;
-  const toggle=()=>video.closest('.home-left,.listen-showcase')?.querySelector('[data-ambient-play]');
-  const show=()=>{const b=toggle();if(b&&!b.disabled)b.hidden=false};
-  const hide=()=>{const b=toggle();if(b)b.hidden=true};
-  video.muted=true;video.defaultMuted=true;video.playsInline=true;
+  if(!video||!video.isConnected)return;
+  video.muted=true;
+  video.defaultMuted=true;
+  video.playsInline=true;
+  video.setAttribute('muted','');
+  video.setAttribute('playsinline','');
   video.setAttribute('webkit-playsinline','');
   if(!video.dataset.ambientBound){
     video.dataset.ambientBound='1';
-    video.addEventListener('playing',hide);
-    video.addEventListener('error',()=>{const b=toggle();if(b){b.hidden=false;b.disabled=true;b.textContent='Fondo estático';}});
-  }
-  const b=toggle();
-  if(b&&!b.dataset.ambientBound){
-    b.dataset.ambientBound='1';
-    b.addEventListener('click',()=>{
-      // Only an explicit click overrides the visitor's reduced-motion setting.
-      video.classList.add('motion-manual');
-      const p=video.play();
-      if(p?.then)p.then(hide).catch(()=>{b.hidden=false;b.textContent='No disponible';});
-      else setTimeout(()=>{video.paused?show():hide()},650);
+    video.addEventListener('error',()=>{
+      // The parent already has a matching static background; make it visible.
+      video.style.opacity='0';
     });
+    video.addEventListener('playing',()=>{video.style.opacity='';});
   }
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches&&!video.classList.contains('motion-manual')){
-    video.pause();show();return;
-  }
-  // No autoplay guarantee on iPhone; this only makes a best effort.
-  const result=video.play();
-  if(result?.then)result.then(hide).catch(show);
-  setTimeout(()=>{if(video.isConnected&&video.paused)show()},1400);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){video.pause();video.style.opacity='0';return;}
+  // Best effort only. A rejected play promise is not an error state for the page.
+  try{
+    const result=video.play();
+    if(result?.catch)result.catch(()=>{video.style.opacity='0';});
+  }catch{video.style.opacity='0';}
 }
-function closeIntro(){const intro=$("#intro");if(!intro||intro.classList.contains("off"))return;intro.classList.add("off");setTimeout(()=>intro.remove(),950)}
+function closeIntro(){
+  const intro=$('#intro');
+  if(!intro||intro.classList.contains('off'))return;
+  intro.classList.add('off');
+  const video=$('#introVideo');
+  if(video)video.pause();
+  setTimeout(()=>intro.remove(),950);
+}
 function initIntro(){
-  const intro=$("#intro"),video=$("#introVideo"),manual=$("#introPlay");
+  const intro=$('#intro'),video=$('#introVideo');
   if(!intro||!video)return;
   const skip=document.createElement('button');
   skip.type='button';skip.className='intro-skip';skip.textContent='Entrar al estudio →';
   skip.addEventListener('click',closeIntro);
   intro.appendChild(skip);
-  if(matchMedia('(prefers-reduced-motion: reduce)').matches){closeIntro();return}
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){closeIntro();return;}
   video.muted=true;video.defaultMuted=true;video.playsInline=true;
+  video.setAttribute('muted','');
+  video.setAttribute('playsinline','');
   video.setAttribute('webkit-playsinline','');
   let started=false;
-  const showManual=()=>{if(!started&&!intro.classList.contains('off'))manual.hidden=false};
-  const attempt=()=>{
-    const result=video.play();
-    if(result?.then)result.then(()=>{manual.hidden=true}).catch(showManual);
-    else setTimeout(()=>{if(video.paused)showManual()},850);
-  };
-  video.addEventListener('playing',()=>{started=true;manual.hidden=true},{once:true});
+  video.addEventListener('playing',()=>{started=true;},{once:true});
   video.addEventListener('ended',closeIntro,{once:true});
-  video.addEventListener('error',showManual,{once:true});
-  manual.addEventListener('click',()=>{
-    const r=video.play(); // Directly inside the tap handler for iOS gesture permissions.
-    if(r?.then)r.then(()=>{manual.hidden=true}).catch(()=>{manual.textContent='Video no disponible · Entrar al estudio →';manual.onclick=closeIntro});
-  });
-  // Important: don't auto-close after 2.2s on iPhone if autoplay is blocked.
-  // Show a tappable option instead; visitors can always choose Entrar.
-  setTimeout(showManual,1700);
-  setTimeout(()=>{if(started&&!intro.classList.contains('off'))closeIntro()},9000);
+  video.addEventListener('error',closeIntro,{once:true});
+  // If iOS refuses autoplay, do not trap the visitor on a static black intro.
+  const attempt=()=>{
+    if(!intro.isConnected||intro.classList.contains('off'))return;
+    try{
+      const result=video.play();
+      if(result?.catch)result.catch(()=>{
+        // Allow a short, quiet fallback to the poster, then enter automatically.
+        setTimeout(()=>{if(!started)closeIntro();},350);
+      });
+    }catch{closeIntro();}
+  };
+  video.addEventListener('canplay',attempt,{once:true});
   requestAnimationFrame(attempt);
+  // Network and power-saving fallback; successful 4 s intros still finish normally.
+  setTimeout(()=>{if(!started||video.paused)closeIntro();},2300);
+  setTimeout(closeIntro,7500);
 }
-
 initIntro();
 async function loadSiteData(){
   const response=await fetch("data/channels.json",{cache:"no-store"});
