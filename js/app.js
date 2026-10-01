@@ -31,9 +31,11 @@ const getJson=async url=>{
   return getText(url).then(JSON.parse);
 };
 let CH=[];
-let active=1,view="canales",panelOpen=false,railOffset=0,railSettleTimer=0;
+let active=1,listenActive=1,view="canales",panelOpen=false,railOffset=0,railSettleTimer=0;
 function buildChannels(){
   CH=APP.canales.map(c=>({...c,avatar:"",videos:[],subs:0,totalViews:0,nVideos:0,loaded:false,metricsTrusted:false}));
+  const galadriel=CH.findIndex(c=>c.handle==="@Galadriel_Symphony");
+  listenActive=galadriel>=0?galadriel:Math.min(1,Math.max(0,CH.length-1));
 }
 
 function iconPlay(){return `<svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zm6 0h4v14h-4z"/></svg>`}
@@ -49,6 +51,10 @@ function homeAudioBlock(c){
 function timeAudio(s){s=Number.isFinite(s)?Math.max(0,s):0;return `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`}
 function paintRange(input,val,max=100){const pct=max?Math.min(100,Math.max(0,val/max*100)):0;input.style.setProperty("--fill",pct+"%")}
 function syncDiscProgress(card,pct,playing=false){
+  if(card.classList.contains("listen-player")){
+    document.querySelector("#view-escuchar .listen-hero")?.classList.toggle("is-audio-playing",playing);
+    return;
+  }
   const target=card.closest("#homeAudio")?document.querySelector(".record-zone"):card.closest(".listen-disc");
   if(!target)return;
   target.style.setProperty("--disc-progress",pct+"%");
@@ -220,32 +226,98 @@ function renderHero(){
 function placeholderVideos(c){
   return `<p class="empty">${c.loaded?(c.videoError?'No se pudieron cargar los videos de YouTube.':'Este canal no tiene videos públicos disponibles.'):"Cargando videos de YouTube…"} <a href="${esc(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`)}" target="_blank" rel="noopener noreferrer">Abrir canal en YouTube →</a></p>`;
 }
-function renderListen(){
-  const retained=new Map([...document.querySelectorAll("#listenList .audio-card")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
-  const ordered=popularChannels();
-  const intro=$("#listenIntro");
-  const allLoaded=CH.length>0&&CH.every(c=>c.loaded);
-  const metricsReady=CH.some(c=>c.metricsTrusted);
-  if(intro){
-    intro.textContent=metricsReady
-      ?"Lo más escuchado de nuestros universos musicales."
-      :allLoaded
-        ?"No se pudieron cargar las estadísticas de YouTube. Puedes abrir los canales directamente en YouTube."
-        :"Cargando canales…";
-  }
-  $("#listenList").innerHTML=ordered.map(c=>{
-    const vids=[...c.videos].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,4);
-    const stats=c.metricsTrusted
-      ?`<span>${fmt(c.totalViews)} vistas</span><span>${c.subsHidden?"Suscriptores ocultos":fmt(c.subs)+" suscriptores"}</span>`
-      :`<span>${c.loaded?"Estadísticas no disponibles temporalmente":"Cargando canal"}</span>`;
-    const videoHeading=c.videos.length?"Videos con más vistas":"Videos del canal";
-    const videoNote="";
-    return `<article class="listen-row"><div class="listen-channel"><div class="row-id"><span class="listen-disc"><span class="mini-disc" aria-hidden="true">${c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:seal(c)}</span>${audioBlock("Audio del canal",c.audio,c)}${c.audio?audioWave():""}</span><span><h3>${esc(c.nombre)}</h3><small class="channel-stats">${stats}</small></span></div></div><div class="listen-videos"><div class="listen-videos-heading"><span>${videoHeading}</span><small>${videoNote}</small></div><div class="videos">${vids.length?vids.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div></div></article>`;
-  }).join("");
-  document.querySelectorAll("#listenList .audio-card").forEach(card=>{const old=retained.get(card.querySelector("audio")?.getAttribute("src"));if(old)card.replaceWith(old)});
-  document.querySelectorAll('#listenList .row-id img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
-  initPlayers($("#listenList"));
+function listenVideos(c,count=8){
+  return [...(c.videos||[])].sort((a,b)=>c.metricsTrusted?(+b.vistas||0)-(+a.vistas||0):(new Date(b.date||0)-new Date(a.date||0))).slice(0,count);
 }
+function listenAvatar(c,cls=""){
+  return c.avatar
+    ?`<span class="listen-avatar ${cls}"><img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer"></span>`
+    :`<span class="listen-avatar ${cls}">${seal(c)}</span>`;
+}
+function listenCover(c){return listenVideos(c,1)[0]?.thumbnail||""}
+function listenWave(){
+  const heights=[18,24,31,42,56,74,92,66,48,37,28,34,46,62,81,55,35,23,30,44,68,88,58,41,27,21,32,49,72,96,64,43,29,37,51,76,59,38,26,19,28,45,63,84,54,36,25,17];
+  return `<span class="listen-wave-art" aria-hidden="true"><span class="listen-wave-vinyl"><i></i></span><span class="listen-wave-bars">${heights.map((h,i)=>`<i style="--h:${h}%;--d:${(i%9)*-73}ms"></i>`).join("")}</span><svg class="listen-headphones" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+}
+function listenSleeve(c,index,side){
+  const cover=listenCover(c);
+  const media=cover?`<img src="${esc(cover)}" alt="" referrerpolicy="no-referrer">`:`<span class="listen-sleeve-fallback">${esc((c.mono||"GS").replace(/\s+/g,""))}</span>`;
+  return `<button class="listen-side-sleeve listen-side-sleeve--${side}" type="button" data-listen-i="${index}" aria-label="Escuchar ${esc(c.nombre)}">${media}<span>${esc(c.nombre)}</span></button>`;
+}
+function renderListen(){
+  const host=$("#listenList");
+  if(!host||!CH.length)return;
+  const retained=new Map([...host.querySelectorAll("[data-audio-player]")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
+  const ordered=popularChannels();
+  const c=CH[listenActive]||ordered[0]||CH[0];
+  if(!c)return;
+  listenActive=CH.indexOf(c);
+  const pos=Math.max(0,ordered.indexOf(c));
+  const prev=ordered[(pos-1+ordered.length)%ordered.length];
+  const next=ordered[(pos+1)%ordered.length];
+  const prevIndex=CH.indexOf(prev),nextIndex=CH.indexOf(next);
+  const videos=listenVideos(c,8);
+  const heroCover=listenCover(c);
+  const views=c.metricsTrusted?fmt(c.totalViews):"—";
+  const subs=c.metricsTrusted?(c.subsHidden?"Ocultos":fmt(c.subs)):"—";
+  const youtube=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;
+  const avatar=listenAvatar(c,"listen-avatar--active");
+  const coverMedia=heroCover?`<img src="${esc(heroCover)}" alt="Portada visual de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<span class="listen-cover-fallback">${esc(c.nombre)}</span>`;
+  const vinylLabel=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
+  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-channel-cta" type="button" data-audio-play aria-label="Escuchar ${esc(c.nombre)}"><span class="listen-cta-play">${iconPlay()}</span><span>Escuchar canal</span><b aria-hidden="true">→</b></button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><a class="listen-channel-cta" href="${esc(youtube)}" target="_blank" rel="noopener noreferrer"><span class="listen-cta-play">${iconPlay()}</span><span>Ver canal</span><b aria-hidden="true">→</b></a></div>`;
+  const intro=$("#listenIntro");
+  const allLoaded=CH.length>0&&CH.every(ch=>ch.loaded);
+  const metricsReady=CH.some(ch=>ch.metricsTrusted);
+  if(intro)intro.textContent=metricsReady?"Lo más escuchado de nuestros universos musicales.":allLoaded?"No se pudieron cargar las estadísticas de YouTube.":"Cargando canales…";
+  host.innerHTML=`
+    <section class="listen-hero" aria-label="Canal seleccionado: ${esc(c.nombre)}">
+      <div class="listen-showcase">
+        <video class="listen-ambient" autoplay muted loop playsinline preload="metadata" poster="img/galadriel-left-ambient-poster.webp" aria-hidden="true"><source src="media/galadriel-left-ambient.mp4" type="video/mp4"></video>
+        <div class="listen-carousel" aria-label="Selector de canales">
+          <button class="listen-arrow listen-arrow--prev" type="button" data-listen-step="-1" aria-label="Canal anterior">‹</button>
+          ${listenSleeve(prev,prevIndex,"prev")}
+          <div class="listen-feature" aria-live="polite">
+            <div class="listen-vinyl" aria-hidden="true"><span>${vinylLabel}</span></div>
+            <div class="listen-cover">${coverMedia}<span class="listen-cover-shade"></span><span class="listen-cover-brand">${avatar}<small>${esc(c.hook||c.cat)}</small><strong>${esc(c.nombre)}</strong></span></div>
+          </div>
+          ${listenSleeve(next,nextIndex,"next")}
+          <button class="listen-arrow listen-arrow--next" type="button" data-listen-step="1" aria-label="Canal siguiente">›</button>
+        </div>
+      </div>
+      <aside class="listen-detail">
+        <div class="listen-detail-label"><span>Canal activo</span><i></i></div>
+        <div class="listen-detail-title">${avatar}<div><h3>${esc(c.nombre)}</h3><p>${esc(c.hook||c.cat)}</p></div></div>
+        ${audioPlayer}
+        <div class="listen-stats"><span><b>${esc(views)}</b><small>Vistas</small></span><i></i><span><b>${esc(subs)}</b><small>Suscriptores</small></span></div>
+      </aside>
+    </section>
+    <section class="listen-popular" aria-labelledby="listen-popular-title">
+      <div class="listen-popular-head"><div><p>${esc(c.nombre)}</p><h3 id="listen-popular-title">Los 8 más escuchados</h3></div><i></i><a href="${esc(youtube)}" target="_blank" rel="noopener noreferrer">Ver todos los videos →</a></div>
+      <div class="listen-video-grid">${videos.length?videos.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div>
+    </section>`;
+  host.querySelectorAll('.listen-avatar img,.listen-vinyl img,.listen-side-sleeve img,.listen-cover>img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
+  host.querySelectorAll("[data-audio-player]").forEach(card=>{
+    const src=card.querySelector("audio")?.getAttribute("src");
+    const old=src&&retained.get(src);
+    if(old)card.replaceWith(old);
+  });
+  initPlayers(host);
+}
+function setListenActive(i){
+  if(!CH.length)return;
+  const next=(i+CH.length)%CH.length;
+  if(next===listenActive){renderListen();return}
+  document.querySelectorAll('#view-escuchar audio').forEach(a=>a.pause());
+  listenActive=next;
+  renderListen();
+}
+function stepListen(delta){
+  const order=popularChannels();
+  const current=CH[listenActive]||order[0];
+  const pos=Math.max(0,order.indexOf(current));
+  setListenActive(CH.indexOf(order[(pos+delta+order.length)%order.length]));
+}
+
 function shopHref(pack,format){
  const mobile=format==="mobile";
  const body=`Hola, me interesa la colección ${pack.t}.\nFormato: ${mobile?"Celular · 1440 × 3200 px · US$2":"Monitor · 3840 × 2160 px · US$5"}.\nPor favor, confirmen el contenido, disponibilidad, condiciones de uso, método de pago y plazo de entrega antes de realizar la compra.`;
@@ -350,6 +422,8 @@ async function loadChannel(c){
   renderListen();
 }
 document.addEventListener("click",ev=>{
+  const listenStep=ev.target.closest("[data-listen-step]");if(listenStep){stepListen(+listenStep.dataset.listenStep||1);return}
+  const listenChannel=ev.target.closest("[data-listen-i]");if(listenChannel){setListenActive(+listenChannel.dataset.listenI);return}
   if(ev.target.closest("#channelPrev")){moveRail(-1);return}
   if(ev.target.closest("#channelNext")){moveRail(1);return}
   const channel=ev.target.closest("[data-i]");if(channel){setActive(+channel.dataset.i);return}
@@ -357,7 +431,7 @@ document.addEventListener("click",ev=>{
   if(ev.target.closest("#openDisc")||ev.target.closest("#touchDisc")){togglePanel();return}
   if(ev.target.closest("#closePanel"))togglePanel(false);
 });
-document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(view==="canales"&&ev.key==="ArrowLeft")stepChannel(-1);if(view==="canales"&&ev.key==="ArrowRight")stepChannel(1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
+document.addEventListener("keydown",ev=>{if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(view==="canales"&&ev.key==="ArrowLeft")stepChannel(-1);if(view==="canales"&&ev.key==="ArrowRight")stepChannel(1);if(view==="escuchar"&&ev.key==="ArrowLeft")stepListen(-1);if(view==="escuchar"&&ev.key==="ArrowRight")stepListen(1);if(ev.key==="Escape"){if(panelOpen)togglePanel(false);else setView("canales")}});
 let railResizeFrame=0;
 addEventListener("resize",()=>{cancelAnimationFrame(railResizeFrame);railResizeFrame=requestAnimationFrame(()=>applyRailPosition(false))},{passive:true});
 function initStaticBindings(){
