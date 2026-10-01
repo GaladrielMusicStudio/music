@@ -295,16 +295,24 @@
 #view-escuchar .listen-side-logo{display:grid;place-items:center;width:clamp(56px,5.5vw,88px);aspect-ratio:1;flex:0 0 auto}
 #view-escuchar .listen-avatar--side{width:100%;height:100%;border-color:rgba(208,160,86,.7)}
 #view-escuchar .listen-side-sleeve>span.listen-side-name:last-child{position:static;z-index:1;display:block;width:100%;padding:0;color:#e5d8c3;font:400 clamp(11px,.9vw,14px)/1.18 Marcellus,Georgia,serif;text-align:center}
-/* A single visible, accessible play/pause button on the exposed portion of the large disc. */
-#view-escuchar .listen-vinyl-play{position:absolute;z-index:7;right:0;top:51%;transform:translateY(-50%);width:clamp(43px,4.4vw,57px);height:clamp(43px,4.4vw,57px);display:grid;place-items:center;border:1.5px solid #d8b16d;border-radius:50%;background:rgba(19,19,17,.94);color:#f4dfb8;box-shadow:0 5px 18px rgba(0,0,0,.34),0 0 0 4px rgba(210,164,90,.12);transition:background .2s,box-shadow .2s,transform .2s}
-#view-escuchar .listen-vinyl-play svg{width:19px;height:19px;fill:currentColor}
-#view-escuchar .listen-vinyl-play .pause-icon{display:none}
-#view-escuchar .listen-hero.is-audio-playing .listen-vinyl-play .play-icon{display:none}
-#view-escuchar .listen-hero.is-audio-playing .listen-vinyl-play .pause-icon{display:block}
-#view-escuchar .listen-vinyl-play:disabled{opacity:.48;cursor:not-allowed}
-#view-escuchar .listen-vinyl-play:focus-visible{outline:3px solid #eac78e;outline-offset:4px}
-@media(hover:hover) and (pointer:fine){#view-escuchar .listen-vinyl-play:not(:disabled):hover{background:#382817;box-shadow:0 9px 24px rgba(0,0,0,.38),0 0 0 6px rgba(210,164,90,.14);transform:translateY(-50%) scale(1.065)}}
-#view-escuchar .listen-internal-play{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;border:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;pointer-events:none!important}
+/* V19: the actual accessible Play/Pause button is on the small waveform vinyl,
+   precisely where the disc joins the live waveform. The large carousel record
+   is visual only. Keep the button OUTSIDE the half-disc's clip-path. */
+#view-escuchar .listen-wave-play{
+  position:absolute;left:58px;top:50%;z-index:6;
+  width:38px;height:38px;display:grid;place-items:center;
+  transform:translate(-50%,-50%);border:1.5px solid #d8b16d;border-radius:50%;
+  color:#f6dfb7;background:radial-gradient(circle at 35% 26%,#49351e,#171412 72%);
+  box-shadow:0 3px 13px rgba(0,0,0,.52),0 0 0 3px rgba(210,164,90,.13);
+  cursor:pointer;transition:background .2s ease,box-shadow .2s ease,scale .2s ease;
+}
+#view-escuchar .listen-wave-play svg{width:18px;height:18px;fill:currentColor}
+#view-escuchar .listen-wave-play .pause-icon{display:none}
+#view-escuchar .listen-wave-play[aria-pressed="true"] .play-icon{display:none}
+#view-escuchar .listen-wave-play[aria-pressed="true"] .pause-icon{display:block}
+#view-escuchar .listen-wave-play:focus-visible{outline:3px solid #f2cf8d;outline-offset:4px}
+@media(hover:hover) and (pointer:fine){#view-escuchar .listen-wave-play:hover{background:#42301b;box-shadow:0 5px 16px rgba(0,0,0,.58),0 0 0 5px rgba(210,164,90,.19);scale:1.05}}
+#view-escuchar .listen-wave-play:active{scale:.96}
 #view-escuchar .listen-player{padding-bottom:14px;border-bottom:1px solid rgba(206,156,79,.44)}
 #view-escuchar .listen-unavailable-note{margin:9px 0 0;color:#b8a994;font-size:10px}
 #view-escuchar .listen-stats{margin-top:24px}
@@ -315,9 +323,9 @@
 #view-escuchar .listen-video-grid .video-card small{display:block;margin:5px 6px 0;font-size:10px}
 #view-escuchar .listen-video-grid .video-card:focus-visible{outline:2px solid #aa7d43;outline-offset:3px}
 @media(hover:hover) and (pointer:fine){#view-escuchar .listen-video-grid .video-card:hover{border-color:rgba(177,127,65,.38);box-shadow:0 13px 27px rgba(49,36,21,.11);transform:translateY(-3px)}}
-@media(max-width:720px){#view-escuchar .listen-vinyl-play{right:0;top:51%;width:46px;height:46px}}
-@media(max-width:520px){#view-escuchar .listen-vinyl-play{right:0;top:50%;width:42px;height:42px}}
-@media(prefers-reduced-motion:reduce){#view-escuchar .listen-vinyl-play,#view-escuchar .listen-video-grid .video-card{transition:none!important}}
+@media(max-width:720px){#view-escuchar .listen-wave-play{left:49px;width:37px;height:37px}}
+@media(max-width:520px){#view-escuchar .listen-wave-play{left:44px;width:34px;height:34px}#view-escuchar .listen-wave-play svg{width:16px;height:16px}}
+@media(prefers-reduced-motion:reduce){#view-escuchar .listen-wave-play,#view-escuchar .listen-video-grid .video-card{transition:none!important}}
 /* Preserve the approved one-cover mobile carousel: the profile-only styling
    must not override the side-sleeve display:none from the tablet breakpoint. */
 @media(max-width:720px){#view-escuchar .listen-side-sleeve{display:none}}
