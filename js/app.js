@@ -25,9 +25,16 @@ function getText(url){
   if(typeof XMLHttpRequest==="function") return new Promise((resolve,reject)=>{const x=new XMLHttpRequest();x.open("GET",url,true);x.onload=()=>x.status>=200&&x.status<300?resolve(x.responseText):reject(new Error("HTTP "+x.status));x.onerror=()=>reject(new Error("Network error"));x.send()});
   return Promise.reject(new Error("No network API available"));
 }
+// Safari iPhone older than 16.4 has no AbortSignal.timeout().
+// AbortController + setTimeout works on considerably more mobile browsers.
+function fetchWithTimeout(url,options={},milliseconds=15000){
+  const controller=typeof AbortController==="function"?new AbortController():null;
+  const timer=controller?setTimeout(()=>controller.abort(),milliseconds):null;
+  return fetch(url,{...options,...(controller?{signal:controller.signal}:{})}).finally(()=>{if(timer!==null)clearTimeout(timer)});
+}
 const getJson=async url=>{
   if(typeof fetch==="function"){
-    const response=await fetch(url,{signal:AbortSignal.timeout(15000)});
+    const response=await fetchWithTimeout(url,{},15000);
     const data=await response.json().catch(()=>null);
     if(!response.ok){
       const error=new Error(data?.error?.message||`HTTP ${response.status}`);
@@ -119,12 +126,15 @@ function seal(c){
   return `<span class="channel-seal" style="--seal:${esc(c.accent||"#b89146")}"><b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b></span>`;
 }
 function videoCard(v,c={}){
-  const href=v.id?`https://youtu.be/${esc(v.id)}`:(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
+  // On an iPhone or an in-app browser (e.g. WhatsApp), a new tab may be blocked.
+  // Use the normal, non-embedded YouTube watch URL in the same tab on touch devices.
+  const href=v.id?`https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}`:(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
+  const target=matchMedia("(pointer:coarse), (max-width:820px)").matches?"_self":"_blank";
   const media=v.thumbnail?`<img src="${esc(v.thumbnail||"")}" alt="" loading="lazy" onerror="this.closest('.video-card')?.classList.add('is-fallback');this.closest('.thumb').innerHTML='<span class=&quot;fallback-title&quot;>${esc(v.tag||v.title).replace(/'/g,"&#39;")}</span>'">`:`<span class="fallback-title">${esc(v.tag||v.title)}</span>`;
   const cls=v.id?"video-card":"video-card is-fallback";
   const views=c.metricsTrusted?fmt(v.vistas)+" vistas · ":"";
   const label=v.badge||(!c.metricsTrusted&&v.featured?"Selección destacada":fecha(v.date)||"Selección destacada");
-  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${href}" target="_blank" rel="noopener noreferrer"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}${v.dur?`<span class="video-duration">${esc(v.dur)}</span>`:""}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
+  return `<a class="${cls}" style="--thumb-a:${esc(c.accent||"#b89146")};--thumb-b:#111" href="${esc(href)}" target="${target}" rel="noopener noreferrer" aria-label="Abrir en YouTube: ${esc(v.title)}"><span class="thumb" data-mark="${esc((c.mono||"GS").replace(/\s+/g,""))}">${media}${v.dur?`<span class="video-duration">${esc(v.dur)}</span>`:""}</span><b>${esc(v.title)}</b><small>${views}${esc(label)}</small></a>`;
 }
 function railVisibleCount(){return innerWidth<=560?1:innerWidth<=900?2:3}
 function ensureRailWindow(order){
@@ -326,11 +336,11 @@ function drawListenWaveLive(state){
   const bottom=amps.map((a,i)=>[i/(points-1)*w,mid+a*h*.40]);
   ctx.beginPath();ctx.moveTo(top[0][0],top[0][1]);
   for(let i=1;i<top.length;i++){const [x0,y0]=top[i-1],[x1,y1]=top[i];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}
-  ctx.lineTo(top.at(-1)[0],top.at(-1)[1]);
+  ctx.lineTo(top[top.length-1][0],top[top.length-1][1]);
   for(let i=bottom.length-1;i>0;i--){const [x0,y0]=bottom[i],[x1,y1]=bottom[i-1];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}
   ctx.lineTo(bottom[0][0],bottom[0][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();
   ctx.strokeStyle=grad;ctx.lineWidth=1.75;ctx.lineCap="round";ctx.lineJoin="round";ctx.shadowColor="rgba(238,174,75,.42)";ctx.shadowBlur=8;
-  const drawEdge=pts=>{ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}ctx.lineTo(pts.at(-1)[0],pts.at(-1)[1]);ctx.stroke()};
+  const drawEdge=pts=>{ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}ctx.lineTo(pts[pts.length-1][0],pts[pts.length-1][1]);ctx.stroke()};
   drawEdge(top);drawEdge(bottom);
   ctx.shadowBlur=0;ctx.strokeStyle="rgba(237,184,91,.32)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,mid);ctx.lineTo(w,mid);ctx.stroke();
 }
@@ -381,7 +391,8 @@ function renderListen(){
   host.innerHTML=`
     <section class="listen-hero" aria-label="Canal seleccionado: ${esc(c.nombre)}">
       <div class="listen-showcase">
-        <video class="listen-ambient" autoplay muted loop playsinline preload="metadata" poster="img/galadriel-left-ambient-poster.webp" aria-hidden="true"><source src="media/galadriel-left-ambient.mp4" type="video/mp4"></video>
+        <video class="listen-ambient" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="img/galadriel-left-ambient-poster.webp" aria-hidden="true"><source src="media/galadriel-left-ambient.mp4" type="video/mp4"></video>
+        <button class="ambient-play-toggle" type="button" data-ambient-play hidden aria-label="Activar fondo animado">▶ Activar fondo</button>
         <div class="listen-carousel" aria-label="Selector de canales">
           <button class="listen-arrow listen-arrow--prev" type="button" data-listen-step="-1" aria-label="Canal anterior">‹</button>
           ${listenSleeve(prev,prevIndex,"prev")}
@@ -407,8 +418,9 @@ function renderListen(){
     </section>`;
   if(retainedAmbient){
     host.querySelector("video.listen-ambient")?.replaceWith(retainedAmbient);
-    if(retainedAmbient.paused)retainedAmbient.play().catch(()=>{});
+    // Resume through the shared Safari-compatible handler after reinserting. 
   }
+  initAmbientVideo(host.querySelector('video.listen-ambient'));
   host.querySelectorAll('.listen-avatar img,.listen-vinyl img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
   host.querySelectorAll("[data-audio-player]").forEach(card=>{
     const src=card.querySelector("audio")?.getAttribute("src");
@@ -479,6 +491,7 @@ function setView(next,fromHistory=false){
  document.body.classList.toggle("view-open",view!=="canales");
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
  document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"true":"false"));
+ requestAnimationFrame(()=>initAmbientVideo(next==="canales"?document.querySelector("#canales .home-left-bg-video"):next==="escuchar"?document.querySelector("#view-escuchar .listen-ambient"):null));
  if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
  if(changed){
   window.scrollTo({top:0,behavior:'auto'});
@@ -590,41 +603,71 @@ function initStaticBindings(){
     initPlayers(studioLower);
   }
 }
+// Mobile Safari and WhatsApp WebViews may refuse muted autoplay (notably in
+// Low Power Mode). Preserve the poster, and provide a genuine user-gesture Play.
+function initAmbientVideo(video){
+  if(!video)return;
+  const toggle=()=>video.closest('.home-left,.listen-showcase')?.querySelector('[data-ambient-play]');
+  const show=()=>{const b=toggle();if(b&&!b.disabled)b.hidden=false};
+  const hide=()=>{const b=toggle();if(b)b.hidden=true};
+  video.muted=true;video.defaultMuted=true;video.playsInline=true;
+  video.setAttribute('webkit-playsinline','');
+  if(!video.dataset.ambientBound){
+    video.dataset.ambientBound='1';
+    video.addEventListener('playing',hide);
+    video.addEventListener('error',()=>{const b=toggle();if(b){b.hidden=false;b.disabled=true;b.textContent='Fondo estático';}});
+  }
+  const b=toggle();
+  if(b&&!b.dataset.ambientBound){
+    b.dataset.ambientBound='1';
+    b.addEventListener('click',()=>{
+      // Only an explicit click overrides the visitor's reduced-motion setting.
+      video.classList.add('motion-manual');
+      const p=video.play();
+      if(p?.then)p.then(hide).catch(()=>{b.hidden=false;b.textContent='No disponible';});
+      else setTimeout(()=>{video.paused?show():hide()},650);
+    });
+  }
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches&&!video.classList.contains('motion-manual')){
+    video.pause();show();return;
+  }
+  // No autoplay guarantee on iPhone; this only makes a best effort.
+  const result=video.play();
+  if(result?.then)result.then(hide).catch(show);
+  setTimeout(()=>{if(video.isConnected&&video.paused)show()},1400);
+}
 function closeIntro(){const intro=$("#intro");if(!intro||intro.classList.contains("off"))return;intro.classList.add("off");setTimeout(()=>intro.remove(),950)}
 function initIntro(){
-  const intro=$("#intro"),video=$("#introVideo");
-  if(!intro)return;
-  // The intro is a real opening sequence: show it once on every fresh page load.
-  // SPA tab changes do not reload the document, so it will not replay while navigating the site.
-  intro.insertAdjacentHTML('beforeend','<button class="intro-skip">Entrar al estudio →</button>');
-  intro.addEventListener("click",closeIntro,{once:true});
-  addEventListener("keydown",closeIntro,{once:true});
-  if(matchMedia("(prefers-reduced-motion: reduce)").matches){setTimeout(closeIntro,500);return}
-  const mobile=matchMedia("(max-width: 820px), (pointer: coarse)").matches;
+  const intro=$("#intro"),video=$("#introVideo"),manual=$("#introPlay");
+  if(!intro||!video)return;
+  const skip=document.createElement('button');
+  skip.type='button';skip.className='intro-skip';skip.textContent='Entrar al estudio →';
+  skip.addEventListener('click',closeIntro);
+  intro.appendChild(skip);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){closeIntro();return}
+  video.muted=true;video.defaultMuted=true;video.playsInline=true;
+  video.setAttribute('webkit-playsinline','');
   let started=false;
-  let fallback=setTimeout(closeIntro,7000);
-  if(video){
-    video.muted=true;
-    video.defaultMuted=true;
-    video.playsInline=true;
-    try{video.currentTime=0}catch{}
-    const markStarted=()=>{started=true};
-    video.addEventListener("playing",markStarted,{once:true});
-    video.addEventListener("timeupdate",markStarted,{once:true});
-    setTimeout(()=>{if(mobile&&!started)closeIntro()},2200);
-    video.addEventListener("ended",()=>{clearTimeout(fallback);closeIntro()},{once:true});
-    video.addEventListener("error",()=>{clearTimeout(fallback);setTimeout(closeIntro,1200)},{once:true});
-    const tryPlay=()=>{
-      const result=video.play?.();
-      if(result&&typeof result.catch==="function")result.catch(()=>{
-        // Some browsers need a second autoplay attempt after metadata is available.
-        video.addEventListener("canplay",()=>video.play?.().catch(()=>{if(mobile)closeIntro()}),{once:true});
-      });
-    };
-    if(video.readyState>=2)requestAnimationFrame(tryPlay);
-    else video.addEventListener("loadeddata",tryPlay,{once:true});
-  }
+  const showManual=()=>{if(!started&&!intro.classList.contains('off'))manual.hidden=false};
+  const attempt=()=>{
+    const result=video.play();
+    if(result?.then)result.then(()=>{manual.hidden=true}).catch(showManual);
+    else setTimeout(()=>{if(video.paused)showManual()},850);
+  };
+  video.addEventListener('playing',()=>{started=true;manual.hidden=true},{once:true});
+  video.addEventListener('ended',closeIntro,{once:true});
+  video.addEventListener('error',showManual,{once:true});
+  manual.addEventListener('click',()=>{
+    const r=video.play(); // Directly inside the tap handler for iOS gesture permissions.
+    if(r?.then)r.then(()=>{manual.hidden=true}).catch(()=>{manual.textContent='Video no disponible · Entrar al estudio →';manual.onclick=closeIntro});
+  });
+  // Important: don't auto-close after 2.2s on iPhone if autoplay is blocked.
+  // Show a tappable option instead; visitors can always choose Entrar.
+  setTimeout(showManual,1700);
+  setTimeout(()=>{if(started&&!intro.classList.contains('off'))closeIntro()},9000);
+  requestAnimationFrame(attempt);
 }
+
 initIntro();
 async function loadSiteData(){
   const response=await fetch("data/channels.json",{cache:"no-store"});
@@ -637,7 +680,7 @@ async function boot(){
   try{
     await loadSiteData();
     const audioSources=[...new Set([...APP.canales.map(c=>c.audio),APP.studioAudio].filter(Boolean))];
-    await Promise.allSettled(audioSources.map(async src=>{try{const r=await fetch(src,{method:'HEAD',signal:AbortSignal.timeout(4000)});if(!r.ok){APP.canales.forEach(c=>{if(c.audio===src)c.audio=''});if(APP.studioAudio===src)APP.studioAudio=''}}catch{}}));
+    await Promise.allSettled(audioSources.map(async src=>{try{const r=await fetchWithTimeout(src,{method:'HEAD'},4000);if(!r.ok){APP.canales.forEach(c=>{if(c.audio===src)c.audio=''});if(APP.studioAudio===src)APP.studioAudio=''}}catch{}}));
     buildChannels();
     initStaticBindings();renderShop();renderHero();renderListen();setView(location.hash.slice(1)||"canales",true);
     await Promise.allSettled(CH.map(loadChannel));renderListen();
