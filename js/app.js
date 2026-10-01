@@ -52,7 +52,13 @@ function timeAudio(s){s=Number.isFinite(s)?Math.max(0,s):0;return `${Math.floor(
 function paintRange(input,val,max=100){const pct=max?Math.min(100,Math.max(0,val/max*100)):0;input.style.setProperty("--fill",pct+"%")}
 function syncDiscProgress(card,pct,playing=false){
   if(card.classList.contains("listen-player")){
-    document.querySelector("#view-escuchar .listen-hero")?.classList.toggle("is-audio-playing",playing);
+    const hero=document.querySelector("#view-escuchar .listen-hero");
+    hero?.classList.toggle("is-audio-playing",playing);
+    const vinylPlay=hero?.querySelector("[data-listen-vinyl-play]");
+    if(vinylPlay){
+      vinylPlay.setAttribute("aria-pressed",String(playing));
+      vinylPlay.setAttribute("aria-label",playing?"Pausar muestra del canal":"Reproducir muestra del canal");
+    }
     return;
   }
   const target=card.closest("#homeAudio")?document.querySelector(".record-zone"):card.closest(".listen-disc");
@@ -84,7 +90,7 @@ function initPlayers(root=document){
         card.classList.add("is-open","is-loading");
         if(card.classList.contains("listen-player")){const waveState=ensureListenAnalyser(card,audio);waveState?.ctx?.resume?.().catch(()=>{})}
         audio.play().catch(fail);
-      }else{audio.pause();card.classList.remove("is-open")}
+      }else{audio.pause();card.classList.remove("is-open");update()}
     });
     seek?.addEventListener("input",()=>{audio.currentTime=+seek.value||0;update()});
     vol?.addEventListener("input",()=>{audio.volume=+vol.value;paintRange(vol,+vol.value,1)});
@@ -327,9 +333,7 @@ function stopListenWave(audio){
   const state=listenWaveStates.get(audio);if(!state)return;cancelAnimationFrame(state.raf);state.raf=0;drawListenWaveRest(state.canvas);
 }
 function listenSleeve(c,index,side){
-  const cover=listenCover(c);
-  const media=cover?`<img src="${esc(cover)}" alt="" referrerpolicy="no-referrer">`:`<span class="listen-sleeve-fallback">${esc((c.mono||"GS").replace(/\s+/g,""))}</span>`;
-  return `<button class="listen-side-sleeve listen-side-sleeve--${side}" type="button" data-listen-i="${index}" aria-label="Escuchar ${esc(c.nombre)}">${media}<span>${esc(c.nombre)}</span></button>`;
+  return `<button class="listen-side-sleeve listen-side-sleeve--${side}" type="button" data-listen-i="${index}" aria-label="Seleccionar ${esc(c.nombre)}"><span class="listen-side-logo">${listenAvatar(c,"listen-avatar--side")}</span><span class="listen-side-name">${esc(c.nombre)}</span></button>`;
 }
 function renderListen(){
   const host=$("#listenList");
@@ -344,14 +348,15 @@ function renderListen(){
   const next=ordered[(pos+1)%ordered.length];
   const prevIndex=CH.indexOf(prev),nextIndex=CH.indexOf(next);
   const videos=listenVideos(c,8);
-  const heroCover=listenCover(c);
   const views=c.metricsTrusted?fmt(c.totalViews):"—";
   const subs=c.metricsTrusted?(c.subsHidden?"Ocultos":fmt(c.subs)):"—";
   const youtube=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;
   const avatar=listenAvatar(c,"listen-avatar--active");
-  const coverMedia=heroCover?`<img src="${esc(heroCover)}" alt="Portada visual de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<span class="listen-cover-fallback">${esc(c.nombre)}</span>`;
+  const sleeveIdentity=listenAvatar(c,"listen-avatar--cover");
   const vinylLabel=c.avatar?`<img class="listen-vinyl-avatar" src="${esc(c.avatar)}" alt="Foto de perfil de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
-  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-channel-cta" type="button" data-audio-play aria-label="Escuchar muestra de ${esc(c.nombre)}"><span class="listen-cta-play">${iconPlay()}</span><span data-audio-label>Escuchar muestra</span><b aria-hidden="true">→</b></button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><a class="listen-channel-cta" href="${esc(youtube)}" target="_blank" rel="noopener noreferrer"><span class="listen-cta-play">${iconPlay()}</span><span>Ver canal</span><b aria-hidden="true">→</b></a></div>`;
+  // The sole visible audio control is positioned on the exposed vinyl. The internal
+  // control preserves the existing player lifecycle when API data re-renders the hero.
+  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-internal-play" type="button" data-audio-play tabindex="-1" aria-hidden="true">${iconPlay()}</button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><p class="listen-unavailable-note">Muestra de audio no disponible</p></div>`;
   const intro=$("#listenIntro");
   const allLoaded=CH.length>0&&CH.every(ch=>ch.loaded);
   const metricsReady=CH.some(ch=>ch.metricsTrusted);
@@ -365,7 +370,8 @@ function renderListen(){
           ${listenSleeve(prev,prevIndex,"prev")}
           <div class="listen-feature" aria-live="polite">
             <div class="listen-vinyl" aria-hidden="true"><span>${vinylLabel}</span></div>
-            <div class="listen-cover">${coverMedia}<span class="listen-cover-shade"></span><span class="listen-cover-brand">${avatar}<small>${esc(c.hook||c.cat)}</small><strong>${esc(c.nombre)}</strong></span></div>
+            <div class="listen-cover" aria-label="Carátula del canal ${esc(c.nombre)}"><div class="listen-cover-mark">${sleeveIdentity}</div></div>
+            <button class="listen-vinyl-play" data-listen-vinyl-play type="button" aria-label="Reproducir muestra de ${esc(c.nombre)}" aria-pressed="false" ${c.audio?'':'disabled'}>${iconPlay()}</button>
           </div>
           ${listenSleeve(next,nextIndex,"next")}
           <button class="listen-arrow listen-arrow--next" type="button" data-listen-step="1" aria-label="Canal siguiente">›</button>
@@ -382,13 +388,18 @@ function renderListen(){
       <div class="listen-popular-head"><div><p>${esc(c.nombre)}</p><h3 id="listen-popular-title">Los 8 más escuchados</h3></div><i></i><a href="${esc(youtube)}" target="_blank" rel="noopener noreferrer">Ver todos los videos →</a></div>
       <div class="listen-video-grid">${videos.length?videos.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div>
     </section>`;
-  host.querySelectorAll('.listen-avatar img,.listen-vinyl img,.listen-side-sleeve img,.listen-cover>img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
+  host.querySelectorAll('.listen-avatar img,.listen-vinyl img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
   host.querySelectorAll("[data-audio-player]").forEach(card=>{
     const src=card.querySelector("audio")?.getAttribute("src");
     const old=src&&retained.get(src);
     if(old)card.replaceWith(old);
   });
   initPlayers(host);
+  // A previous audio element may have been retained while YouTube stats refreshed.
+  // Bring the newly rendered vinyl button back into sync with that same player.
+  const currentPlayer=host.querySelector('.listen-player[data-audio-player]');
+  const currentAudio=currentPlayer?.querySelector('audio');
+  if(currentAudio)syncDiscProgress(currentPlayer,0,!currentAudio.paused&&!currentAudio.ended);
 }
 function setListenActive(i){
   if(!CH.length)return;
@@ -509,6 +520,11 @@ async function loadChannel(c){
   renderListen();
 }
 document.addEventListener("click",ev=>{
+  const vinylPlay=ev.target.closest("[data-listen-vinyl-play]");
+  if(vinylPlay){
+    if(!vinylPlay.disabled)document.querySelector("#view-escuchar .listen-player [data-audio-play]")?.click();
+    return;
+  }
   const listenStep=ev.target.closest("[data-listen-step]");if(listenStep){stepListen(+listenStep.dataset.listenStep||1);return}
   const listenChannel=ev.target.closest("[data-listen-i]");if(listenChannel){setListenActive(+listenChannel.dataset.listenI);return}
   if(ev.target.closest("#channelPrev")){moveRail(-1);return}
