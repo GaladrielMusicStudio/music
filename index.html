@@ -3,38 +3,43 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Galadriel Music Studio — Música sonora para otros mundos</title>
-<meta name="description" content="Galadriel Music Studio compone música sonora, épica y emocional para universos originales: orquesta, adoración, cine, entrenamiento, romance, anime y cultura visual.">
+<title>Galadriel Music Studio | Música para otros mundos</title>
+<meta name="description" content="Música cinematográfica y emocional para otros mundos. Explora orquesta, culturas, cine y los universos musicales de Galadriel Music Studio.">
 <meta name="theme-color" content="#F4EFE6">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://www.googleapis.com https://api.allorigins.win; frame-src https://www.youtube-nocookie.com; form-action https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://galadrielmusicstudio.github.io/music/">
 <meta name="robots" content="index, follow">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Galadriel Music Studio">
-<meta property="og:description" content="Música sonora, épica y emocional para universos originales, con una estética editorial premium.">
+<meta property="og:title" content="Galadriel Music Studio | Música para otros mundos">
+<meta property="og:description" content="Descubre nuestros universos musicales: orquesta, cine, culturas y música emocional. Escucha muestras y explora cada canal.">
 <meta property="og:url" content="https://galadrielmusicstudio.github.io/music/">
 <meta property="og:site_name" content="Galadriel Music Studio">
 <meta property="og:locale" content="es_PE">
-<meta property="og:image" content="https://galadrielmusicstudio.github.io/music/og.jpg?v=20260926c">
+<meta property="og:image" content="https://galadrielmusicstudio.github.io/music/og.jpg?v=20261001-share23">
+<meta property="og:image:secure_url" content="https://galadrielmusicstudio.github.io/music/og.jpg?v=20261001-share23">
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Galadriel Music Studio - universo sonoro cinematografico">
+<meta property="og:image:alt" content="Galadriel Music Studio: tocadiscos de mármol y oro sobre fondo marfil, panel carbón y el lema Música para otros mundos">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://galadrielmusicstudio.github.io/music/og.jpg?v=20260926c">
+<meta name="twitter:title" content="Galadriel Music Studio | Música para otros mundos">
+<meta name="twitter:description" content="Descubre nuestros universos musicales: orquesta, cine, culturas y música emocional.">
+<meta name="twitter:image" content="https://galadrielmusicstudio.github.io/music/og.jpg?v=20261001-share23">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='16' fill='%23080705'/%3E%3Ccircle cx='16' cy='16' r='10' fill='none' stroke='%23C8A76B' stroke-width='.8'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23F4EFE6'/%3E%3Ccircle cx='16' cy='16' r='1.15' fill='%23C8A76B'/%3E%3C/svg%3E">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Organization","name":"Galadriel Music Studio","url":"https://galadrielmusicstudio.github.io/music/","sameAs":["https://www.youtube.com/@Galadriel_Symphony","https://www.youtube.com/@EcosDelAnimeMusic","https://www.youtube.com/@Heavenly_Echoes_Sounds","https://www.youtube.com/@ForgedInSilenceMusic","https://www.youtube.com/@ReelEmpiresMusic","https://open.spotify.com/intl-es/artist/4nYRh691c9rFwYWgybuZY1","https://tidal.com/artist/80259415","https://instagram.com/galadrielsymphony"]}
 </script>
 <link rel="stylesheet" href="css/fonts.css?v=20260928">
 <link rel="stylesheet" href="css/styles.css?v=20260928b">
-<link rel="stylesheet" href="css/turntable.css?v=14">
+<link rel="stylesheet" href="css/turntable.css?v=23">
 <link rel="stylesheet" href="css/canales-v15.css?v=15">
 <link rel="stylesheet" href="css/escuchar-v16.css?v=20">
 </head>
 <body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
-  <video class="intro-video" id="introVideo" src="media/galadriel-intro.mp4" autoplay muted playsinline preload="auto"></video>
+  <video class="intro-video" id="introVideo" src="media/galadriel-intro.mp4" poster="img/galadriel-intro-poster.jpg" autoplay muted playsinline webkit-playsinline preload="metadata"></video>
+  <button class="intro-play" id="introPlay" type="button" hidden>▶ Ver presentación</button>
 </div>
 <div class="page">
   <header class="top">
@@ -54,7 +59,7 @@
     <div class="home-grid">
       <section class="home-left" aria-labelledby="titulo">
         <div class="home-left-ambient" aria-hidden="true">
-          <video class="home-left-bg-video" autoplay muted loop playsinline preload="auto" poster="img/galadriel-left-ambient-poster.webp">
+          <video class="home-left-bg-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="img/galadriel-left-ambient-poster.webp">
             <source src="media/galadriel-left-ambient.mp4" type="video/mp4">
           </video>
         </div>
@@ -124,6 +129,7 @@
         </div>
         <p class="sample-caption"></p>
 </div>
+        <button class="ambient-play-toggle" type="button" data-ambient-play hidden aria-label="Activar fondo animado">▶ Activar fondo</button>
         <div class="home-signature"><i aria-hidden="true"></i><span>Música<br>para otros mundos</span></div>
       </section>
 
@@ -211,6 +217,6 @@
 <footer class="site-footer"><span>Galadriel Music Studio</span><a href="privacidad.html">Privacidad</a><a href="#estudio" data-view="estudio">Contacto</a></footer></div>
 <dialog id="productPreview"><button class="preview-close" aria-label="Cerrar vista previa">Cerrar ×</button><img alt=""><p></p></dialog>
 <script src="js/turntable.js?v=20260928b" defer></script>
-<script src="js/app.js?v=20261001v21" defer></script>
+<script src="js/app.js?v=20261001v23" defer></script>
 </body>
 </html>
