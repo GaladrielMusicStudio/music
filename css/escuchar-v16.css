@@ -1,4 +1,4 @@
-/* ESCUCHAR V17 — editorial music archive
+/* ESCUCHAR V18 — editorial music archive
    Isolated from CANALES so its responsive system cannot affect the turntable page. */
 
 #view-escuchar{
@@ -277,3 +277,47 @@
 #view-escuchar .listen-hero.is-audio-playing .listen-vinyl{animation:listenVinylSpin 9s linear infinite}
 @keyframes listenVinylSpin{to{transform:rotate(355deg)}}
 @media (prefers-reduced-motion:reduce){#view-escuchar .listen-hero.is-audio-playing .listen-vinyl{animation:none!important}}
+
+
+/* V18: The selected sleeve carries only the channel's profile mark, never a video image. */
+#view-escuchar .listen-cover{
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 44% 37%,#25282a 0%,#111417 56%,#080a0c 100%);
+  border:1px solid rgba(197,155,87,.45);
+}
+#view-escuchar .listen-cover::before{content:"";position:absolute;inset:7px;border:1px solid rgba(213,172,101,.12);border-radius:2px;pointer-events:none}
+#view-escuchar .listen-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.20) 100%);pointer-events:none}
+#view-escuchar .listen-cover-mark{width:57%;aspect-ratio:1;display:grid;place-items:center;position:relative;z-index:1}
+#view-escuchar .listen-avatar--cover{width:100%;height:100%;border:1px solid rgba(218,174,97,.62);box-shadow:0 0 0 8px rgba(206,159,85,.06),0 0 0 9px rgba(206,159,85,.26),0 9px 28px rgba(0,0,0,.45)}
+#view-escuchar .listen-avatar--cover .channel-seal{font-size:clamp(16px,2vw,28px)}
+#view-escuchar .listen-side-sleeve{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(circle at 45% 32%,#292a29,#111416 75%);padding:14px 8px;opacity:.70}
+#view-escuchar .listen-side-sleeve::after{display:none}
+#view-escuchar .listen-side-logo{display:grid;place-items:center;width:clamp(56px,5.5vw,88px);aspect-ratio:1;flex:0 0 auto}
+#view-escuchar .listen-avatar--side{width:100%;height:100%;border-color:rgba(208,160,86,.7)}
+#view-escuchar .listen-side-sleeve>span.listen-side-name:last-child{position:static;z-index:1;display:block;width:100%;padding:0;color:#e5d8c3;font:400 clamp(11px,.9vw,14px)/1.18 Marcellus,Georgia,serif;text-align:center}
+/* A single visible, accessible play/pause button on the exposed portion of the large disc. */
+#view-escuchar .listen-vinyl-play{position:absolute;z-index:7;right:0;top:51%;transform:translateY(-50%);width:clamp(43px,4.4vw,57px);height:clamp(43px,4.4vw,57px);display:grid;place-items:center;border:1.5px solid #d8b16d;border-radius:50%;background:rgba(19,19,17,.94);color:#f4dfb8;box-shadow:0 5px 18px rgba(0,0,0,.34),0 0 0 4px rgba(210,164,90,.12);transition:background .2s,box-shadow .2s,transform .2s}
+#view-escuchar .listen-vinyl-play svg{width:19px;height:19px;fill:currentColor}
+#view-escuchar .listen-vinyl-play .pause-icon{display:none}
+#view-escuchar .listen-hero.is-audio-playing .listen-vinyl-play .play-icon{display:none}
+#view-escuchar .listen-hero.is-audio-playing .listen-vinyl-play .pause-icon{display:block}
+#view-escuchar .listen-vinyl-play:disabled{opacity:.48;cursor:not-allowed}
+#view-escuchar .listen-vinyl-play:focus-visible{outline:3px solid #eac78e;outline-offset:4px}
+@media(hover:hover) and (pointer:fine){#view-escuchar .listen-vinyl-play:not(:disabled):hover{background:#382817;box-shadow:0 9px 24px rgba(0,0,0,.38),0 0 0 6px rgba(210,164,90,.14);transform:translateY(-50%) scale(1.065)}}
+#view-escuchar .listen-internal-play{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;border:0!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;pointer-events:none!important}
+#view-escuchar .listen-player{padding-bottom:14px;border-bottom:1px solid rgba(206,156,79,.44)}
+#view-escuchar .listen-unavailable-note{margin:9px 0 0;color:#b8a994;font-size:10px}
+#view-escuchar .listen-stats{margin-top:24px}
+/* Four-by-two grid with light editorial tiles: defined edges, quiet shadows, no heavy cards. */
+#view-escuchar .listen-video-grid .video-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid rgba(132,102,68,.14);border-radius:12px;padding:6px 6px 12px;background:rgba(255,253,248,.74);box-shadow:0 5px 15px rgba(49,36,21,.045);transition:border-color .24s,box-shadow .24s,transform .24s}
+#view-escuchar .listen-video-grid .thumb{border-radius:8px;box-shadow:none;overflow:hidden}
+#view-escuchar .listen-video-grid .video-card b{min-height:0;margin:8px 6px 0;font-size:12px;line-height:1.35}
+#view-escuchar .listen-video-grid .video-card small{display:block;margin:5px 6px 0;font-size:10px}
+#view-escuchar .listen-video-grid .video-card:focus-visible{outline:2px solid #aa7d43;outline-offset:3px}
+@media(hover:hover) and (pointer:fine){#view-escuchar .listen-video-grid .video-card:hover{border-color:rgba(177,127,65,.38);box-shadow:0 13px 27px rgba(49,36,21,.11);transform:translateY(-3px)}}
+@media(max-width:720px){#view-escuchar .listen-vinyl-play{right:0;top:51%;width:46px;height:46px}}
+@media(max-width:520px){#view-escuchar .listen-vinyl-play{right:0;top:50%;width:42px;height:42px}}
+@media(prefers-reduced-motion:reduce){#view-escuchar .listen-vinyl-play,#view-escuchar .listen-video-grid .video-card{transition:none!important}}
+/* Preserve the approved one-cover mobile carousel: the profile-only styling
+   must not override the side-sleeve display:none from the tablet breakpoint. */
+@media(max-width:720px){#view-escuchar .listen-side-sleeve{display:none}}
