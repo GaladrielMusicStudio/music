@@ -1611,57 +1611,136 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
 }
 
 /* ======================================================================
-   CANALES v13 — responsive guardrail for the turntable scene
-   Fixes the desktop/tablet dead-zone where the turntable could collapse to
-   a miniature while the split layout remained active. The artwork itself is
-   untouched: we change only when the two-column composition is allowed.
+   CANALES v14 — continuous responsive handoff
+   Goal: remove the 901–1180 dead-zone introduced in v13. The premium split
+   remains active while both columns still have usable room; once that is no
+   longer true, the layout switches directly to the proven vertical tablet
+   composition. There is no intermediate state where the turntable becomes a
+   thumbnail or floats beside the title.
    ====================================================================== */
 
-/* Keep the premium split only while both columns can sustain their content.
-   The left stage is never allowed to shrink below a professional product
-   presentation size. */
-@media (min-width:1181px){
+/* Desktop + narrow desktop: keep the approved split. The left stage may
+   scale down only to a useful presentation size; it is never given a hard
+   min-width that can force overflow or trigger a strange secondary layout. */
+@media (min-width:1041px){
   body:not(.view-open) #canales .home-grid{
-    grid-template-columns:minmax(650px,61fr) minmax(480px,39fr)!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,54fr) minmax(410px,46fr)!important;
+    height:clamp(700px,58vw,860px)!important;
+    min-height:0!important;
+  }
+
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 54%,#0f1318 54% 100%)!important;
+  }
+
+  #canales .home-left{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto minmax(0,1fr) auto!important;
+    min-width:0!important;
+    min-height:0!important;
+    padding-left:clamp(20px,2.7vw,44px)!important;
+    padding-right:clamp(20px,2.7vw,44px)!important;
+  }
+
+  #canales .hero-copy{
+    width:min(100%,820px)!important;
+    margin-inline:auto!important;
+    min-width:0!important;
+  }
+
+  #canales h1>.brand-word{
+    font-size:clamp(52px,5.15vw,80px)!important;
+  }
+  #canales h1 small{
+    font-size:clamp(10px,.95vw,13px)!important;
+  }
+  #canales .hero-statement{
+    font-size:clamp(12px,1.05vw,15px)!important;
   }
 
   #canales .record-zone.tt-zone{
-    width:min(96%,980px)!important;
-    min-width:560px;
-    max-width:980px;
-    justify-self:center;
+    position:relative!important;
+    width:min(100%,820px)!important;
+    min-width:0!important;
+    max-width:820px!important;
+    align-self:end!important;
+    justify-self:center!important;
+    left:auto!important;
+    transform:none!important;
+    margin:clamp(8px,1.2vw,16px) auto -2px!important;
   }
-
   #canales .tt-zone .tt-stage{
     width:100%!important;
-    min-width:0;
-    aspect-ratio:1240/590;
+    min-width:0!important;
+    aspect-ratio:1240/590!important;
+  }
+
+  #canales .home-signature{
+    align-self:end!important;
+    margin-top:clamp(4px,.7vw,10px)!important;
+  }
+
+  #canales .home-right{
+    min-width:0!important;
+    min-height:0!important;
+    padding-left:clamp(18px,2.2vw,30px)!important;
+    padding-right:clamp(18px,2.2vw,30px)!important;
+  }
+  #canales .channel-browser{
+    margin-top:clamp(78px,8.5vw,112px)!important;
+  }
+  #canales .channel-info-wrap{
+    margin-top:clamp(28px,3vw,42px)!important;
   }
 }
 
-/* Tablet / narrow-desktop mode begins BEFORE the left column can crush the
-   turntable. This is intentional: reflow is preferable to shrinking the hero
-   object into a thumbnail. */
-@media (max-width:1180px) and (min-width:901px){
+/* Large desktop returns to the approved wider 61/39 balance. */
+@media (min-width:1321px){
+  body:not(.view-open) #canales .home-grid{
+    grid-template-columns:minmax(0,61fr) minmax(480px,39fr)!important;
+    height:clamp(720px,49vw,940px)!important;
+  }
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
+    background:linear-gradient(90deg,#efe4d5 0 61%,#0f1318 61% 100%)!important;
+  }
+  #canales .record-zone.tt-zone{
+    width:min(96%,980px)!important;
+    max-width:980px!important;
+  }
+  #canales h1>.brand-word{
+    font-size:clamp(68px,5.25vw,126px)!important;
+  }
+}
+
+/* True tablet handoff. This is the ONLY intermediate reflow: title, stage and
+   signature remain in one vertical column, then the dark channel panel follows.
+   Explicit one-column placement prevents legacy rules from putting the
+   turntable beside the title. */
+@media (max-width:1040px) and (min-width:901px){
   body:not(.view-open) .page{
-    width:calc(100% - 28px);
-    margin:14px auto;
-    min-height:0;
+    width:calc(100% - 28px)!important;
+    margin:14px auto!important;
+    min-height:0!important;
   }
 
-  body:not(.view-open) .top{
+  body:not(.view-open) .top,
+  body:not(.view-open) .site-footer{
     background:#efe4d5!important;
   }
   body:not(.view-open) .nav button{color:#6d6257!important}
   body:not(.view-open) .nav button:hover,
   body:not(.view-open) .nav button[aria-current=true]{color:#1b1713!important}
-  body:not(.view-open) .nav button[aria-current=true]:after{background:#b88a4a}
+  body:not(.view-open) .nav button[aria-current=true]:after{background:#b88a4a!important}
 
   body:not(.view-open) #canales.screen{
     display:block!important;
+    width:100%!important;
     min-height:0!important;
   }
-
   body:not(.view-open) #canales .home-grid{
     display:block!important;
     height:auto!important;
@@ -1670,74 +1749,120 @@ body.view-open .nav button[aria-current=true]{color:var(--ink)}
 
   #canales .home-left{
     display:grid!important;
-    grid-template-rows:auto auto auto;
-    min-height:680px;
-    padding:clamp(34px,4vw,52px) clamp(28px,5vw,58px) 26px;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto auto!important;
+    grid-auto-flow:row!important;
+    min-height:0!important;
+    padding:clamp(34px,4.5vw,52px) clamp(28px,5vw,56px) 28px!important;
+  }
+  #canales .hero-copy,
+  #canales .record-zone.tt-zone,
+  #canales .home-signature{
+    grid-column:1!important;
+    position:relative!important;
+    left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
+    transform:none!important;
   }
 
   #canales .hero-copy{
-    width:min(100%,850px);
-    margin:0 auto;
+    width:min(100%,820px)!important;
+    margin:0 auto!important;
   }
   #canales h1>.brand-word{
-    font-size:clamp(58px,7vw,82px)!important;
+    font-size:clamp(58px,7.2vw,76px)!important;
   }
   #canales h1 small{
-    font-size:clamp(10px,1.2vw,13px)!important;
+    font-size:clamp(10px,1.25vw,13px)!important;
   }
   #canales .hero-statement{
-    font-size:clamp(12px,1.4vw,15px)!important;
+    font-size:clamp(12px,1.45vw,15px)!important;
   }
 
   #canales .record-zone.tt-zone{
-    width:min(92%,820px)!important;
-    min-width:520px;
-    max-width:820px;
-    margin:clamp(18px,2.6vw,28px) auto 0!important;
-    align-self:auto;
-    justify-self:center;
-    left:auto!important;
-    transform:none!important;
+    width:min(88%,760px)!important;
+    min-width:0!important;
+    max-width:760px!important;
+    justify-self:center!important;
+    align-self:auto!important;
+    margin:clamp(22px,3vw,32px) auto 0!important;
   }
   #canales .tt-zone .tt-stage{
     width:100%!important;
-    aspect-ratio:1240/590;
+    min-width:0!important;
+    aspect-ratio:1240/590!important;
   }
-
   #canales .home-signature{
-    margin-top:12px!important;
-    padding-top:10px;
+    justify-self:start!important;
+    align-self:auto!important;
+    margin-top:14px!important;
+    padding-top:8px!important;
   }
 
   #canales .home-left-bg-video{
-    object-fit:cover;
+    object-fit:cover!important;
     object-position:center bottom!important;
     transform:none!important;
   }
 
   #canales .home-right{
-    min-height:620px;
-    padding:54px clamp(32px,6vw,64px) 40px;
+    min-height:620px!important;
+    padding:54px clamp(32px,6vw,64px) 40px!important;
   }
   #canales .channel-browser{margin-top:0!important}
-  #canales .channel-info-wrap{margin-top:42px}
+  #canales .channel-info-wrap{margin-top:42px!important}
 
   body:not(.view-open) .site-footer{
-    background:#efe4d5!important;
-    color:#75695d;
+    color:#75695d!important;
   }
   body:not(.view-open) .site-footer a{color:#75695d!important}
 }
 
-/* At the exact handoff there must be no residual minimum width that can force
-   fragments of the player outside the stage. */
+/* Mobile keeps the established stacked design. Remove every desktop minimum
+   so the complete turntable/player unit scales together instead of leaving
+   detached fragments. */
 @media (max-width:900px){
   #canales .record-zone.tt-zone{
+    position:relative!important;
     min-width:0!important;
     width:100%!important;
     max-width:720px!important;
     left:auto!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:auto!important;
     transform:none!important;
   }
-  #canales .tt-zone .tt-stage{width:100%!important;min-width:0!important}
+  #canales .tt-zone .tt-stage{
+    width:100%!important;
+    min-width:0!important;
+  }
+}
+
+/* V23 — iPhone/WhatsApp: manual playback when background autoplay is blocked.
+   The toggle is intentionally invisible when the video plays normally. */
+.ambient-play-toggle[hidden],.intro-play[hidden]{display:none!important}
+#canales .home-left,.listen-showcase{position:relative}
+.ambient-play-toggle{
+ position:absolute;bottom:18px;right:18px;z-index:9;min-height:36px;
+ padding:7px 12px;border:1px solid rgba(203,160,92,.65);border-radius:22px;
+ background:rgba(17,16,14,.83);color:#fff4de;backdrop-filter:blur(5px);
+ font:500 11px/1.4 Inter,Arial,sans-serif;letter-spacing:.035em;
+ box-shadow:0 4px 16px rgba(0,0,0,.14);
+}
+.ambient-play-toggle:disabled{opacity:.72;cursor:default}
+/* Manual opt-in can re-enable a video hidden for prefers-reduced-motion. */
+#canales .home-left-bg-video.motion-manual{display:block!important}
+.intro-play{
+ position:absolute;left:50%;bottom:clamp(86px,12svh,140px);z-index:3;
+ transform:translateX(-50%);min-height:48px;white-space:nowrap;
+ padding:12px 22px;border:1px solid #c6a368;border-radius:28px;
+ background:rgba(22,19,16,.94);color:#fff2db;font:500 14px Inter,Arial,sans-serif;
+ box-shadow:0 8px 30px rgba(0,0,0,.3)
+}
+@media(max-width:820px){
+ .ambient-play-toggle{bottom:12px;right:12px;font-size:10px;min-height:40px}
+ .intro-play{font-size:13px}
 }
