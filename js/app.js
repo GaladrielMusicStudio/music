@@ -67,12 +67,13 @@ function initPlayers(root=document){
   root.querySelectorAll("[data-audio-player]").forEach(card=>{
     if(card.dataset.ready)return;
     card.dataset.ready="1";
-    const audio=card.querySelector("audio"),play=card.querySelector("[data-audio-play]"),seek=card.querySelector("[data-audio-seek]"),vol=card.querySelector("[data-audio-volume]"),now=card.querySelector("[data-audio-current]"),end=card.querySelector("[data-audio-duration]");
+    const audio=card.querySelector("audio"),play=card.querySelector("[data-audio-play]"),seek=card.querySelector("[data-audio-seek]"),vol=card.querySelector("[data-audio-volume]"),now=card.querySelector("[data-audio-current]"),end=card.querySelector("[data-audio-duration]"),audioLabel=card.querySelector("[data-audio-label]");
     if(!audio)return;
+    if(card.classList.contains("listen-player"))drawListenWaveRest(card.querySelector("[data-audio-wave]"));
     audio.addEventListener('error',()=>{play.disabled=true;play.setAttribute('aria-label','Muestra no disponible');if(seek)seek.disabled=true;if(vol)vol.disabled=true;const caption=card.closest('.record-zone')?.querySelector('.sample-caption');if(caption)caption.textContent='Muestra de audio aún no disponible';},{once:true});
     audio.volume=vol?+vol.value:.9;
     if(seek)paintRange(seek,0); if(vol)paintRange(vol,+vol.value,1);
-    const update=()=>{play.setAttribute("aria-label",audio.paused?"Reproducir muestra":"Pausar muestra");play.setAttribute("aria-pressed",String(!audio.paused));const d=Number.isFinite(audio.duration)?audio.duration:0,pct=d?Math.min(100,Math.max(0,audio.currentTime/d*100)):0;card.style.setProperty("--audio-progress",pct+"%");syncDiscProgress(card,pct,!audio.paused&&!audio.ended);if(seek){seek.disabled=!d;seek.max=d||100;seek.value=audio.currentTime||0;paintRange(seek,+seek.value,+seek.max)}if(now)now.textContent=timeAudio(audio.currentTime);if(end)end.textContent=d?timeAudio(d):"--:--"};
+    const update=()=>{play.setAttribute("aria-label",audio.paused?"Reproducir muestra":"Pausar muestra");play.setAttribute("aria-pressed",String(!audio.paused));if(audioLabel)audioLabel.textContent=audio.paused?"Escuchar muestra":"Pausar muestra";const d=Number.isFinite(audio.duration)?audio.duration:0,pct=d?Math.min(100,Math.max(0,audio.currentTime/d*100)):0;card.style.setProperty("--audio-progress",pct+"%");syncDiscProgress(card,pct,!audio.paused&&!audio.ended);if(seek){seek.disabled=!d;seek.max=d||100;seek.value=audio.currentTime||0;paintRange(seek,+seek.value,+seek.max)}if(now)now.textContent=timeAudio(audio.currentTime);if(end)end.textContent=d?timeAudio(d):"--:--"};
     const status=card.querySelector('[data-audio-status]');
     const fail=()=>{card.classList.remove('is-loading','is-playing');card.classList.add('is-error');syncDiscProgress(card,0,false);if(status)status.textContent='No se pudo reproducir esta muestra. Inténtalo de nuevo más tarde.';};
     play.addEventListener("click",()=>{
@@ -81,6 +82,7 @@ function initPlayers(root=document){
         document.querySelectorAll("audio").forEach(a=>{if(a!==audio)a.pause()});
         document.querySelectorAll("[data-audio-player]").forEach(p=>{if(p!==card)p.classList.remove("is-open","is-playing")});
         card.classList.add("is-open","is-loading");
+        if(card.classList.contains("listen-player")){const waveState=ensureListenAnalyser(card,audio);waveState?.ctx?.resume?.().catch(()=>{})}
         audio.play().catch(fail);
       }else{audio.pause();card.classList.remove("is-open")}
     });
@@ -89,11 +91,11 @@ function initPlayers(root=document){
     audio.addEventListener("loadedmetadata",update);
     audio.addEventListener("timeupdate",update);
     audio.addEventListener("waiting",()=>{card.classList.add("is-loading");syncDiscProgress(card,0,false)});
-    audio.addEventListener("playing",()=>{card.classList.remove("is-loading");update()});
+    audio.addEventListener("playing",()=>{card.classList.remove("is-loading");if(card.classList.contains("listen-player"))startListenWave(card,audio);update()});
     audio.addEventListener("canplay",()=>card.classList.remove("is-loading"));
-    audio.addEventListener("play",()=>{card.classList.remove("is-loading");card.classList.add("is-playing");update()});
-    audio.addEventListener("pause",()=>{card.classList.remove("is-playing","is-loading");update()});
-    audio.addEventListener("ended",()=>{card.classList.remove("is-playing","is-open");card.style.setProperty("--audio-progress","100%");syncDiscProgress(card,100,false)});
+    audio.addEventListener("play",()=>{card.classList.remove("is-loading");card.classList.add("is-playing");if(card.classList.contains("listen-player"))startListenWave(card,audio);update()});
+    audio.addEventListener("pause",()=>{card.classList.remove("is-playing","is-loading");if(card.classList.contains("listen-player"))stopListenWave(audio);update()});
+    audio.addEventListener("ended",()=>{card.classList.remove("is-playing","is-open");if(card.classList.contains("listen-player"))stopListenWave(audio);card.style.setProperty("--audio-progress","100%");syncDiscProgress(card,100,false);update()});
     audio.addEventListener("error",fail);
   });
 }
@@ -235,9 +237,94 @@ function listenAvatar(c,cls=""){
     :`<span class="listen-avatar ${cls}">${seal(c)}</span>`;
 }
 function listenCover(c){return listenVideos(c,1)[0]?.thumbnail||""}
+const listenWaveStates=new WeakMap();
+let listenAudioContext=null;
 function listenWave(){
-  const heights=[18,24,31,42,56,74,92,66,48,37,28,34,46,62,81,55,35,23,30,44,68,88,58,41,27,21,32,49,72,96,64,43,29,37,51,76,59,38,26,19,28,45,63,84,54,36,25,17];
-  return `<span class="listen-wave-art" aria-hidden="true"><span class="listen-wave-vinyl"><i></i></span><span class="listen-wave-bars">${heights.map((h,i)=>`<i style="--h:${h}%;--d:${(i%9)*-73}ms"></i>`).join("")}</span><svg class="listen-headphones" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+  return `<span class="listen-wave-art" aria-hidden="true"><span class="listen-wave-vinyl"><i></i></span><canvas class="listen-wave-canvas" data-audio-wave width="760" height="120"></canvas><svg class="listen-headphones" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1-3-3v-6a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+}
+function sizeListenWaveCanvas(canvas){
+  if(!canvas)return null;
+  const cssW=Math.max(1,Math.round(canvas.clientWidth||380));
+  const cssH=Math.max(1,Math.round(canvas.clientHeight||88));
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const w=Math.max(1,Math.round(cssW*dpr)),h=Math.max(1,Math.round(cssH*dpr));
+  if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h}
+  const ctx=canvas.getContext("2d");
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,w:cssW,h:cssH};
+}
+function drawListenWaveRest(canvas){
+  const sized=sizeListenWaveCanvas(canvas);if(!sized)return;
+  const {ctx,w,h}=sized,mid=h/2;ctx.clearRect(0,0,w,h);
+  const grad=ctx.createLinearGradient(0,0,w,0);grad.addColorStop(0,"rgba(187,132,55,.35)");grad.addColorStop(.16,"rgba(239,185,91,.88)");grad.addColorStop(.5,"rgba(255,211,128,.95)");grad.addColorStop(.84,"rgba(239,185,91,.88)");grad.addColorStop(1,"rgba(187,132,55,.35)");
+  ctx.strokeStyle=grad;ctx.lineWidth=1.7;ctx.lineCap="round";ctx.lineJoin="round";ctx.shadowColor="rgba(230,167,72,.28)";ctx.shadowBlur=7;
+  ctx.beginPath();
+  const points=72;
+  for(let i=0;i<points;i++){const x=i/(points-1)*w;const envelope=Math.sin(Math.PI*i/(points-1));const y=mid+Math.sin(i*.83)*Math.sin(i*.19)*h*.055*envelope;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+  ctx.stroke();ctx.shadowBlur=0;
+}
+function ensureListenAnalyser(card,audio){
+  const canvas=card?.querySelector?.("[data-audio-wave]");
+  if(!canvas)return null;
+  let state=listenWaveStates.get(audio);
+  if(state){state.canvas=canvas;return state}
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){drawListenWaveRest(canvas);return null}
+  try{
+    if(!listenAudioContext)listenAudioContext=new AC();
+    const source=listenAudioContext.createMediaElementSource(audio);
+    const analyser=listenAudioContext.createAnalyser();
+    analyser.fftSize=1024;
+    analyser.minDecibels=-88;
+    analyser.maxDecibels=-18;
+    analyser.smoothingTimeConstant=.80;
+    source.connect(analyser);analyser.connect(listenAudioContext.destination);
+    state={ctx:listenAudioContext,source,analyser,data:new Uint8Array(analyser.frequencyBinCount),canvas,raf:0,smoothed:[]};
+    listenWaveStates.set(audio,state);
+    drawListenWaveRest(canvas);
+    return state;
+  }catch(_){drawListenWaveRest(canvas);return null}
+}
+function drawListenWaveLive(state){
+  const {analyser,data,canvas}=state;
+  const sized=sizeListenWaveCanvas(canvas);if(!sized)return;
+  analyser.getByteFrequencyData(data);
+  const {ctx,w,h}=sized,mid=h/2,points=62,maxBin=Math.max(8,Math.min(data.length-1,190));
+  ctx.clearRect(0,0,w,h);
+  const amps=[];
+  for(let i=0;i<points;i++){
+    const t=i/(points-1);
+    const idx=Math.min(maxBin,Math.floor(Math.pow(t,.72)*maxBin));
+    const raw=Math.min(1,(data[idx]||0)/235);
+    const previous=state.smoothed[i]??raw;
+    const smooth=previous*.68+raw*.32;state.smoothed[i]=smooth;
+    const edge=.62+.38*Math.sin(Math.PI*t);
+    amps.push(Math.max(.018,smooth*edge));
+  }
+  const grad=ctx.createLinearGradient(0,0,w,0);grad.addColorStop(0,"rgba(180,121,45,.34)");grad.addColorStop(.12,"#dba84f");grad.addColorStop(.5,"#ffd784");grad.addColorStop(.88,"#dba84f");grad.addColorStop(1,"rgba(180,121,45,.34)");
+  const fill=ctx.createLinearGradient(0,0,0,h);fill.addColorStop(0,"rgba(245,190,89,.05)");fill.addColorStop(.5,"rgba(255,211,128,.16)");fill.addColorStop(1,"rgba(245,190,89,.05)");
+  const top=amps.map((a,i)=>[i/(points-1)*w,mid-a*h*.40]);
+  const bottom=amps.map((a,i)=>[i/(points-1)*w,mid+a*h*.40]);
+  ctx.beginPath();ctx.moveTo(top[0][0],top[0][1]);
+  for(let i=1;i<top.length;i++){const [x0,y0]=top[i-1],[x1,y1]=top[i];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}
+  ctx.lineTo(top.at(-1)[0],top.at(-1)[1]);
+  for(let i=bottom.length-1;i>0;i--){const [x0,y0]=bottom[i],[x1,y1]=bottom[i-1];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}
+  ctx.lineTo(bottom[0][0],bottom[0][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();
+  ctx.strokeStyle=grad;ctx.lineWidth=1.75;ctx.lineCap="round";ctx.lineJoin="round";ctx.shadowColor="rgba(238,174,75,.42)";ctx.shadowBlur=8;
+  const drawEdge=pts=>{ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++){const [x0,y0]=pts[i-1],[x1,y1]=pts[i];ctx.quadraticCurveTo(x0,y0,(x0+x1)/2,(y0+y1)/2)}ctx.lineTo(pts.at(-1)[0],pts.at(-1)[1]);ctx.stroke()};
+  drawEdge(top);drawEdge(bottom);
+  ctx.shadowBlur=0;ctx.strokeStyle="rgba(237,184,91,.32)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,mid);ctx.lineTo(w,mid);ctx.stroke();
+}
+function startListenWave(card,audio){
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){drawListenWaveRest(card?.querySelector?.("[data-audio-wave]"));return}
+  const state=ensureListenAnalyser(card,audio);if(!state)return;
+  state.ctx.resume?.().catch(()=>{});
+  cancelAnimationFrame(state.raf);
+  const tick=()=>{if(audio.paused||audio.ended){state.raf=0;return}drawListenWaveLive(state);state.raf=requestAnimationFrame(tick)};
+  state.raf=requestAnimationFrame(tick);
+}
+function stopListenWave(audio){
+  const state=listenWaveStates.get(audio);if(!state)return;cancelAnimationFrame(state.raf);state.raf=0;drawListenWaveRest(state.canvas);
 }
 function listenSleeve(c,index,side){
   const cover=listenCover(c);
@@ -263,8 +350,8 @@ function renderListen(){
   const youtube=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;
   const avatar=listenAvatar(c,"listen-avatar--active");
   const coverMedia=heroCover?`<img src="${esc(heroCover)}" alt="Portada visual de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<span class="listen-cover-fallback">${esc(c.nombre)}</span>`;
-  const vinylLabel=c.avatar?`<img src="${esc(c.avatar)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
-  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-channel-cta" type="button" data-audio-play aria-label="Escuchar ${esc(c.nombre)}"><span class="listen-cta-play">${iconPlay()}</span><span>Escuchar canal</span><b aria-hidden="true">→</b></button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><a class="listen-channel-cta" href="${esc(youtube)}" target="_blank" rel="noopener noreferrer"><span class="listen-cta-play">${iconPlay()}</span><span>Ver canal</span><b aria-hidden="true">→</b></a></div>`;
+  const vinylLabel=c.avatar?`<img class="listen-vinyl-avatar" src="${esc(c.avatar)}" alt="Foto de perfil de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
+  const audioPlayer=c.audio?`<div class="listen-player" data-audio-player><audio preload="metadata" controlslist="nodownload noplaybackrate" src="${esc(c.audio)}"></audio>${listenWave()}<div class="listen-wave-timeline"><span data-audio-current>0:00</span><input type="range" data-audio-seek min="0" max="100" value="0" step="0.1" aria-label="Posición de la muestra" disabled><span data-audio-duration>--:--</span></div><button class="listen-channel-cta" type="button" data-audio-play aria-label="Escuchar muestra de ${esc(c.nombre)}"><span class="listen-cta-play">${iconPlay()}</span><span data-audio-label>Escuchar muestra</span><b aria-hidden="true">→</b></button><span class="listen-player-status" data-audio-status role="status"></span></div>`:`<div class="listen-player listen-player--unavailable">${listenWave()}<div class="listen-wave-timeline"><span>0:00</span><span class="listen-static-line"></span><span>—</span></div><a class="listen-channel-cta" href="${esc(youtube)}" target="_blank" rel="noopener noreferrer"><span class="listen-cta-play">${iconPlay()}</span><span>Ver canal</span><b aria-hidden="true">→</b></a></div>`;
   const intro=$("#listenIntro");
   const allLoaded=CH.length>0&&CH.every(ch=>ch.loaded);
   const metricsReady=CH.some(ch=>ch.metricsTrusted);
@@ -339,7 +426,7 @@ function setView(next,fromHistory=false){
  if(view!=="canales"&&panelOpen){panelOpen=false;renderHero()}
  document.body.classList.toggle("view-open",view!=="canales");
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
- document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"page":"false"));
+ document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"true":"false"));
  if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
  if(changed){
   window.scrollTo({top:0,behavior:'auto'});
