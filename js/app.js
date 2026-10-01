@@ -240,10 +240,18 @@ function listenAvatar(c,cls=""){
     :`<span class="listen-avatar ${cls}">${seal(c)}</span>`;
 }
 function listenCover(c){return listenVideos(c,1)[0]?.thumbnail||""}
+// Opens YouTube's own subscription confirmation; never subscribes the visitor silently.
+function listenSubscribeHref(c){
+  if(/^UC[A-Za-z0-9_-]{22}$/.test(c.channelId||""))
+    return `https://www.youtube.com/channel/${encodeURIComponent(c.channelId)}?sub_confirmation=1`;
+  const url=new URL(c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`);
+  url.searchParams.set("sub_confirmation","1");
+  return url.href;
+}
 const listenWaveStates=new WeakMap();
 let listenAudioContext=null;
 function listenWave(available=false,name=""){
-  return `<div class="listen-wave-art"><span class="listen-wave-vinyl" aria-hidden="true"><i></i></span>${available?`<button class="listen-wave-play" type="button" data-audio-play aria-label="Reproducir muestra de ${esc(name)}" aria-pressed="false" title="Reproducir o pausar muestra de audio">${iconPlay()}</button>`:""}<canvas class="listen-wave-canvas" aria-hidden="true" data-audio-wave width="760" height="120"></canvas><svg class="listen-headphones" aria-hidden="true" viewBox="0 0 48 48"><path d="M9 28v-5a15 15 0 0 1 30 0v5M9 27h5v12H9a3 3 0 0 1 3-3Zm30 0h-5v12h5a3 3 0 0 1 3-3Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+  return `<div class="listen-wave-art"><span class="listen-wave-vinyl" aria-hidden="true"><i></i></span>${available?`<button class="listen-wave-play" type="button" data-audio-play aria-label="Reproducir muestra de ${esc(name)}" aria-pressed="false" title="Reproducir o pausar muestra de audio">${iconPlay()}</button>`:""}<canvas class="listen-wave-canvas" aria-hidden="true" data-audio-wave width="760" height="120"></canvas><svg class="listen-headphones" aria-hidden="true" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 26v-4a15 15 0 0 1 30 0v4"/><rect x="6" y="24" width="8" height="16" rx="3"/><rect x="34" y="24" width="8" height="16" rx="3"/></svg></div>`;
 }
 function sizeListenWaveCanvas(canvas){
   if(!canvas)return null;
@@ -335,6 +343,9 @@ function listenSleeve(c,index,side){
 function renderListen(){
   const host=$("#listenList");
   if(!host||!CH.length)return;
+  // Keep the ambient animation alive between channel changes; only the covers
+  // and channel-specific information need to be replaced.
+  const retainedAmbient=host.querySelector("video.listen-ambient");
   const retained=new Map([...host.querySelectorAll("[data-audio-player]")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
   const ordered=popularChannels();
   const c=CH[listenActive]||ordered[0]||CH[0];
@@ -348,6 +359,7 @@ function renderListen(){
   const views=c.metricsTrusted?fmt(c.totalViews):"—";
   const subs=c.metricsTrusted?(c.subsHidden?"Ocultos":fmt(c.subs)):"—";
   const youtube=c.enlaces?.YouTube||`https://www.youtube.com/${c.handle}`;
+  const subscribe=listenSubscribeHref(c);
   const avatar=listenAvatar(c,"listen-avatar--active");
   const sleeveIdentity=listenAvatar(c,"listen-avatar--cover");
   const vinylLabel=c.avatar?`<img class="listen-vinyl-avatar" src="${esc(c.avatar)}" alt="Foto de perfil de ${esc(c.nombre)}" referrerpolicy="no-referrer">`:`<b>${esc((c.mono||"GS").replace(/\s+/g,""))}</b>`;
@@ -375,15 +387,20 @@ function renderListen(){
       </div>
       <aside class="listen-detail">
         <div class="listen-detail-label"><span>Canal activo</span><i></i></div>
-        <div class="listen-detail-title">${avatar}<div><h3>${esc(c.nombre)}</h3><p>${esc(c.hook||c.cat)}</p></div></div>
+        <div class="listen-detail-title"><a class="listen-channel-identity" href="${esc(subscribe)}" target="_blank" rel="noopener noreferrer" aria-label="Visitar ${esc(c.nombre)} y confirmar suscripción en YouTube">${avatar}<div><h3>${esc(c.nombre)}</h3><p>${esc(c.hook||c.cat)}</p></div></a></div>
         ${audioPlayer}
         <div class="listen-stats"><span><b>${esc(views)}</b><small>Vistas</small></span><i></i><span><b>${esc(subs)}</b><small>Suscriptores</small></span></div>
+        <a class="listen-subscribe" href="${esc(subscribe)}" target="_blank" rel="noopener noreferrer" aria-label="Abrir la confirmación de suscripción de ${esc(c.nombre)} en YouTube">Suscribirse en YouTube <span aria-hidden="true">↗</span></a>
       </aside>
     </section>
     <section class="listen-popular" aria-labelledby="listen-popular-title">
-      <div class="listen-popular-head"><div><p>${esc(c.nombre)}</p><h3 id="listen-popular-title">Los 8 más escuchados</h3></div><i></i><a href="${esc(youtube)}" target="_blank" rel="noopener noreferrer">Ver todos los videos →</a></div>
+      <div class="listen-popular-head"><div><p>${esc(c.nombre)}</p><h3 id="listen-popular-title">Los 8 más escuchados</h3></div><i></i><a href="${esc(subscribe)}" target="_blank" rel="noopener noreferrer" title="YouTube mostrará su confirmación de suscripción">Visitar canal y suscribirse →</a></div>
       <div class="listen-video-grid">${videos.length?videos.map(v=>videoCard(v,c)).join(""):placeholderVideos(c)}</div>
     </section>`;
+  if(retainedAmbient){
+    host.querySelector("video.listen-ambient")?.replaceWith(retainedAmbient);
+    if(retainedAmbient.paused)retainedAmbient.play().catch(()=>{});
+  }
   host.querySelectorAll('.listen-avatar img,.listen-vinyl img').forEach(img=>{img.onerror=()=>{img.hidden=true}});
   host.querySelectorAll("[data-audio-player]").forEach(card=>{
     const src=card.querySelector("audio")?.getAttribute("src");
@@ -397,19 +414,39 @@ function renderListen(){
   const currentAudio=currentPlayer?.querySelector('audio');
   if(currentAudio)syncDiscProgress(currentPlayer,0,!currentAudio.paused&&!currentAudio.ended);
 }
-function setListenActive(i){
+let listenSwitchTimer=0,listenEnterTimer=0;
+function setListenActive(i,direction=1){
   if(!CH.length)return;
   const next=(i+CH.length)%CH.length;
-  if(next===listenActive){renderListen();return}
+  if(next===listenActive&&!listenSwitchTimer)return;
   document.querySelectorAll('#view-escuchar audio').forEach(a=>a.pause());
   listenActive=next;
-  renderListen();
+  const host=$("#listenList");
+  clearTimeout(listenSwitchTimer);
+  clearTimeout(listenEnterTimer);
+  if(!host||view!=="escuchar"||matchMedia("(prefers-reduced-motion: reduce)").matches){
+    host?.classList.remove("listen-is-leaving","listen-is-entering");
+    listenSwitchTimer=0;
+    renderListen();
+    return;
+  }
+  host.style.setProperty("--listen-exit-x",(direction>0?"-18px":"18px"));
+  host.style.setProperty("--listen-enter-x",(direction>0?"22px":"-22px"));
+  host.classList.remove("listen-is-entering");
+  host.classList.add("listen-is-leaving");
+  listenSwitchTimer=setTimeout(()=>{
+    listenSwitchTimer=0;
+    host.classList.remove("listen-is-leaving");
+    renderListen();
+    host.classList.add("listen-is-entering");
+    listenEnterTimer=setTimeout(()=>{host.classList.remove("listen-is-entering");listenEnterTimer=0},480);
+  },175);
 }
 function stepListen(delta){
   const order=popularChannels();
   const current=CH[listenActive]||order[0];
   const pos=Math.max(0,order.indexOf(current));
-  setListenActive(CH.indexOf(order[(pos+delta+order.length)%order.length]));
+  setListenActive(CH.indexOf(order[(pos+delta+order.length)%order.length]),delta);
 }
 
 function shopHref(pack,format){
@@ -517,7 +554,7 @@ async function loadChannel(c){
 }
 document.addEventListener("click",ev=>{
   const listenStep=ev.target.closest("[data-listen-step]");if(listenStep){stepListen(+listenStep.dataset.listenStep||1);return}
-  const listenChannel=ev.target.closest("[data-listen-i]");if(listenChannel){setListenActive(+listenChannel.dataset.listenI);return}
+  const listenChannel=ev.target.closest("[data-listen-i]");if(listenChannel){setListenActive(+listenChannel.dataset.listenI,listenChannel.classList.contains("listen-side-sleeve--prev")?-1:1);return}
   if(ev.target.closest("#channelPrev")){moveRail(-1);return}
   if(ev.target.closest("#channelNext")){moveRail(1);return}
   const channel=ev.target.closest("[data-i]");if(channel){setActive(+channel.dataset.i);return}
