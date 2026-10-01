@@ -10,6 +10,14 @@ const cleanRemoteUrl=url=>String(url||"").replace(/\\u0026/g,"&").replace(/\\u00
 const pad=n=>String(n+1).padStart(2,"0");
 const fmt=n=>{n=Math.max(0,Number(n)||0);if(n<1000)return String(Math.floor(n));const unit=n>=999950?1e6:1e3;return new Intl.NumberFormat("es-ES",{maximumFractionDigits:1}).format(n/unit)+(unit===1e6?"M":"K")};
 function popularChannels(){return [...CH].sort((a,b)=>(Number(b.metricsTrusted)-Number(a.metricsTrusted))||(a.metricsTrusted&&b.metricsTrusted?b.totalViews-a.totalViews:0)||CH.indexOf(a)-CH.indexOf(b))}
+// The Escuchar carousel has its own stable editorial order. Its opening
+// neighbours must always be Heavenly ← Galadriel Symphony → The Velvet Atlas,
+// regardless of the changing popularity metrics used on the Canales page.
+function listenCarouselOrder(){
+  const featured=["@Heavenly_Echoes_Sounds","@Galadriel_Symphony","@TheVelvetAtlasMusic"]
+    .map(handle=>CH.find(c=>c.handle===handle)).filter(Boolean);
+  return [...featured,...CH.filter(c=>!featured.includes(c))];
+}
 const fecha=iso=>{if(!iso)return"";const d=(Date.now()-new Date(iso))/864e5;if(d<1)return"Hoy";if(d<2)return"Ayer";if(d<7)return`Hace ${Math.floor(d)} días`;if(d<35)return`Hace ${Math.floor(d/7)} semanas`;return new Date(iso).toLocaleDateString("es-PE",{day:"numeric",month:"long"})};
 const dur=iso=>{const m=/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso||"");if(!m)return"";const h=+m[1]||0,mi=+m[2]||0,sg=+m[3]||0;return h?`${h}:${String(mi).padStart(2,"0")}:${String(sg).padStart(2,"0")}`:`${mi}:${String(sg).padStart(2,"0")}`};
 function getText(url){
@@ -347,7 +355,7 @@ function renderListen(){
   // and channel-specific information need to be replaced.
   const retainedAmbient=host.querySelector("video.listen-ambient");
   const retained=new Map([...host.querySelectorAll("[data-audio-player]")].map(card=>[card.querySelector("audio")?.getAttribute("src"),card]));
-  const ordered=popularChannels();
+  const ordered=listenCarouselOrder();
   const c=CH[listenActive]||ordered[0]||CH[0];
   if(!c)return;
   listenActive=CH.indexOf(c);
@@ -443,7 +451,7 @@ function setListenActive(i,direction=1){
   },175);
 }
 function stepListen(delta){
-  const order=popularChannels();
+  const order=listenCarouselOrder();
   const current=CH[listenActive]||order[0];
   const pos=Math.max(0,order.indexOf(current));
   setListenActive(CH.indexOf(order[(pos+delta+order.length)%order.length]),delta);
