@@ -1,4 +1,4 @@
-/* ESCUCHAR V16 — editorial music archive
+/* ESCUCHAR V17 — editorial music archive
    Isolated from CANALES so its responsive system cannot affect the turntable page. */
 
 #view-escuchar{
@@ -102,10 +102,11 @@
   background:linear-gradient(112deg,transparent 32%,rgba(255,255,255,.12) 40%,transparent 48%,transparent 70%,rgba(255,255,255,.05) 76%,transparent 82%);
 }
 #view-escuchar .listen-vinyl>span{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:27%;aspect-ratio:1;border-radius:50%;
-  display:grid;place-items:center;overflow:hidden;background:#15130f;border:1px solid #9e773d;color:#d4ad6c;font:600 13px/1 Marcellus,serif;
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:34%;aspect-ratio:1;border-radius:50%;
+  display:grid;place-items:center;overflow:hidden;background:#15130f;border:1px solid rgba(184,137,68,.82);color:#d4ad6c;font:600 13px/1 Marcellus,serif;
+  box-shadow:0 0 0 3px rgba(8,9,10,.66),0 0 0 4px rgba(199,154,84,.16);
 }
-#view-escuchar .listen-vinyl img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+#view-escuchar .listen-vinyl img,#view-escuchar .listen-vinyl-avatar{width:100%;height:100%;object-fit:cover;border-radius:50%}
 
 #view-escuchar .listen-side-sleeve{
   position:relative;width:min(100%,155px);aspect-ratio:.78/1;overflow:hidden;border-radius:3px;
@@ -156,10 +157,7 @@
 #view-escuchar .listen-wave-vinyl{width:90px;height:90px;border-radius:50%;overflow:hidden;clip-path:inset(0 48% 0 0);transform:translateX(13px);background:repeating-radial-gradient(circle,#090a0b 0 3px,#27231c 4px,#0c0d0e 6px);position:relative;z-index:2}
 #view-escuchar .listen-wave-vinyl:before{content:"";position:absolute;inset:32%;border-radius:50%;background:#c7984f;border:8px solid #151310;box-shadow:0 0 18px rgba(224,171,87,.2)}
 #view-escuchar .listen-wave-vinyl i{position:absolute;width:5px;height:5px;border-radius:50%;background:#f3dfb9;left:50%;top:50%;transform:translate(-50%,-50%)}
-#view-escuchar .listen-wave-bars{height:94px;display:flex;align-items:center;justify-content:center;gap:2px;overflow:hidden;position:relative;z-index:3}
-#view-escuchar .listen-wave-bars i{display:block;flex:1;max-width:3px;min-width:1px;height:var(--h);border-radius:4px;background:linear-gradient(to bottom,#f1c36f,#b57f36);box-shadow:0 0 8px rgba(214,157,67,.22);transform-origin:center;transition:height .2s ease}
-#view-escuchar .listen-player.is-playing .listen-wave-bars i{animation:listenPulse .76s ease-in-out var(--d) infinite alternate}
-@keyframes listenPulse{from{transform:scaleY(.34);opacity:.62}to{transform:scaleY(1);opacity:1}}
+#view-escuchar .listen-wave-canvas{width:100%;height:94px;display:block;position:relative;z-index:3;min-width:0}
 #view-escuchar .listen-headphones{width:34px;height:34px;position:relative;z-index:3;color:#e8bd70;margin-left:7px}
 #view-escuchar .listen-wave-timeline{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px;align-items:center;color:#c8baa7;font-size:9px;margin-top:-4px}
 #view-escuchar .listen-wave-timeline input{--fill:0%;appearance:none;height:2px;border:0;border-radius:99px;background:linear-gradient(to right,#c99b55 var(--fill),rgba(218,194,155,.23) var(--fill));outline:0;padding:0}
@@ -234,7 +232,7 @@
   #view-escuchar .listen-detail-title .listen-avatar{width:58px;height:58px}
   #view-escuchar .listen-wave-art{grid-template-columns:50px minmax(0,1fr) 34px;height:88px}
   #view-escuchar .listen-wave-vinyl{width:72px;height:72px}
-  #view-escuchar .listen-wave-bars{height:78px}
+  #view-escuchar .listen-wave-canvas{height:78px}
   #view-escuchar .listen-headphones{width:29px;height:29px}
   #view-escuchar .listen-popular{padding:26px 20px 38px}
   #view-escuchar .listen-popular-head{grid-template-columns:1fr auto;gap:10px}
@@ -259,7 +257,7 @@
   #view-escuchar .listen-detail-title p{font-size:8px;letter-spacing:.19em}
   #view-escuchar .listen-wave-art{grid-template-columns:42px minmax(0,1fr) 28px;height:78px}
   #view-escuchar .listen-wave-vinyl{width:62px;height:62px}
-  #view-escuchar .listen-wave-bars{height:68px;gap:1px}
+  #view-escuchar .listen-wave-canvas{height:68px}
   #view-escuchar .listen-headphones{width:24px;height:24px}
   #view-escuchar .listen-stats{gap:16px}
   #view-escuchar .listen-stats b{font-size:29px}
@@ -272,7 +270,6 @@
 }
 
 @media (prefers-reduced-motion:reduce){
-  #view-escuchar .listen-wave-bars i{animation:none!important}
   #view-escuchar .listen-arrow,#view-escuchar .listen-side-sleeve,#view-escuchar .listen-channel-cta{transition:none!important}
 }
 
