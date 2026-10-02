@@ -44,32 +44,31 @@
 @media(max-width:590px){.studio-v25 .st-hero{min-height:560px;display:flex;align-items:flex-start}.studio-v25 .st-hero-copy{width:100%;padding:35px 25px 0}.studio-v25 .st-hero-art{right:0;top:auto;bottom:0;height:58%;width:100%;opacity:1;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 37%);mask-image:linear-gradient(to bottom,transparent 0%,#000 37%)}.studio-v25 .st-hero-art img{object-position:52% 53%}.studio-v25 .st-overline{font-size:8px;letter-spacing:.2em}.studio-v25 #estudio-title{font-size:clamp(48px,12vw,70px)}.studio-v25 #estudio-title em{white-space:normal}.studio-v25 .st-gold-rule{margin:15px 0}.studio-v25 .st-statement{font-size:16px}.studio-v25 .st-middle{padding:0 23px}.studio-v25 .st-disciplines{grid-template-columns:1fr;padding:19px 0 15px}.studio-v25 .st-discipline,.studio-v25 .st-discipline+.st-discipline{padding:13px 0;border-left:0}.studio-v25 .st-discipline+.st-discipline{border-top:1px solid rgba(152,118,77,.2)}.studio-v25 .st-number{margin-bottom:6px}.studio-v25 .st-discipline h3{font-size:21px;margin-bottom:3px}.studio-v25 .st-discipline p{font-size:12px;max-width:none}.studio-v25 .st-socials{grid-template-columns:repeat(3,minmax(0,1fr));padding:15px 0}.studio-v25 .st-socials>a,.studio-v25 .st-socials>.st-social-pending{gap:7px;font-size:11px}.studio-v25 .st-socials svg{height:18px;width:18px}.studio-v25 .st-contact{padding:30px 23px}.studio-v25 .st-contact-kicker{letter-spacing:.15em;font-size:8px}.studio-v25 .st-contact h3{font-size:clamp(29px,8vw,43px)}}
 @media(prefers-reduced-motion:reduce){.studio-v25 *{transition:none!important;animation:none!important}}
 
-/* V26: each of six slots remains editorially compact; Instagram/Facebook have two real destinations. */
-.studio-v25 .st-socials>:not(:first-child){border-left:1px solid rgba(152,118,77,.25)}
-.studio-v25 .st-socials>.st-social-dual{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:5px;padding:7px 3px;color:#6a5130}
-.studio-v25 .st-socials .st-social-brand{display:flex;gap:8px;align-items:center;justify-content:center;font:400 clamp(10px,.92vw,13px)/1.2 Marcellus,Georgia,serif;white-space:nowrap}
-.studio-v25 .st-social-options{display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;text-align:center;font:500 clamp(9px,.73vw,11px)/1.5 Inter,system-ui,sans-serif;letter-spacing:0}
-.studio-v25 .st-social-options a{color:#866941;text-underline-offset:3px;text-decoration:underline;text-decoration-color:rgba(152,118,77,.32);padding:2px 0;min-height:20px;transition:color .2s}
-.studio-v25 .st-social-options a:is(:hover,:focus-visible){color:#21170d;text-decoration-color:currentColor}
-.studio-v25 .st-social-options a:focus-visible{outline:2px solid #a98350;outline-offset:3px;border-radius:2px}
-.studio-v25 .st-social-options i{font-style:normal;opacity:.45}
-@media(max-width:800px){.studio-v25 .st-socials>:nth-child(4){border-left:0}.studio-v25 .st-social-options{font-size:10px}.studio-v25 .st-socials>.st-social-dual{padding-block:9px}}
-@media(max-width:390px){.studio-v25 .st-social-options{font-size:9px;gap:3px}}
-
-/* V27: seven actual YouTube destinations in the existing sixth platform slot. */
+/* V28 — six discreet platform selectors, all profile lists hidden until activation. */
 .studio-v25 .st-middle{position:relative;z-index:2}
-.studio-v25 .st-socials>.st-social-youtube{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:3px;padding:7px 3px;color:#6a5130}
-.studio-v25 .st-social-youtube summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;border-radius:3px;white-space:nowrap;min-height:26px;user-select:none}
-.studio-v25 .st-social-youtube summary::-webkit-details-marker{display:none}
-.studio-v25 .st-social-youtube summary::marker{content:''}
-.studio-v25 .st-social-youtube summary:hover,.studio-v25 .st-social-youtube[open] summary{color:#21170d}
-.studio-v25 .st-social-youtube summary:focus-visible{outline:2px solid #a98350;outline-offset:3px}
-.studio-v25 .st-yt-chevron{font:18px/1 Georgia,serif;display:inline-block;margin-left:-2px;transition:transform .2s}
-.studio-v25 .st-social-youtube[open] .st-yt-chevron{transform:rotate(180deg)}
-.studio-v25 .st-yt-count{font:500 clamp(9px,.73vw,11px)/1.25 Inter,system-ui,sans-serif;color:#866941;letter-spacing:0}
-.studio-v25 .st-yt-menu{position:absolute;z-index:20;right:-5px;bottom:calc(100% + 8px);width:min(260px,calc(100vw - 44px));padding:11px 12px 8px;border:1px solid #d9c9af;border-radius:8px;background:#fcfaf7;box-shadow:0 16px 38px rgba(35,26,14,.18)}
-.studio-v25 .st-yt-menu-title{margin:0 2px 6px;padding:0 0 8px;border-bottom:1px solid rgba(152,118,77,.24);font:600 9px/1.5 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#907148}
-.studio-v25 .st-yt-menu a{display:flex;align-items:center;min-height:33px;padding:7px 8px;border-radius:4px;color:#433424;font:500 11px/1.35 Inter,system-ui,sans-serif;text-decoration:none;transition:background .18s,color .18s}
-.studio-v25 .st-yt-menu a:hover,.studio-v25 .st-yt-menu a:focus-visible{background:#f1e9dc;color:#1d1710;outline:0}
-@media(max-width:800px){.studio-v25 .st-social-youtube summary{font-size:11px}.studio-v25 .st-yt-count{font-size:10px}.studio-v25 .st-yt-menu{right:-3px}}
-@media(prefers-reduced-motion:reduce){.studio-v25 .st-yt-chevron,.studio-v25 .st-yt-menu a{transition:none}}
+.studio-v25 .st-socials>:not(:first-child){border-left:1px solid rgba(152,118,77,.25)}
+.studio-v25 .st-socials>.st-social-dropdown{position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:34px;padding:7px 3px;color:#6a5130}
+.studio-v25 .st-social-dropdown summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:7px;min-width:0;min-height:30px;padding:3px;border-radius:3px;cursor:pointer;user-select:none;white-space:nowrap;font:400 clamp(10px,.92vw,13px)/1.2 Marcellus,Georgia,serif;transition:color .2s}
+.studio-v25 .st-social-dropdown summary::-webkit-details-marker{display:none}
+.studio-v25 .st-social-dropdown summary::marker{content:''}
+.studio-v25 .st-social-dropdown summary:is(:hover,:focus-visible),.studio-v25 .st-social-dropdown[open] summary{color:#21170d}
+.studio-v25 .st-social-dropdown summary:focus-visible{outline:2px solid #a98350;outline-offset:3px}
+.studio-v25 .st-social-chevron{font:17px/1 Georgia,serif;display:inline-block;transition:transform .22s;opacity:.8}
+.studio-v25 .st-social-dropdown[open] .st-social-chevron{transform:rotate(180deg)}
+.studio-v25 .st-social-menu{position:absolute;z-index:30;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);width:max-content;min-width:205px;max-width:min(280px,calc(100vw - 44px));padding:11px 12px 8px;border:1px solid #d9c9af;border-radius:8px;background:#fcfaf7;box-shadow:0 16px 38px rgba(35,26,14,.18)}
+.studio-v25 .st-social-menu-title{margin:0 2px 6px;padding:0 0 8px;border-bottom:1px solid rgba(152,118,77,.24);font:600 9px/1.5 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#907148;white-space:nowrap}
+.studio-v25 .st-social-menu a{display:flex;align-items:center;min-height:35px;padding:8px;border-radius:4px;color:#433424;font:500 11px/1.35 Inter,system-ui,sans-serif;text-decoration:none;white-space:normal;transition:background .18s,color .18s}
+.studio-v25 .st-social-menu a:is(:hover,:focus-visible){background:#f1e9dc;color:#1d1710;outline:0}
+@media(max-width:800px){
+ .studio-v25 .st-socials>:nth-child(4){border-left:0}
+ .studio-v25 .st-social-dropdown summary{font-size:11px}
+ .studio-v25 .st-socials>.st-social-dropdown:nth-child(3n + 1) .st-social-menu{left:0;transform:none}
+ .studio-v25 .st-socials>.st-social-dropdown:nth-child(3n) .st-social-menu{left:auto;right:0;transform:none}
+}
+@media(max-width:390px){.studio-v25 .st-social-dropdown summary{gap:4px;font-size:10px}.studio-v25 .st-social-dropdown svg{width:17px;height:17px}}
+@media(prefers-reduced-motion:reduce){.studio-v25 .st-social-chevron,.studio-v25 .st-social-menu a{transition:none}}
+.studio-v25 .st-social-dropdown:not([open]) .st-social-menu{display:none}
+/* In the 3x2 grid, row-two flyouts open above row one, never covering its triggers. */
+@media(max-width:800px){
+ .studio-v25 .st-socials>.st-social-dropdown:nth-child(n+4) .st-social-menu{bottom:calc(100% + 62px)}
+}
