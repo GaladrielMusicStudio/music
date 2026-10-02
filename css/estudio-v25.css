@@ -55,3 +55,21 @@
 .studio-v25 .st-social-options i{font-style:normal;opacity:.45}
 @media(max-width:800px){.studio-v25 .st-socials>:nth-child(4){border-left:0}.studio-v25 .st-social-options{font-size:10px}.studio-v25 .st-socials>.st-social-dual{padding-block:9px}}
 @media(max-width:390px){.studio-v25 .st-social-options{font-size:9px;gap:3px}}
+
+/* V27: seven actual YouTube destinations in the existing sixth platform slot. */
+.studio-v25 .st-middle{position:relative;z-index:2}
+.studio-v25 .st-socials>.st-social-youtube{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;gap:3px;padding:7px 3px;color:#6a5130}
+.studio-v25 .st-social-youtube summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;border-radius:3px;white-space:nowrap;min-height:26px;user-select:none}
+.studio-v25 .st-social-youtube summary::-webkit-details-marker{display:none}
+.studio-v25 .st-social-youtube summary::marker{content:''}
+.studio-v25 .st-social-youtube summary:hover,.studio-v25 .st-social-youtube[open] summary{color:#21170d}
+.studio-v25 .st-social-youtube summary:focus-visible{outline:2px solid #a98350;outline-offset:3px}
+.studio-v25 .st-yt-chevron{font:18px/1 Georgia,serif;display:inline-block;margin-left:-2px;transition:transform .2s}
+.studio-v25 .st-social-youtube[open] .st-yt-chevron{transform:rotate(180deg)}
+.studio-v25 .st-yt-count{font:500 clamp(9px,.73vw,11px)/1.25 Inter,system-ui,sans-serif;color:#866941;letter-spacing:0}
+.studio-v25 .st-yt-menu{position:absolute;z-index:20;right:-5px;bottom:calc(100% + 8px);width:min(260px,calc(100vw - 44px));padding:11px 12px 8px;border:1px solid #d9c9af;border-radius:8px;background:#fcfaf7;box-shadow:0 16px 38px rgba(35,26,14,.18)}
+.studio-v25 .st-yt-menu-title{margin:0 2px 6px;padding:0 0 8px;border-bottom:1px solid rgba(152,118,77,.24);font:600 9px/1.5 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#907148}
+.studio-v25 .st-yt-menu a{display:flex;align-items:center;min-height:33px;padding:7px 8px;border-radius:4px;color:#433424;font:500 11px/1.35 Inter,system-ui,sans-serif;text-decoration:none;transition:background .18s,color .18s}
+.studio-v25 .st-yt-menu a:hover,.studio-v25 .st-yt-menu a:focus-visible{background:#f1e9dc;color:#1d1710;outline:0}
+@media(max-width:800px){.studio-v25 .st-social-youtube summary{font-size:11px}.studio-v25 .st-yt-count{font-size:10px}.studio-v25 .st-yt-menu{right:-3px}}
+@media(prefers-reduced-motion:reduce){.studio-v25 .st-yt-chevron,.studio-v25 .st-yt-menu a{transition:none}}
