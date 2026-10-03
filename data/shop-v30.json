@@ -1,0 +1,318 @@
+{
+  "version": 30,
+  "defaultChannel": "galadriel",
+  "channels": [
+    {
+      "slug": "heavenly",
+      "name": "Heavenly Echoes Sounds",
+      "mono": "HE",
+      "strap": "La luz en imágenes",
+      "provisional": false,
+      "items": [
+        {
+          "id": "01",
+          "name": "Puertas de luz",
+          "wide": "img/shop/v30/heavenly/01-wide.webp",
+          "tablet": "img/shop/v30/heavenly/01-tablet.webp",
+          "mobile": "img/shop/v30/heavenly/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "Intercesora",
+          "wide": "img/shop/v30/heavenly/02-wide.webp",
+          "tablet": "img/shop/v30/heavenly/02-tablet.webp",
+          "mobile": "img/shop/v30/heavenly/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Ciudad celestial",
+          "wide": "img/shop/v30/heavenly/03-wide.webp",
+          "tablet": "img/shop/v30/heavenly/03-tablet.webp",
+          "mobile": "img/shop/v30/heavenly/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Coro de gloria",
+          "wide": "img/shop/v30/heavenly/04-wide.webp",
+          "tablet": "img/shop/v30/heavenly/04-tablet.webp",
+          "mobile": "img/shop/v30/heavenly/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Santuario interior",
+          "wide": "img/shop/v30/heavenly/05-wide.webp",
+          "tablet": "img/shop/v30/heavenly/05-tablet.webp",
+          "mobile": "img/shop/v30/heavenly/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "galadriel",
+      "name": "Galadriel Symphony",
+      "mono": "GS",
+      "strap": "Sinfonía en imágenes",
+      "provisional": false,
+      "items": [
+        {
+          "id": "01",
+          "name": "Mundo sinfónico",
+          "wide": "img/shop/v30/galadriel/01-wide.webp",
+          "tablet": "img/shop/v30/galadriel/01-tablet.webp",
+          "mobile": "img/shop/v30/galadriel/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "La directora",
+          "wide": "img/shop/v30/galadriel/02-wide.webp",
+          "tablet": "img/shop/v30/galadriel/02-tablet.webp",
+          "mobile": "img/shop/v30/galadriel/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "El jardín eterno",
+          "wide": "img/shop/v30/galadriel/03-wide.webp",
+          "tablet": "img/shop/v30/galadriel/03-tablet.webp",
+          "mobile": "img/shop/v30/galadriel/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "La orquesta",
+          "wide": "img/shop/v30/galadriel/04-wide.webp",
+          "tablet": "img/shop/v30/galadriel/04-tablet.webp",
+          "mobile": "img/shop/v30/galadriel/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Nocturno de cámara",
+          "wide": "img/shop/v30/galadriel/05-wide.webp",
+          "tablet": "img/shop/v30/galadriel/05-tablet.webp",
+          "mobile": "img/shop/v30/galadriel/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "velvet",
+      "name": "The Velvet Atlas",
+      "mono": "VA",
+      "strap": "Viajes a través de la música",
+      "provisional": false,
+      "items": [
+        {
+          "id": "01",
+          "name": "Puertos lejanos",
+          "wide": "img/shop/v30/velvet/01-wide.webp",
+          "tablet": "img/shop/v30/velvet/01-tablet.webp",
+          "mobile": "img/shop/v30/velvet/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "Canciones de época",
+          "wide": "img/shop/v30/velvet/02-wide.webp",
+          "tablet": "img/shop/v30/velvet/02-tablet.webp",
+          "mobile": "img/shop/v30/velvet/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Horizontes del mundo",
+          "wide": "img/shop/v30/velvet/03-wide.webp",
+          "tablet": "img/shop/v30/velvet/03-tablet.webp",
+          "mobile": "img/shop/v30/velvet/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Noches de Oriente",
+          "wide": "img/shop/v30/velvet/04-wide.webp",
+          "tablet": "img/shop/v30/velvet/04-tablet.webp",
+          "mobile": "img/shop/v30/velvet/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Romance de ciudad",
+          "wide": "img/shop/v30/velvet/05-wide.webp",
+          "tablet": "img/shop/v30/velvet/05-tablet.webp",
+          "mobile": "img/shop/v30/velvet/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "reel",
+      "name": "Reel Empires Music",
+      "mono": "RE",
+      "strap": "Escenas cinematográficas",
+      "provisional": true,
+      "items": [
+        {
+          "id": "01",
+          "name": "Gran escenario",
+          "wide": "img/shop/v30/reel/01-wide.webp",
+          "tablet": "img/shop/v30/reel/01-tablet.webp",
+          "mobile": "img/shop/v30/reel/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "Territorios de leyenda",
+          "wide": "img/shop/v30/reel/02-wide.webp",
+          "tablet": "img/shop/v30/reel/02-tablet.webp",
+          "mobile": "img/shop/v30/reel/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Ecos de montaña",
+          "wide": "img/shop/v30/reel/03-wide.webp",
+          "tablet": "img/shop/v30/reel/03-tablet.webp",
+          "mobile": "img/shop/v30/reel/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Personaje en escena",
+          "wide": "img/shop/v30/reel/04-wide.webp",
+          "tablet": "img/shop/v30/reel/04-tablet.webp",
+          "mobile": "img/shop/v30/reel/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Bosque narrativo",
+          "wide": "img/shop/v30/reel/05-wide.webp",
+          "tablet": "img/shop/v30/reel/05-tablet.webp",
+          "mobile": "img/shop/v30/reel/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "anime",
+      "name": "Ecos del Anime",
+      "mono": "EA",
+      "strap": "Historias animadas",
+      "provisional": true,
+      "items": [
+        {
+          "id": "01",
+          "name": "Protagonista",
+          "wide": "img/shop/v30/anime/01-wide.webp",
+          "tablet": "img/shop/v30/anime/01-tablet.webp",
+          "mobile": "img/shop/v30/anime/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "La naturaleza",
+          "wide": "img/shop/v30/anime/02-wide.webp",
+          "tablet": "img/shop/v30/anime/02-tablet.webp",
+          "mobile": "img/shop/v30/anime/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Un nuevo universo",
+          "wide": "img/shop/v30/anime/03-wide.webp",
+          "tablet": "img/shop/v30/anime/03-tablet.webp",
+          "mobile": "img/shop/v30/anime/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Paisaje fantástico",
+          "wide": "img/shop/v30/anime/04-wide.webp",
+          "tablet": "img/shop/v30/anime/04-tablet.webp",
+          "mobile": "img/shop/v30/anime/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Ecos del norte",
+          "wide": "img/shop/v30/anime/05-wide.webp",
+          "tablet": "img/shop/v30/anime/05-tablet.webp",
+          "mobile": "img/shop/v30/anime/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "forged",
+      "name": "Forged In Silence",
+      "mono": "FS",
+      "strap": "El trabajo que nadie ve",
+      "provisional": true,
+      "items": [
+        {
+          "id": "01",
+          "name": "Disciplina I",
+          "wide": "img/shop/v30/forged/01-wide.webp",
+          "tablet": "img/shop/v30/forged/01-tablet.webp",
+          "mobile": "img/shop/v30/forged/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "Disciplina II",
+          "wide": "img/shop/v30/forged/02-wide.webp",
+          "tablet": "img/shop/v30/forged/02-tablet.webp",
+          "mobile": "img/shop/v30/forged/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Disciplina III",
+          "wide": "img/shop/v30/forged/03-wide.webp",
+          "tablet": "img/shop/v30/forged/03-tablet.webp",
+          "mobile": "img/shop/v30/forged/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Disciplina IV",
+          "wide": "img/shop/v30/forged/04-wide.webp",
+          "tablet": "img/shop/v30/forged/04-tablet.webp",
+          "mobile": "img/shop/v30/forged/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Disciplina V",
+          "wide": "img/shop/v30/forged/05-wide.webp",
+          "tablet": "img/shop/v30/forged/05-tablet.webp",
+          "mobile": "img/shop/v30/forged/05-mobile.webp"
+        }
+      ]
+    },
+    {
+      "slug": "kawaii",
+      "name": "Kawaii Cat Pro",
+      "mono": "KC",
+      "strap": "Arte de colección",
+      "provisional": true,
+      "items": [
+        {
+          "id": "01",
+          "name": "Ahorro en calma",
+          "wide": "img/shop/v30/kawaii/01-wide.webp",
+          "tablet": "img/shop/v30/kawaii/01-tablet.webp",
+          "mobile": "img/shop/v30/kawaii/01-mobile.webp"
+        },
+        {
+          "id": "02",
+          "name": "Monedas y objetivos",
+          "wide": "img/shop/v30/kawaii/02-wide.webp",
+          "tablet": "img/shop/v30/kawaii/02-tablet.webp",
+          "mobile": "img/shop/v30/kawaii/02-mobile.webp"
+        },
+        {
+          "id": "03",
+          "name": "Crecimiento",
+          "wide": "img/shop/v30/kawaii/03-wide.webp",
+          "tablet": "img/shop/v30/kawaii/03-tablet.webp",
+          "mobile": "img/shop/v30/kawaii/03-mobile.webp"
+        },
+        {
+          "id": "04",
+          "name": "Plan mensual",
+          "wide": "img/shop/v30/kawaii/04-wide.webp",
+          "tablet": "img/shop/v30/kawaii/04-tablet.webp",
+          "mobile": "img/shop/v30/kawaii/04-mobile.webp"
+        },
+        {
+          "id": "05",
+          "name": "Futuro posible",
+          "wide": "img/shop/v30/kawaii/05-wide.webp",
+          "tablet": "img/shop/v30/kawaii/05-tablet.webp",
+          "mobile": "img/shop/v30/kawaii/05-mobile.webp"
+        }
+      ]
+    }
+  ],
+  "support": {
+    "paypalUrl": "",
+    "contactEmail": "galdriel2818@hotmail.com"
+  }
+}
