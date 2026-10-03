@@ -36,6 +36,7 @@
 <link rel="stylesheet" href="css/canales-v15.css?v=15">
 <link rel="stylesheet" href="css/escuchar-v16.css?v=24">
 <link rel="stylesheet" href="css/estudio-v25.css?v=20261002v28">
+<link rel="stylesheet" href="css/tienda-v29.css?v=29">
 </head>
 <body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
@@ -251,25 +252,65 @@
       </div>
     </div>
   </section>
-  <section class="view" id="view-tienda" aria-labelledby="tienda-title">
-    <div class="shop-head">
-      <div>
-        <p class="shop-kicker">Colecciones digitales</p>
-        <h2 id="tienda-title">Tienda</h2>
-        <p>Elige el universo que quieres llevar contigo. Explora las colecciones y consulta los formatos disponibles para celular y monitor.</p>
+  <!-- TIENDA V29: selector y escaparate sincronizados. Los activos son vistas de catálogo, no descargas de producto. -->
+  <section class="view shop-v29" id="view-tienda" aria-labelledby="tienda-title">
+    <div class="sh-showcase" id="shopShowcase">
+      <div class="sh-ambient" aria-hidden="true"></div>
+      <div class="sh-showcase-top"><span>TIENDA · GALADRIEL MUSIC STUDIO</span><span id="shCount" aria-label="Colección 3 de 5">03 / 05</span></div>
+      <div class="sh-carousel" aria-label="Selector de colecciones visuales">
+        <button type="button" class="sh-arrow" data-sh-step="-1" aria-label="Colección anterior">‹</button>
+        <div class="sh-slots" id="shSlots" aria-live="polite"></div>
+        <button type="button" class="sh-arrow" data-sh-step="1" aria-label="Colección siguiente">›</button>
       </div>
-      <div class="shop-badges" aria-label="Detalles de compra">
-        <span>Monitor 3840 × 2160</span>
-        <span>Celular y monitor</span>
-        <span>Entrega por correo</span>
+      <div class="sh-showcase-foot"><span>ARTE &nbsp;·&nbsp; AUDIO &nbsp;·&nbsp; COLECCIONES</span><button type="button" class="sh-outline" id="shJump">Explorar selección <span aria-hidden="true">↓</span></button></div>
+    </div>
+    <div class="sh-bottom" id="shCollection">
+      <div class="sh-catalogue">
+        <p class="sh-overline">ARTE VISUAL · SELECCIÓN</p>
+        <h2 id="tienda-title">Lleva el arte <em>contigo.</em></h2>
+        <p class="sh-lead">Selecciona una colección. La vista previa se adapta a los cuatro dispositivos al instante.</p>
+        <div class="sh-type-list" id="shTypes" role="group" aria-label="Elegir una imagen de la colección"></div>
+        <div class="sh-catalogue-actions">
+          <a id="shSave" class="sh-text-link" href="img/shop/v29/visual.webp" download="galadriel-vista-previa.webp">Guardar vista previa ↓</a>
+          <button class="sh-text-link" type="button" data-sh-paypal>Pedir enlace PayPal ♡</button>
+        </div>
+        <p class="sh-small">Vista conceptual del catálogo. Consulta disponibilidad, resolución y condiciones antes de solicitar archivos premium. Puedes disfrutar y compartir las muestras libremente; un aporte es opcional.</p>
       </div>
+      <div class="sh-devices" aria-label="Vista simultánea en monitor, laptop, tablet y teléfono">
+        <p class="sh-devices-label" id="shActiveLabel">COLECCIÓN VISUAL CINEMÁTICA</p>
+        <div class="sh-monitor sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en monitor"></div><div class="sh-monitor-neck"></div><div class="sh-monitor-foot"></div></div>
+        <div class="sh-laptop sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en laptop"></div><div class="sh-laptop-base"></div></div>
+        <div class="sh-tablet sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en tablet"></div></div>
+        <div class="sh-phone sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en móvil"></div></div>
+        <p class="sh-visual-note">Una misma escena, cuatro encuadres de muestra.</p>
+      </div>
+      <aside class="sh-noir" aria-label="Música y solicitudes especiales">
+        <img src="img/shop/v29/noir-gramofono.webp" alt="Fotografía en blanco y negro de una persona sentada junto a un gramófono" loading="lazy">
+        <div class="sh-noir-copy">
+          <p class="sh-overline">MÚSICA DE NUESTROS UNIVERSOS</p>
+          <h3>Música que <em>permanece.</em></h3>
+          <p>¿Te gustó una pieza de cualquiera de nuestros canales? Indícanos el video y el fragmento que buscas para consultar la versión completa o una edición de mayor calidad.</p>
+          <button class="sh-primary" type="button" data-sh-request="premium">Solicitar música o fragmento <span>→</span></button>
+          <button class="sh-secondary" type="button" data-sh-request="custom">Encargar canción personalizada <span>↗</span></button>
+          <button class="sh-listen-link" type="button" data-view="escuchar">Explorar canciones de nuestros canales →</button>
+          <span class="sh-noir-fine">Disponibilidad y derechos de uso sujetos a confirmación del estudio.</span>
+        </div>
+      </aside>
     </div>
-    <div class="shop-grid" id="shopGrid"></div>
-    <div class="contact-card">
-      <h3>Cómo funciona</h3>
-      <p>Selecciona un formato y solicita información por correo. Antes de pagar, confirma con el estudio el contenido, la disponibilidad, el permiso de uso y el plazo de entrega de la colección.</p>
-      <p><a href="privacidad.html">Política de privacidad</a></p>
-    </div>
+    <dialog class="sh-request-dialog" id="shRequestDialog" aria-labelledby="shRequestTitle">
+      <form id="shRequestForm" method="dialog">
+        <div class="sh-dialog-head"><div><p class="sh-overline">CONTACTO · GALADRIEL</p><h2 id="shRequestTitle">Solicitar música</h2></div><button type="button" id="shClose" aria-label="Cerrar formulario">×</button></div>
+        <p id="shRequestIntro">Indícanos qué pieza buscas y en qué minuto aparece.</p>
+        <label>Canal o universo musical <input id="shChannel" name="channel" placeholder="Ej.: The Velvet Atlas" required></label>
+        <label>Enlace del video <input id="shVideo" name="video" inputmode="url" type="url" placeholder="https://www.youtube.com/watch?..." ></label>
+        <div class="sh-form-row"><label>Desde (min:seg) <input id="shFrom" name="from" placeholder="01:25"></label><label>Hasta (min:seg) <input id="shTo" name="to" placeholder="04:10"></label></div>
+        <label>Formato o finalidad <select id="shFormat" name="format"><option>Audio completo · Consultar disponibilidad</option><option>WAV / FLAC · Alta calidad</option><option>Composición personalizada</option><option>Consulta de licencia para uso especial</option></select></label>
+        <label>Mensaje adicional <textarea id="shNotes" name="notes" rows="3" placeholder="Cuéntanos qué necesitas…"></textarea></label>
+        <p class="sh-dialog-note">Al continuar se abrirá tu aplicación de correo. No se procesa ningún pago en esta página.</p>
+        <div class="sh-dialog-actions"><button class="sh-primary" type="submit">Preparar correo →</button><button type="button" class="sh-secondary" id="shCopy">Copiar solicitud</button></div>
+        <a class="sh-mail-fallback" href="mailto:galdriel2818@hotmail.com">galdriel2818@hotmail.com</a><span class="sh-copy-status" id="shCopyStatus" role="status"></span>
+      </form>
+    </dialog>
   </section>
 <footer class="site-footer"><span>Galadriel Music Studio</span><a href="privacidad.html">Privacidad</a><a href="#estudio" data-view="estudio">Contacto</a></footer></div>
 <dialog id="productPreview"><button class="preview-close" aria-label="Cerrar vista previa">Cerrar ×</button><img alt=""><p></p></dialog>
@@ -293,6 +334,7 @@
 })();
 </script>
 <script src="js/turntable.js?v=20260928b" defer></script>
-<script src="js/app.js?v=20261001v24" defer></script>
+<script src="js/app.js?v=20261001v29" defer></script>
+<script src="js/tienda-v29.js?v=29" defer></script>
 </body>
 </html>
