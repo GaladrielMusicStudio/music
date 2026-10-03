@@ -492,7 +492,9 @@ function setView(next,fromHistory=false){
  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id===`view-${view}`));
  document.querySelectorAll(".nav [data-view]").forEach(b=>b.setAttribute("aria-current",b.dataset.view===view?"true":"false"));
  requestAnimationFrame(()=>initAmbientVideo(next==="canales"?document.querySelector("#canales .home-left-bg-video"):next==="escuchar"?document.querySelector("#view-escuchar .listen-ambient"):null));
+ document.title = "Galadriel Music Studio | " + ({canales:"Canales",escuchar:"Escuchar",estudio:"Estudio",tienda:"Tienda"}[next]);
  if(!fromHistory&&location.hash!==`#${next}`)history.pushState(null,"",`#${next}`);
+ window.dispatchEvent(new CustomEvent("galadriel:view-change",{detail:{view:next}}));
  if(changed){
   window.scrollTo({top:0,behavior:'auto'});
   const heading=next==='canales'?$('#titulo'):document.querySelector(`#view-${next} h2`);
