@@ -36,7 +36,7 @@
 <link rel="stylesheet" href="css/canales-v15.css?v=15">
 <link rel="stylesheet" href="css/escuchar-v16.css?v=24">
 <link rel="stylesheet" href="css/estudio-v25.css?v=20261002v28">
-<link rel="stylesheet" href="css/tienda-v29.css?v=29">
+<link rel="stylesheet" href="css/tienda-v30.css?v=30">
 </head>
 <body><a class="skip-link" href="#canales">Ir al contenido</a>
 <div id="intro">
@@ -252,63 +252,69 @@
       </div>
     </div>
   </section>
-  <!-- TIENDA V29: selector y escaparate sincronizados. Los activos son vistas de catálogo, no descargas de producto. -->
-  <section class="view shop-v29" id="view-tienda" aria-labelledby="tienda-title">
-    <div class="sh-showcase" id="shopShowcase">
-      <div class="sh-ambient" aria-hidden="true"></div>
-      <div class="sh-showcase-top"><span>TIENDA · GALADRIEL MUSIC STUDIO</span><span id="shCount" aria-label="Colección 3 de 5">03 / 05</span></div>
-      <div class="sh-carousel" aria-label="Selector de colecciones visuales">
-        <button type="button" class="sh-arrow" data-sh-step="-1" aria-label="Colección anterior">‹</button>
-        <div class="sh-slots" id="shSlots" aria-live="polite"></div>
-        <button type="button" class="sh-arrow" data-sh-step="1" aria-label="Colección siguiente">›</button>
+  <!-- TIENDA V30: logos de canales arriba; cinco obras por canal; vistas por dispositivo y música de pago. -->
+  <section class="view shop-v30" id="view-tienda" aria-labelledby="tienda-title">
+    <div class="sh30-hero" id="sh30Hero">
+      <div class="sh30-hero-meta"><span>TIENDA · GALADRIEL MUSIC STUDIO</span><span id="sh30Counter" aria-live="polite">02 / 07</span></div>
+      <div class="sh30-hero-label"><span>ELIGE UN UNIVERSO</span><h2 id="tienda-title">Cada canal, una mirada.</h2><p>Selecciona un logotipo para descubrir su colección visual.</p></div>
+      <div class="sh30-carousel" aria-label="Carrusel de los siete canales">
+        <button type="button" class="sh30-step" data-sh30-step="-1" aria-label="Canal anterior">‹</button>
+        <div class="sh30-rail" id="sh30Rail" aria-live="polite"></div>
+        <button type="button" class="sh30-step" data-sh30-step="1" aria-label="Canal siguiente">›</button>
       </div>
-      <div class="sh-showcase-foot"><span>ARTE &nbsp;·&nbsp; AUDIO &nbsp;·&nbsp; COLECCIONES</span><button type="button" class="sh-outline" id="shJump">Explorar selección <span aria-hidden="true">↓</span></button></div>
+      <div class="sh30-hero-foot"><span id="sh30HeroName">GALADRIEL SYMPHONY</span><span class="sh30-hero-line"></span><button type="button" id="sh30Explore">Explorar sus cinco obras <span aria-hidden="true">↓</span></button></div>
     </div>
-    <div class="sh-bottom" id="shCollection">
-      <div class="sh-catalogue">
-        <p class="sh-overline">ARTE VISUAL · SELECCIÓN</p>
-        <h2 id="tienda-title">Lleva el arte <em>contigo.</em></h2>
-        <p class="sh-lead">Selecciona una colección. La vista previa se adapta a los cuatro dispositivos al instante.</p>
-        <div class="sh-type-list" id="shTypes" role="group" aria-label="Elegir una imagen de la colección"></div>
-        <div class="sh-catalogue-actions">
-          <a id="shSave" class="sh-text-link" href="img/shop/v29/visual.webp" download="galadriel-vista-previa.webp">Guardar vista previa ↓</a>
-          <button class="sh-text-link" type="button" data-sh-paypal>Pedir enlace PayPal ♡</button>
+    <div class="sh30-content" id="sh30Content">
+      <section class="sh30-list" aria-labelledby="sh30ListTitle">
+        <p class="sh30-eyebrow">GALERÍA VISUAL · DESCARGA GRATUITA</p>
+        <h3 id="sh30ListTitle">Cinco obras.<br><em>Tu elección.</em></h3>
+        <p class="sh30-list-intro" id="sh30Strap">Selecciona una imagen: aparecerá adaptada a todas las pantallas.</p>
+        <div id="sh30Items" class="sh30-items" role="group" aria-label="Elegir una de las cinco imágenes del canal"></div>
+        <p class="sh30-free-label">GRATIS · Sin compra ni registro</p>
+        <button type="button" id="sh30Download" class="sh30-download">Descargar imagen gratis <span aria-hidden="true">↓</span></button>
+        <button type="button" id="sh30Support" class="sh30-quiet-link">¿Te inspira? Apoya al estudio de forma voluntaria ♡</button>
+        <p class="sh30-terms">El aporte nunca es obligatorio. Para uso comercial, consúltanos previamente.</p>
+      </section>
+      <section class="sh30-stage" aria-label="La imagen elegida en monitor, laptop, tablet y celular">
+        <div class="sh30-stage-head"><span id="sh30StageChannel">GALADRIEL SYMPHONY</span><span id="sh30StageIndex">OBRA 01 / 05</span></div>
+        <div class="sh30-stage-art" id="sh30StageArt">
+          <div class="sh30-device sh30-desktop"><div class="sh30-frame"><img data-sh30-screen="wide" src="img/shop/v30/galadriel/01-wide.webp" alt="Vista en monitor" decoding="async"></div><span class="sh30-stand"></span><span class="sh30-base"></span></div>
+          <div class="sh30-device sh30-laptop"><div class="sh30-frame"><img data-sh30-screen="wide" src="img/shop/v30/galadriel/01-wide.webp" alt="Vista en laptop" decoding="async"></div><span class="sh30-keyboard"></span></div>
+          <div class="sh30-device sh30-tablet"><div class="sh30-frame"><img data-sh30-screen="tablet" src="img/shop/v30/galadriel/01-tablet.webp" alt="Vista en tablet" decoding="async"></div></div>
+          <div class="sh30-device sh30-phone"><div class="sh30-frame"><img data-sh30-screen="mobile" src="img/shop/v30/galadriel/01-mobile.webp" alt="Vista en celular" decoding="async"></div></div>
         </div>
-        <p class="sh-small">Vista conceptual del catálogo. Consulta disponibilidad, resolución y condiciones antes de solicitar archivos premium. Puedes disfrutar y compartir las muestras libremente; un aporte es opcional.</p>
-      </div>
-      <div class="sh-devices" aria-label="Vista simultánea en monitor, laptop, tablet y teléfono">
-        <p class="sh-devices-label" id="shActiveLabel">COLECCIÓN VISUAL CINEMÁTICA</p>
-        <div class="sh-monitor sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en monitor"></div><div class="sh-monitor-neck"></div><div class="sh-monitor-foot"></div></div>
-        <div class="sh-laptop sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en laptop"></div><div class="sh-laptop-base"></div></div>
-        <div class="sh-tablet sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en tablet"></div></div>
-        <div class="sh-phone sh-device"><div class="sh-screen"><img data-sh-device-img src="img/shop/v29/visual.webp" alt="Vista previa en móvil"></div></div>
-        <p class="sh-visual-note">Una misma escena, cuatro encuadres de muestra.</p>
-      </div>
-      <aside class="sh-noir" aria-label="Música y solicitudes especiales">
-        <img src="img/shop/v29/noir-gramofono.webp" alt="Fotografía en blanco y negro de una persona sentada junto a un gramófono" loading="lazy">
-        <div class="sh-noir-copy">
-          <p class="sh-overline">MÚSICA DE NUESTROS UNIVERSOS</p>
-          <h3>Música que <em>permanece.</em></h3>
-          <p>¿Te gustó una pieza de cualquiera de nuestros canales? Indícanos el video y el fragmento que buscas para consultar la versión completa o una edición de mayor calidad.</p>
-          <button class="sh-primary" type="button" data-sh-request="premium">Solicitar música o fragmento <span>→</span></button>
-          <button class="sh-secondary" type="button" data-sh-request="custom">Encargar canción personalizada <span>↗</span></button>
-          <button class="sh-listen-link" type="button" data-view="escuchar">Explorar canciones de nuestros canales →</button>
-          <span class="sh-noir-fine">Disponibilidad y derechos de uso sujetos a confirmación del estudio.</span>
+        <div class="sh30-stage-caption"><span id="sh30SelectedName">Mundo sinfónico</span><span>MONITOR · LAPTOP · TABLET · MÓVIL</span></div>
+      </section>
+      <aside class="sh30-music" aria-labelledby="sh30MusicTitle">
+        <img class="sh30-noir-photo" src="img/shop/v29/noir-gramofono.webp" alt="Silueta monocromática de una persona sentada junto a un gramófono" loading="lazy" decoding="async">
+        <div class="sh30-music-copy"><p class="sh30-eyebrow">EDICIONES SONORAS</p><h3 id="sh30MusicTitle">Música que<br><em>permanece.</em></h3>
+          <p>¿Encontraste una canción especial en alguno de nuestros canales? Indícanos el enlace y el minuto exacto. Consulta su versión de estudio o un encargo original.</p>
+          <div class="sh30-price"><b>Desde US$5</b><span>Según pieza, formato y derechos disponibles.</span></div>
+          <button type="button" class="sh30-music-main" data-sh30-request="existing">Solicitar música WAV / MP3 <span>→</span></button>
+          <button type="button" class="sh30-music-alt" data-sh30-request="custom">Encargar una canción propia <span>↗</span></button>
+          <p class="sh30-fine">WAV conserva la calidad del archivo maestro disponible; no mejora una grabación comprimida. MIDI, solo si existe el proyecto compatible. Entrega y licencia por confirmar.</p>
         </div>
       </aside>
     </div>
-    <dialog class="sh-request-dialog" id="shRequestDialog" aria-labelledby="shRequestTitle">
-      <form id="shRequestForm" method="dialog">
-        <div class="sh-dialog-head"><div><p class="sh-overline">CONTACTO · GALADRIEL</p><h2 id="shRequestTitle">Solicitar música</h2></div><button type="button" id="shClose" aria-label="Cerrar formulario">×</button></div>
-        <p id="shRequestIntro">Indícanos qué pieza buscas y en qué minuto aparece.</p>
-        <label>Canal o universo musical <input id="shChannel" name="channel" placeholder="Ej.: The Velvet Atlas" required></label>
-        <label>Enlace del video <input id="shVideo" name="video" inputmode="url" type="url" placeholder="https://www.youtube.com/watch?..." ></label>
-        <div class="sh-form-row"><label>Desde (min:seg) <input id="shFrom" name="from" placeholder="01:25"></label><label>Hasta (min:seg) <input id="shTo" name="to" placeholder="04:10"></label></div>
-        <label>Formato o finalidad <select id="shFormat" name="format"><option>Audio completo · Consultar disponibilidad</option><option>WAV / FLAC · Alta calidad</option><option>Composición personalizada</option><option>Consulta de licencia para uso especial</option></select></label>
-        <label>Mensaje adicional <textarea id="shNotes" name="notes" rows="3" placeholder="Cuéntanos qué necesitas…"></textarea></label>
-        <p class="sh-dialog-note">Al continuar se abrirá tu aplicación de correo. No se procesa ningún pago en esta página.</p>
-        <div class="sh-dialog-actions"><button class="sh-primary" type="submit">Preparar correo →</button><button type="button" class="sh-secondary" id="shCopy">Copiar solicitud</button></div>
-        <a class="sh-mail-fallback" href="mailto:galdriel2818@hotmail.com">galdriel2818@hotmail.com</a><span class="sh-copy-status" id="shCopyStatus" role="status"></span>
+    <dialog class="sh30-dialog" id="sh30FreeDialog" aria-labelledby="sh30FreeTitle">
+      <div class="sh30-dialog-title"><div><p class="sh30-eyebrow">UNA OBRA PARA LLEVAR CONTIGO</p><h3 id="sh30FreeTitle">Tu imagen es gratuita.</h3></div><button type="button" data-sh30-close aria-label="Cerrar">×</button></div>
+      <p id="sh30FreeArt">Elige el tamaño que deseas guardar. No necesitas realizar un pago.</p>
+      <div class="sh30-formats"><a data-sh30-file="wide" href="#" download>Monitor y laptop · 16:9 ↓</a><a data-sh30-file="tablet" href="#" download>Tablet · 4:3 ↓</a><a data-sh30-file="mobile" href="#" download>Celular · 9:16 ↓</a></div>
+      <div class="sh30-donation"><span>Si esta obra te inspira, puedes dejar un aporte voluntario para apoyar las próximas creaciones.</span><a id="sh30PayPalLink" href="#" rel="noopener noreferrer">Solicitar enlace PayPal ♡</a></div>
+      <p class="sh30-legal">La descarga no está condicionada a una donación. Estas vistas de catálogo pueden sustituirse por sus versiones maestras a medida que se aprueben.</p>
+    </dialog>
+    <dialog class="sh30-dialog" id="sh30MusicDialog" aria-labelledby="sh30MusicFormTitle">
+      <form id="sh30MusicForm" method="dialog">
+        <div class="sh30-dialog-title"><div><p class="sh30-eyebrow">CONSULTA PERSONALIZADA</p><h3 id="sh30MusicFormTitle">Solicitar música</h3></div><button type="button" data-sh30-close aria-label="Cerrar">×</button></div>
+        <p class="sh30-dialog-intro">Elige el canal, pega el enlace del video e indica los minutos que necesitas. La disponibilidad, precio y derechos se confirman por correo antes de cualquier pago.</p>
+        <label>Canal <select id="sh30FormChannel" required></select></label>
+        <label>Enlace de YouTube (para una pieza existente) <input id="sh30FormUrl" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=..."></label>
+        <div class="sh30-two"><label>Desde <input id="sh30FormFrom" placeholder="01:20" inputmode="text"></label><label>Hasta <input id="sh30FormTo" placeholder="04:15" inputmode="text"></label></div>
+        <label>Entrega deseada <select id="sh30FormFormat"><option>WAV · según maestro disponible</option><option>MP3 · 320 kbps si está disponible</option><option>MIDI · consultar si existe el proyecto</option><option>Composición personalizada</option><option>Licencia comercial · consultar derechos</option></select></label>
+        <label>Detalles adicionales <textarea id="sh30FormNotes" rows="3" placeholder="Canción, emoción, destino de uso o petición especial..."></textarea></label>
+        <p class="sh30-legal">Solicitudes desde US$5 orientativos. El correo no procesa pagos ni confirma automáticamente derechos de uso.</p>
+        <div class="sh30-form-actions"><button type="submit">Preparar solicitud →</button><button type="button" id="sh30CopyRequest">Copiar texto</button></div>
+        <p id="sh30FormStatus" role="status"></p>
       </form>
     </dialog>
   </section>
@@ -335,6 +341,6 @@
 </script>
 <script src="js/turntable.js?v=20260928b" defer></script>
 <script src="js/app.js?v=20261001v29" defer></script>
-<script src="js/tienda-v29.js?v=29" defer></script>
+<script src="js/tienda-v30.js?v=30" defer></script>
 </body>
 </html>
